@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt", "JobHunt.csproj", "{979B515C-F0AD-49E2-A84D-633C9B5316EA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{31EE0F65-B7D1-4C6F-A747-21FE2344EAFB} = {31EE0F65-B7D1-4C6F-A747-21FE2344EAFB}
+		{3C79BCE5-B296-455C-B9F3-8982097D2CA0} = {3C79BCE5-B296-455C-B9F3-8982097D2CA0}
+		{98DFD0C8-A5C0-425D-800B-09641535A881} = {98DFD0C8-A5C0-425D-800B-09641535A881}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt.Infrastructure", "..\JobHunt.Infrastructure\JobHunt.Infrastructure.csproj", "{3C79BCE5-B296-455C-B9F3-8982097D2CA0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{98DFD0C8-A5C0-425D-800B-09641535A881} = {98DFD0C8-A5C0-425D-800B-09641535A881}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt.Domain", "..\JobHunt.Domain\JobHunt.Domain.csproj", "{98DFD0C8-A5C0-425D-800B-09641535A881}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt.Application", "..\JobHunt.Application\JobHunt.Application.csproj", "{31EE0F65-B7D1-4C6F-A747-21FE2344EAFB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3C79BCE5-B296-455C-B9F3-8982097D2CA0} = {3C79BCE5-B296-455C-B9F3-8982097D2CA0}
+		{98DFD0C8-A5C0-425D-800B-09641535A881} = {98DFD0C8-A5C0-425D-800B-09641535A881}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{979B515C-F0AD-49E2-A84D-633C9B5316EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{979B515C-F0AD-49E2-A84D-633C9B5316EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{979B515C-F0AD-49E2-A84D-633C9B5316EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{979B515C-F0AD-49E2-A84D-633C9B5316EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C79BCE5-B296-455C-B9F3-8982097D2CA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C79BCE5-B296-455C-B9F3-8982097D2CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C79BCE5-B296-455C-B9F3-8982097D2CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C79BCE5-B296-455C-B9F3-8982097D2CA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98DFD0C8-A5C0-425D-800B-09641535A881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98DFD0C8-A5C0-425D-800B-09641535A881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98DFD0C8-A5C0-425D-800B-09641535A881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98DFD0C8-A5C0-425D-800B-09641535A881}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31EE0F65-B7D1-4C6F-A747-21FE2344EAFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31EE0F65-B7D1-4C6F-A747-21FE2344EAFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31EE0F65-B7D1-4C6F-A747-21FE2344EAFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31EE0F65-B7D1-4C6F-A747-21FE2344EAFB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {466631DC-1DC5-4C0C-97EE-78933A315321}
+	EndGlobalSection
+EndGlobal
