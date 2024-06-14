@@ -13,16 +13,12 @@ public partial class OtpRecord
     [Column("otp_id")]
     public int OtpId { get; set; }
 
-    [Column("aspnetuser_id")]
-    public int AspnetuserId { get; set; }
-
     [Column("otp")]
     public int Otp { get; set; }
 
     [Column("sent_datetime", TypeName = "timestamp without time zone")]
     public DateTime SentDatetime { get; set; }
 
-    [ForeignKey("AspnetuserId")]
-    [InverseProperty("OtpRecords")]
-    public virtual Aspnetuser Aspnetuser { get; set; } = null!;
+    [Column(TypeName = "character varying")]
+    public string Email { get; set; } = null!;
 }

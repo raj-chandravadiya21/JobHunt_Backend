@@ -200,10 +200,6 @@ public partial class DefaultdbContext : DbContext
             entity.HasKey(e => e.OtpId).HasName("otp_record_pkey");
 
             entity.Property(e => e.OtpId).UseIdentityAlwaysColumn();
-
-            entity.HasOne(d => d.Aspnetuser).WithMany(p => p.OtpRecords)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("otp_record_aspnetuser_id_fkey");
         });
 
         modelBuilder.Entity<Project>(entity =>

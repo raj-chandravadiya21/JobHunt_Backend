@@ -43,9 +43,6 @@ public partial class Aspnetuser
     [InverseProperty("Aspnetuser")]
     public virtual ICollection<Company> Companies { get; set; } = new List<Company>();
 
-    [InverseProperty("Aspnetuser")]
-    public virtual ICollection<OtpRecord> OtpRecords { get; set; } = new List<OtpRecord>();
-
     [ForeignKey("RoleId")]
     [InverseProperty("Aspnetusers")]
     public virtual Roleset? Role { get; set; }

@@ -1,7 +1,6 @@
 using JobHunt.Application.Services;
 using JobHunt.Domain.Entities;
 using JobHunt.Application.Interfaces;
-using JobHunt.Domain.Interfaces;
 using JobHunt.Infrastructure.Repositories;
 using JobHunt.Domain.Helper;
 using JobHunt.Infrastructure.Interfaces;
@@ -21,6 +20,7 @@ builder.Services.AddDbContext<DefaultdbContext>();
 
 //SERVICES
 builder.Services.AddScoped<IServiceBundle, ServiceBundle>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 //REPOSITORY
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
