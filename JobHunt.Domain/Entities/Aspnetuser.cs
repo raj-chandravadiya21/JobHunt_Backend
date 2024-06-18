@@ -37,6 +37,9 @@ public partial class Aspnetuser
     [Column("created_date", TypeName = "timestamp without time zone")]
     public DateTime CreatedDate { get; set; }
 
+    [Column("is_registered")]
+    public bool IsRegistered { get; set; }
+
     [InverseProperty("Aspnetuser")]
     public virtual ICollection<Admin> Admins { get; set; } = new List<Admin>();
 

@@ -4,14 +4,17 @@ using JobHunt.Domain.DataModels.Request;
 using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Enum;
+using JobHunt.Domain.Helper;
 using JobHunt.Infrastructure.Interfaces;
 using System.Net;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace JobHunt.Application.Services
 {
     public class AuthService(IUnitOfWork _unitOfWork, IMapper _mapper, IEmailSender _emailSender) : IAuthService
     {
+
 
         public async Task<ResponseDTO> CheckUser(CheckUserDTO model)
         {

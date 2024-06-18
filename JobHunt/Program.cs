@@ -15,6 +15,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
+        });
+});
+
 //DATABASE CONNECTION
 builder.Services.AddDbContext<DefaultdbContext>();
 
@@ -41,6 +54,7 @@ if (app.Environment.IsDevelopment())
 //MIDDLEWARE EXCEPTION HANDLER
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
+app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

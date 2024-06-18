@@ -52,9 +52,6 @@ public partial class User
     [Column("gender")]
     public int? Gender { get; set; }
 
-    [Column("is_verified")]
-    public bool IsVerified { get; set; }
-
     [InverseProperty("User")]
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
 
