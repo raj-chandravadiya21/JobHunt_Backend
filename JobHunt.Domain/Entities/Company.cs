@@ -20,19 +20,19 @@ public partial class Company
     public string CompanyName { get; set; } = null!;
 
     [Column("website", TypeName = "character varying")]
-    public string Website { get; set; } = null!;
+    public string? Website { get; set; }
 
     [Column("establised_date")]
-    public DateOnly EstablisedDate { get; set; }
+    public DateOnly? EstablisedDate { get; set; }
 
     [Column("address", TypeName = "character varying")]
-    public string Address { get; set; } = null!;
+    public string? Address { get; set; }
 
     [Column("email", TypeName = "character varying")]
     public string Email { get; set; } = null!;
 
     [Column("logo", TypeName = "character varying")]
-    public string Logo { get; set; } = null!;
+    public string? Logo { get; set; }
 
     [Column("created_date", TypeName = "timestamp without time zone")]
     public DateTime CreatedDate { get; set; }
@@ -41,7 +41,7 @@ public partial class Company
     public DateTime? ModifiedDate { get; set; }
 
     [Column("created_by", TypeName = "character varying")]
-    public string CreatedBy { get; set; } = null!;
+    public string? CreatedBy { get; set; }
 
     [Column("modified_by", TypeName = "character varying")]
     public string? ModifiedBy { get; set; }
