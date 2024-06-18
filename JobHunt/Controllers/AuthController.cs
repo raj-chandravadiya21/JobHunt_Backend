@@ -26,5 +26,11 @@ namespace JobHunt.Controllers
         {
             return await _serviceBundle.AuthService.RegisterUser(model);
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromBody] LoginUserDTO model)
+        {
+            return await _serviceBundle.AuthService.LoginUser(model);
+        }
     }
 }

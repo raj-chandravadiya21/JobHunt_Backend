@@ -151,5 +151,49 @@ namespace JobHunt.Application.Services
 
             return otp;
         }
+
+        public async Task<ResponseDTO> LoginUser(LoginUserDTO model)
+        {
+            var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == (int)Role.User);
+
+            if (user == null)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    Message = "User Not Found",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+            if (BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+            {
+                var claims = new Claim[]
+                {
+                    new(ClaimTypes.Role,(((Role)user.RoleId!).ToString())),
+                    new(ClaimTypes.Sid,user.AspnetuserId.ToString())
+                };
+
+                var token = Jwt.GenerateToken(claims, DateTime.Now.AddDays(1));
+
+                return new()
+                {
+                    Data = new
+                    {
+                        token,
+                    },
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Message = "Login Successfully",
+                };
+            }
+
+            return new()
+            {
+                IsSuccess = false,
+                StatusCode = HttpStatusCode.BadRequest,
+                Message = "Enter valid Crendential",
+            };
+        }
     }
 }
