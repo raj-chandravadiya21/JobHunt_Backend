@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace JobHunt.Infrastructure.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class 
+    public class Repository<T> : IRepository<T> where T : class
     {
         private readonly DefaultdbContext _context;
         private readonly DbSet<T> _dbSet;
@@ -25,11 +25,21 @@ namespace JobHunt.Infrastructure.Repositories
             return await _dbSet.FirstOrDefaultAsync(predicate);
         }
 
+        public async Task<T?> GetLastOrDefaultOrderedBy<TProperty>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProperty>> orderByExpression)
+        {
+            return await _dbSet.Where(predicate)
+                       .OrderBy(orderByExpression)
+                       .LastOrDefaultAsync();
+        }
+
+        public async Task<bool?> GetAnyAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.AnyAsync(predicate);
+        }
+
         public async Task CreateAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
         }
-
-        
     }
 }

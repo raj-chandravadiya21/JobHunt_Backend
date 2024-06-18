@@ -9,13 +9,89 @@ using JobHunt.Infrastructure.Interfaces;
 using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using JobHunt.Domain.Helper;
-using Microsoft.Extensions.Configuration;
 
 namespace JobHunt.Application.Services
 {
-    public class AuthService() : IAuthService
+    public class AuthService(IUnitOfWork _unitOfWork, IMapper _mapper, IEmailSender _emailSender) : IAuthService
     {
+
+
+        public async Task<ResponseDTO> CheckUser(CheckUserDTO model)
+        {
+            var user = await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.User);
+            if ((bool)user)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    Message = "User Already Exists",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+            int otp = await GenerateAndSaveOtp(model.Email!);
+
+            await _emailSender.SendEmailVerifiaction(otp, model.Email!);
+
+            return new()
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                Message = "Otp Sent Successfully",
+            };
+        }
+
+        public async Task<ResponseDTO> RegisterUser(RegisterUserDTO model)
+        {
+            if (model.Password != model.ConfirmPassword)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    Message = "Password and Confirm Password Not match",
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            var otpRecord = _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
+
+            int otp = otpRecord.Result!.Otp;
+
+            if (otp == model.Otp)
+            {
+                if (DateTime.Now.AddMinutes(-20) >= otpRecord.Result!.SentDatetime)
+                {
+                    return new()
+                    {
+                        IsSuccess = false,
+                        Message = "Time Out",
+                        StatusCode = HttpStatusCode.BadRequest,
+                    };
+                }
+
+                Aspnetuser aspUser = new Aspnetuser();
+                aspUser.CreatedDate = DateTime.Now;
+                aspUser.RoleId = (int)Role.User;
+                aspUser.Email = model.Email!;
+                aspUser.FirstName = model.FirstName!;
+                aspUser.LastName = model.LastName;
+
+                string salt = BCrypt.Net.BCrypt.GenerateSalt();
+                string Password = BCrypt.Net.BCrypt.HashPassword(model.Password, salt);
+
+                aspUser.Password = Password;
+
+                await _unitOfWork.AspNetUser.CreateAsync(aspUser);
+                await _unitOfWork.SaveAsync();
+
+                User user = new()
+                {
+                    FirstName = model.FirstName!,
+                    LastName = model.LastName,
+                    Email = model.Email!,
+                    AspnetuserId = aspUser.AspnetuserId,
+                    Createddate = DateTime.Now,
+                };
 
                 await _unitOfWork.User.CreateAsync(user);
                 await _unitOfWork.SaveAsync();

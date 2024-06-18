@@ -11,14 +11,15 @@ namespace JobHunt.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private ResponseDTO _response;
+        private readonly IEmailSender _emailSender;
 
-        public ServiceBundle(IUnitOfWork unitOfWork, IMapper mapper)
+        public ServiceBundle(IUnitOfWork unitOfWork, IMapper mapper, IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _response = new();
+            _emailSender = emailSender;
+            AuthService = new AuthService(_unitOfWork, _mapper, _emailSender);
         }
-        public IAuthService AuthService { get; private set; } 
+        public IAuthService AuthService { get; private set; }
     }
 }
