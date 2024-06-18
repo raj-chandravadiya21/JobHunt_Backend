@@ -38,5 +38,14 @@ namespace JobHunt.Application.Services
             await SendEmailAsync(email, subject, message);
         }
 
+        public async Task SendResetPasswordLink(string token, string email)
+        {
+            var subject = "Reset Your Account Password";
+            var message = $"<h2>Hello From JobHunt</h2>" +
+                $"<p> We received a request to reset your JobHunt password.Please click on the link below to update your password." +
+                $"http://localhost:3000/reset-password/{token}";
+            await SendEmailAsync(email, subject, message);
+        }
+
     }
 }

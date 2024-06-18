@@ -6,6 +6,7 @@ using JobHunt.Domain.Entities;
 using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;
 using JobHunt.Infrastructure.Interfaces;
+using System.Globalization;
 using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -14,7 +15,6 @@ namespace JobHunt.Application.Services
 {
     public class AuthService(IUnitOfWork _unitOfWork, IMapper _mapper, IEmailSender _emailSender) : IAuthService
     {
-
 
         public async Task<ResponseDTO> CheckUser(CheckUserDTO model)
         {
@@ -194,6 +194,71 @@ namespace JobHunt.Application.Services
                 StatusCode = HttpStatusCode.BadRequest,
                 Message = "Enter valid Crendential",
             };
+        }
+
+        public async Task<ResponseDTO> ForgotPasswordUser(ForgotPasswordDTO model)
+        {
+            var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == model.Role);
+            if (user == null)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    Message = "User Not Found",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+            var expires = DateTime.UtcNow.AddMinutes(20);
+            var unixExpires = new DateTimeOffset(expires).ToUnixTimeSeconds();
+
+            var claims = new Claim[]
+                {
+                    new(ClaimTypes.Role,(((Role)model.Role!).ToString())),
+                    new(ClaimTypes.Sid,user.AspnetuserId.ToString()),
+                    new(ClaimTypes.Expiration,unixExpires.ToString())
+                };
+
+            var token = Jwt.GenerateToken(claims, DateTime.Now.AddMinutes(20));
+
+            await _emailSender.SendResetPasswordLink(token, user.Email);
+
+            return new()
+            {
+                IsSuccess = true,
+                Message = "Reset Password link sent Successfully",
+                StatusCode = HttpStatusCode.OK
+            };
+        }
+
+        public async Task<ResponseDTO> ValidateResetToken(ValidateTokenDTO model)
+        {
+            bool isValid = await ValidToken(model.Token!);
+            if (isValid)
+            {
+                return new()
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Message = "Token is valid"
+                };
+            }
+            return new()
+            {
+                IsSuccess = false,
+                StatusCode = HttpStatusCode.OK,
+                Message = "Token is not Valid"
+            };
+        }
+
+        public async Task<bool> ValidToken(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return false;
+            }
+
+            return await Task.FromResult(Jwt.IsTokenValidResetPassword(token));
         }
     }
 }
