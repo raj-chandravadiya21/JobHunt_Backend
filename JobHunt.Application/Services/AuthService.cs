@@ -9,6 +9,7 @@ using JobHunt.Infrastructure.Interfaces;
 using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Transactions;
 
 namespace JobHunt.Application.Services
 {
@@ -67,32 +68,39 @@ namespace JobHunt.Application.Services
                     };
                 }
 
-                Aspnetuser aspUser = new Aspnetuser();
-                aspUser.CreatedDate = DateTime.Now;
-                aspUser.RoleId = (int)Role.User;
-                aspUser.Email = model.Email!;
-                aspUser.FirstName = model.FirstName!;
-                aspUser.LastName = model.LastName;
-
-                string salt = BCrypt.Net.BCrypt.GenerateSalt();
-                string Password = BCrypt.Net.BCrypt.HashPassword(model.Password, salt);
-
-                aspUser.Password = Password;
-
-                await _unitOfWork.AspNetUser.CreateAsync(aspUser);
-                await _unitOfWork.SaveAsync();
-
-                User user = new()
+                using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    FirstName = model.FirstName!,
-                    LastName = model.LastName,
-                    Email = model.Email!,
-                    AspnetuserId = aspUser.AspnetuserId,
-                    Createddate = DateTime.Now,
-                };
+                    Aspnetuser aspUser = new()
+                    {
+                        CreatedDate = DateTime.Now,
+                        RoleId = (int)Role.User,
+                        Email = model.Email!,
+                        FirstName = model.FirstName!,
+                        LastName = model.LastName
+                    };
 
-                await _unitOfWork.User.CreateAsync(user);
-                await _unitOfWork.SaveAsync();
+                    string salt = BCrypt.Net.BCrypt.GenerateSalt();
+                    string Password = BCrypt.Net.BCrypt.HashPassword(model.Password, salt);
+
+                    aspUser.Password = Password;
+
+                    await _unitOfWork.AspNetUser.CreateAsync(aspUser);
+                    await _unitOfWork.SaveAsync();
+
+                    User user = new()
+                    {
+                        FirstName = model.FirstName!,
+                        LastName = model.LastName,
+                        Email = model.Email!,
+                        AspnetuserId = aspUser.AspnetuserId,
+                        Createddate = DateTime.Now,
+                    };
+
+                    await _unitOfWork.User.CreateAsync(user);
+                    await _unitOfWork.SaveAsync();
+
+                    transactionScope.Complete();
+                }
 
                 return new()
                 {
@@ -249,29 +257,33 @@ namespace JobHunt.Application.Services
                 string salt = BCrypt.Net.BCrypt.GenerateSalt();
                 string password = BCrypt.Net.BCrypt.HashPassword(model.Password, salt);
 
-                Aspnetuser aspUser = new()
+                using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    FirstName = model.CompanyName,
-                    Password = password,
-                    Email = model.Email!,
-                    RoleId = (int)Role.Company,
-                    CreatedDate = DateTime.Now,
-                };
+                    Aspnetuser aspUser = new()
+                    {
+                        FirstName = model.CompanyName,
+                        Password = password,
+                        Email = model.Email!,
+                        RoleId = (int)Role.Company,
+                        CreatedDate = DateTime.Now,
+                    };
 
-                await _unitOfWork.AspNetUser.CreateAsync(aspUser);
-                await _unitOfWork.SaveAsync();
+                    await _unitOfWork.AspNetUser.CreateAsync(aspUser);
+                    await _unitOfWork.SaveAsync();
 
-                Company company = new()
-                {
-                    AspnetuserId = aspUser.AspnetuserId,
-                    CompanyName = model.CompanyName,
-                    Email = model.Email!,
-                    CreatedDate = DateTime.Now,
-                    IsApprove = false,
-                };
+                    Company company = new()
+                    {
+                        AspnetuserId = aspUser.AspnetuserId,
+                        CompanyName = model.CompanyName,
+                        Email = model.Email!,
+                        CreatedDate = DateTime.Now,
+                        IsApprove = false,
+                    };
 
-                await _unitOfWork.Company.CreateAsync(company);
-                await _unitOfWork.SaveAsync();
+                    await _unitOfWork.Company.CreateAsync(company);
+                    await _unitOfWork.SaveAsync();
+                    transactionScope.Complete();
+                }
 
                 return new()
                 {
