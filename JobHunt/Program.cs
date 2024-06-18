@@ -42,7 +42,6 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 var app = builder.Build();
-
 ConfigurationHelper.Configure(app.Configuration);
 
 // Configure the HTTP request pipeline.

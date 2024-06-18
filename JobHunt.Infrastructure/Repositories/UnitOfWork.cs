@@ -14,12 +14,15 @@ namespace JobHunt.Infrastructure.Repositories
             AspNetUser = new AspnetUserRepo(_context);
             User = new UserRepo(_context);
             OtpRecord = new OtpRecordRepo(_context);
+            Company = new CompanyRepo(_context);
         }
         public IAspnetUserRepo AspNetUser { get; private set; }
 
         public IUserRepo User { get; private set; }
 
         public IOtpRecordRepo OtpRecord { get; private set; }
+
+        public ICompanyRepo Company { get; private set; }
 
         public async Task SaveAsync()
         {
