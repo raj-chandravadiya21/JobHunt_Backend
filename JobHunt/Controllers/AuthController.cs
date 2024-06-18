@@ -1,5 +1,6 @@
 ﻿using JobHunt.Application.Interfaces;
 using JobHunt.Domain.DataModels.Request;
+using JobHunt.Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobHunt.Controllers
@@ -16,7 +17,7 @@ namespace JobHunt.Controllers
         }
 
         [HttpPost("check-user")]
-        public async Task<IActionResult> CheckUser([FromBody] CheckUserDTO model)
+        public async Task<IActionResult> CheckUser([FromBody] CheckEmailDTO model)
         {
             return await _serviceBundle.AuthService.CheckUser(model);
         }
@@ -28,9 +29,27 @@ namespace JobHunt.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginUser([FromBody] LoginUserDTO model)
+        public async Task<IActionResult> LoginUser([FromBody] LoginAspNetUserDTO model)
         {
-            return await _serviceBundle.AuthService.LoginUser(model);
+            return await _serviceBundle.AuthService.Login(model , (int)Role.User);
+        }
+
+        [HttpPost("check-company")]
+        public async Task<IActionResult> CheckCompany([FromBody] CheckEmailDTO model)
+        {
+            return await _serviceBundle.AuthService.CheckCompany(model);
+        }
+
+        [HttpPost("register-company")]
+        public async Task<IActionResult> RegisterCompany([FromBody] RegisterCompanyDTO model)
+        {
+            return await _serviceBundle.AuthService.RegisterCompany(model);
+        }
+
+        [HttpPost("login-company")]
+        public async Task<IActionResult> LoginCompany([FromBody] LoginAspNetUserDTO model)
+        {
+            return await _serviceBundle.AuthService.Login(model, (int)Role.Company);
         }
     }
 }

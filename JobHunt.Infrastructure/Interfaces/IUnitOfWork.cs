@@ -10,6 +10,8 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public IOtpRecordRepo OtpRecord { get; }
 
+        public ICompanyRepo Company { get; }
+
         Task SaveAsync();
     }
 }
