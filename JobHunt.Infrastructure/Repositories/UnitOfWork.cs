@@ -21,6 +21,8 @@ namespace JobHunt.Infrastructure.Repositories
 
         public IOtpRecordRepo OtpRecord { get; private set; }
 
+        public ICompanyRepo Company { get; private set; }
+
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();

@@ -13,8 +13,12 @@ namespace JobHunt.Application.Interfaces
     {
         Task<ResponseDTO> RegisterUser(RegisterUserDTO model);
 
-        Task<ResponseDTO> CheckUser(CheckUserDTO model);
+        Task<ResponseDTO> CheckUser(CheckEmailDTO model);
 
-        Task<ResponseDTO> LoginUser(LoginUserDTO model);
+        Task<ResponseDTO> Login(LoginAspNetUserDTO model, int role);
+
+        Task<ResponseDTO> CheckCompany(CheckEmailDTO model);
+
+        Task<ResponseDTO> RegisterCompany(RegisterCompanyDTO model);
     }
 }

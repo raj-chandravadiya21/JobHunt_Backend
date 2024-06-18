@@ -14,9 +14,7 @@ namespace JobHunt.Application.Services
 {
     public class AuthService(IUnitOfWork _unitOfWork, IMapper _mapper, IEmailSender _emailSender) : IAuthService
     {
-
-
-        public async Task<ResponseDTO> CheckUser(CheckUserDTO model)
+        public async Task<ResponseDTO> CheckUser(CheckEmailDTO model)
         {
             var user = await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.User);
             if ((bool)user)
@@ -114,7 +112,6 @@ namespace JobHunt.Application.Services
             }
         }
 
-
         public static Task<string> GenerateOTP()
         {
             int length = 6;
@@ -152,26 +149,26 @@ namespace JobHunt.Application.Services
             return otp;
         }
 
-        public async Task<ResponseDTO> LoginUser(LoginUserDTO model)
+        public async Task<ResponseDTO> Login(LoginAspNetUserDTO model, int role)
         {
-            var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == (int)Role.User);
+            var aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == role);
 
-            if (user == null)
+            if (aspnetuser == null)
             {
                 return new()
                 {
                     IsSuccess = false,
-                    Message = "User Not Found",
+                    Message = "Email Id does not exists!",
                     StatusCode = HttpStatusCode.OK,
                 };
             }
 
-            if (BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+            if (BCrypt.Net.BCrypt.Verify(model.Password, aspnetuser.Password))
             {
                 var claims = new Claim[]
                 {
-                    new(ClaimTypes.Role,(((Role)user.RoleId!).ToString())),
-                    new(ClaimTypes.Sid,user.AspnetuserId.ToString())
+                    new(ClaimTypes.Role,(((Role)aspnetuser.RoleId!).ToString())),
+                    new(ClaimTypes.Sid,aspnetuser.AspnetuserId.ToString())
                 };
 
                 var token = Jwt.GenerateToken(claims, DateTime.Now.AddDays(1));
@@ -194,6 +191,104 @@ namespace JobHunt.Application.Services
                 StatusCode = HttpStatusCode.BadRequest,
                 Message = "Enter valid Crendential",
             };
+        }
+
+        public async Task<ResponseDTO> CheckCompany(CheckEmailDTO model)
+        {
+            var company = await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.Company);
+            if ((bool)company)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    Message = "Company Email Id Already Exists",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+            int otp = await GenerateAndSaveOtp(model.Email!);
+
+            await _emailSender.SendEmailVerifiaction(otp, model.Email!);
+
+            return new()
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                Message = "Otp Sent Successfully",
+            };
+        }
+
+        public async Task<ResponseDTO> RegisterCompany(RegisterCompanyDTO model)
+        {
+            if (model.Password != model.ConfirmPassword)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    Message = "Password and Confirm Password Not match",
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            var otpRecord = _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
+
+            int otp = otpRecord.Result!.Otp;
+
+            if (otp == model.Otp)
+            {
+                if (DateTime.Now.AddMinutes(-20) >= otpRecord.Result!.SentDatetime)
+                {
+                    return new()
+                    {
+                        IsSuccess = false,
+                        Message = "Time Out",
+                        StatusCode = HttpStatusCode.BadRequest,
+                    };
+                }
+
+                string salt = BCrypt.Net.BCrypt.GenerateSalt();
+                string password = BCrypt.Net.BCrypt.HashPassword(model.Password, salt);
+
+                Aspnetuser aspUser = new()
+                {
+                    FirstName = model.CompanyName,
+                    Password = password,
+                    Email = model.Email!,
+                    RoleId = (int)Role.Company,
+                    CreatedDate = DateTime.Now,
+                };
+
+                await _unitOfWork.AspNetUser.CreateAsync(aspUser);
+                await _unitOfWork.SaveAsync();
+
+                Company company = new()
+                {
+                    AspnetuserId = aspUser.AspnetuserId,
+                    CompanyName = model.CompanyName,
+                    Email = model.Email!,
+                    CreatedDate = DateTime.Now,
+                    IsApprove = false,
+                };
+
+                await _unitOfWork.Company.CreateAsync(company);
+                await _unitOfWork.SaveAsync();
+
+                return new()
+                {
+                    IsSuccess = true,
+                    Message = "Company Registered Successfully",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+            else
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    Message = "Otp Not Match",
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
         }
     }
 }
