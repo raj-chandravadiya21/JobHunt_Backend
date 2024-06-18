@@ -11,6 +11,8 @@ namespace JobHunt.Application.Interfaces
 {
     public interface IAuthService 
     {
-        
+        Task<ResponseDTO> RegisterUser(RegisterUserDTO model);
+
+        Task<ResponseDTO> CheckUser(CheckUserDTO model);
     }
 }

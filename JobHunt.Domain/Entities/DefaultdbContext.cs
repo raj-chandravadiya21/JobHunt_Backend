@@ -126,6 +126,7 @@ public partial class DefaultdbContext : DbContext
             entity.HasKey(e => e.AspnetuserId).HasName("AspNetUser_pkey");
 
             entity.Property(e => e.AspnetuserId).UseIdentityAlwaysColumn();
+            entity.Property(e => e.IsRegistered).HasDefaultValue(false);
 
             entity.HasOne(d => d.Role).WithMany(p => p.Aspnetusers).HasConstraintName("aspnetuser_role_id_fkey");
         });
@@ -236,7 +237,6 @@ public partial class DefaultdbContext : DbContext
             entity.HasKey(e => e.UserId).HasName("user			_pkey");
 
             entity.Property(e => e.UserId).UseIdentityAlwaysColumn();
-            entity.Property(e => e.IsVerified).HasDefaultValue(false);
 
             entity.HasOne(d => d.Aspnetuser).WithMany(p => p.Users)
                 .OnDelete(DeleteBehavior.ClientSetNull)
