@@ -17,8 +17,8 @@ namespace JobHunt.Application.Services
 {
     public class AuthService(IUnitOfWork _unitOfWork, IMapper _mapper, IEmailSender _emailSender) : IAuthService
     {
+
         public async Task<ResponseDTO> CheckUser(CheckEmailDTO model)
-        public async Task<ResponseDTO> CheckUser(CheckUserDTO model)
         {
             var user = await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.User);
             if ((bool)user)
@@ -201,6 +201,31 @@ namespace JobHunt.Application.Services
                 IsSuccess = false,
                 StatusCode = HttpStatusCode.BadRequest,
                 Message = "Enter valid Crendential",
+            };
+        }
+
+        public async Task<ResponseDTO> CheckCompany(CheckEmailDTO model)
+        {
+            var company = await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.Company);
+            if ((bool)company)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    Message = "Company Email Id Already Exists",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+            int otp = await GenerateAndSaveOtp(model.Email!);
+
+            await _emailSender.SendEmailVerifiaction(otp, model.Email!);
+
+            return new()
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                Message = "Otp Sent Successfully",
             };
         }
 
