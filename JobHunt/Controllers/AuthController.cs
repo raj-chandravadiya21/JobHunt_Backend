@@ -63,5 +63,11 @@ namespace JobHunt.Controllers
         {
             return await _serviceBundle.AuthService.ValidateResetToken(model);
         }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+        {
+            return await _serviceBundle.AuthService.ResetPassword(model);
+        }
     }
 }

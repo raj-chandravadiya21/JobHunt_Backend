@@ -24,5 +24,7 @@ namespace JobHunt.Application.Interfaces
         Task<ResponseDTO> ForgotPasswordUser(ForgotPasswordDTO model);
 
         Task<ResponseDTO> ValidateResetToken(ValidateTokenDTO model);
+
+        Task<ResponseDTO> ResetPassword(ResetPasswordDTO model);
     }
 }

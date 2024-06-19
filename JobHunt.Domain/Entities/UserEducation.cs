@@ -28,11 +28,15 @@ public partial class UserEducation
     [Column("percentage/grade", TypeName = "character varying")]
     public string PercentageGrade { get; set; } = null!;
 
-    [Column("startdate")]
-    public DateOnly Startdate { get; set; }
+    [Column("streem")]
+    [StringLength(30)]
+    public string? Streem { get; set; }
 
-    [Column("end_date")]
-    public DateOnly EndDate { get; set; }
+    [Column("start_year")]
+    public int StartYear { get; set; }
+
+    [Column("end_year")]
+    public int EndYear { get; set; }
 
     [ForeignKey("DegreeId")]
     [InverseProperty("UserEducations")]
@@ -44,5 +48,5 @@ public partial class UserEducation
 
     [ForeignKey("UserEducationTypeId")]
     [InverseProperty("UserEducations")]
-    public virtual UserEducationType UserEducationType { get; set; } = null!;
+    public virtual EducationType UserEducationType { get; set; } = null!;
 }

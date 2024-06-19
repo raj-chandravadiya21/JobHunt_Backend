@@ -55,13 +55,13 @@ namespace JobHunt.Application.Services
                 };
             }
 
-            var otpRecord = _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
+            var otpRecord = await _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
 
-            int otp = otpRecord.Result!.Otp;
+            int otp = otpRecord!.Otp;
 
             if (otp == model.Otp)
             {
-                if (DateTime.Now.AddMinutes(-20) >= otpRecord.Result!.SentDatetime)
+                if (DateTime.Now.AddMinutes(-20) >= otpRecord!.SentDatetime)
                 {
                     return new()
                     {
@@ -241,13 +241,13 @@ namespace JobHunt.Application.Services
                 };
             }
 
-            var otpRecord = _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
+            var otpRecord = await _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
 
-            int otp = otpRecord.Result!.Otp;
+            int otp = otpRecord!.Otp;
 
             if (otp == model.Otp)
             {
-                if (DateTime.Now.AddMinutes(-20) >= otpRecord.Result!.SentDatetime)
+                if (DateTime.Now.AddMinutes(-20) >= otpRecord!.SentDatetime)
                 {
                     return new()
                     {
@@ -319,14 +319,13 @@ namespace JobHunt.Application.Services
                 };
             }
 
-            var expires = DateTime.UtcNow.AddMinutes(20);
-            var unixExpires = new DateTimeOffset(expires).ToUnixTimeSeconds();
+
 
             var claims = new Claim[]
                 {
                     new(ClaimTypes.Role,(((Role)model.Role!).ToString())),
                     new(ClaimTypes.Sid,user.AspnetuserId.ToString()),
-                    new(ClaimTypes.Expiration,unixExpires.ToString())
+                    new(ClaimTypes.Expiration,user.Password.ToString())
                 };
 
             var token = Jwt.GenerateToken(claims, DateTime.Now.AddMinutes(20));
@@ -369,6 +368,63 @@ namespace JobHunt.Application.Services
             }
 
             return await Task.FromResult(Jwt.ValidateToken(token, out JwtSecurityToken? _));
+        }
+
+        public async Task<ResponseDTO> ResetPassword(ResetPasswordDTO model)
+        {
+            var isValidToken = Jwt.ValidateToken(model.Token!, out JwtSecurityToken? jwtToken);
+            if (!isValidToken)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.OK,
+                    Message = "Reset Password Link Expire",
+                };
+            }
+
+            var userPassword = Jwt.GetClaimValue(ClaimTypes.Expiration, jwtToken!);
+            var userId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
+
+
+            var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.AspnetuserId.ToString() == userId);
+
+            if (user==null || userPassword != user.Password)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = "You have aleready Reset your password using this link"
+                };
+            }
+
+            if (model.Password != model.ConfirmPassword)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.OK,
+                    Message = "Password and Confirmpassword Not match"
+                };
+            }
+
+            string salt = BCrypt.Net.BCrypt.GenerateSalt();
+            string password = BCrypt.Net.BCrypt.HashPassword(model.Password, salt);
+
+            user.Password = password;
+            user.ModifiedDate = DateTime.Now;
+
+
+            _unitOfWork.AspNetUser.UpdateAsync(user);
+           await _unitOfWork.SaveAsync();
+
+            return new()
+            {
+                IsSuccess = true,
+                StatusCode= HttpStatusCode.OK,
+                Message = "Password Update Successfully",
+            };
         }
     }
 }
