@@ -11,5 +11,7 @@ namespace JobHunt.Domain.Interfaces
         Task<bool?> GetAnyAsync(Expression<Func<T, bool>> predicate);
 
         Task CreateAsync(T entity);
+
+        void UpdateAsync(T entity);
     }
 }

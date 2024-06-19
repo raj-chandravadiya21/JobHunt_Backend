@@ -31,20 +31,42 @@ namespace JobHunt.Application.Services
         public async Task SendEmailVerifiaction(int otp, string email)
         {
             var subject = "Email Verification OTP For JobHunt";
-            var message = $"<h2> Verify Your Email For JobHunt </h2>" +
-                $"<p style=\"font-weight: bold;\">Hey We are excited to have you onboard at JobHunt" +
-                $"<p style=\"font-weight: bold;\"> Verify your email address by using the following One-Time-Password(valid for 20 mins):{otp}";
 
-            await SendEmailAsync(email, subject, message);
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var parentDirectory = Directory.GetParent(currentDirectory)?.FullName;
+            var filePath = Path.Combine(parentDirectory!, "JobHunt.Domain", "EmailTemplate", "email-verification.html");
+
+            var htmlTemplate = ReadHtmlTemplateFromFile(filePath);
+
+            var htmlBody = htmlTemplate.Replace("{{otp}}", otp.ToString());
+
+            await SendEmailAsync(email, subject, htmlBody);
         }
 
         public async Task SendResetPasswordLink(string token, string email)
         {
             var subject = "Reset Your Account Password";
-            var message = $"<h2>Hello From JobHunt</h2>" +
-                $"<p> We received a request to reset your JobHunt password.Please click on the link below to update your password." +
-                $"http://localhost:3000/reset-password/{token}";
-            await SendEmailAsync(email, subject, message);
+
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var parentDirectory = Directory.GetParent(currentDirectory)?.FullName;
+            var filePath = Path.Combine(parentDirectory!, "JobHunt.Domain", "EmailTemplate", "reset-password.html");
+
+            var htmlTemplate = ReadHtmlTemplateFromFile(filePath);
+
+            var resetLink = $"http://localhost:3000/reset-password/{token}";
+
+            var htmlBody =  htmlTemplate.Replace("{{action_url}}", resetLink);
+
+            await SendEmailAsync(email, subject, htmlBody);
+        }
+
+        public string ReadHtmlTemplateFromFile(string filePath)
+        {
+            string htmlBody = string.Empty;
+
+            htmlBody = File.ReadAllText(filePath);
+
+            return htmlBody;
         }
 
     }

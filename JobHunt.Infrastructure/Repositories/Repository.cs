@@ -1,6 +1,7 @@
 ﻿using JobHunt.Domain.Entities;
 using JobHunt.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,11 @@ namespace JobHunt.Infrastructure.Repositories
         public async Task CreateAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
+        }
+
+        public void UpdateAsync(T entity)
+        {
+            _dbSet.Update(entity);
         }
     }
 }
