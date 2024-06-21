@@ -20,5 +20,11 @@ namespace JobHunt.Application.Interfaces
         Task<ResponseDTO> CheckCompany(CheckEmailDTO model);
 
         Task<ResponseDTO> RegisterCompany(RegisterCompanyDTO model);
+
+        Task<ResponseDTO> ForgotPasswordUser(ForgotPasswordDTO model);
+
+        Task<ResponseDTO> ValidateResetToken(ValidateTokenDTO model);
+
+        Task<ResponseDTO> ResetPassword(ResetPasswordDTO model);
     }
 }

@@ -6,14 +6,18 @@ using JobHunt.Domain.Entities;
 using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;
 using JobHunt.Infrastructure.Interfaces;
+using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Transactions;
 
 namespace JobHunt.Application.Services
 {
     public class AuthService(IUnitOfWork _unitOfWork, IMapper _mapper, IEmailSender _emailSender) : IAuthService
     {
+
         public async Task<ResponseDTO> CheckUser(CheckEmailDTO model)
         {
             var user = await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.User);
@@ -51,13 +55,13 @@ namespace JobHunt.Application.Services
                 };
             }
 
-            var otpRecord = _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
+            var otpRecord = await _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
 
-            int otp = otpRecord.Result!.Otp;
+            int otp = otpRecord!.Otp;
 
             if (otp == model.Otp)
             {
-                if (DateTime.Now.AddMinutes(-20) >= otpRecord.Result!.SentDatetime)
+                if (DateTime.Now.AddMinutes(-20) >= otpRecord!.SentDatetime)
                 {
                     return new()
                     {
@@ -67,32 +71,39 @@ namespace JobHunt.Application.Services
                     };
                 }
 
-                Aspnetuser aspUser = new Aspnetuser();
-                aspUser.CreatedDate = DateTime.Now;
-                aspUser.RoleId = (int)Role.User;
-                aspUser.Email = model.Email!;
-                aspUser.FirstName = model.FirstName!;
-                aspUser.LastName = model.LastName;
-
-                string salt = BCrypt.Net.BCrypt.GenerateSalt();
-                string Password = BCrypt.Net.BCrypt.HashPassword(model.Password, salt);
-
-                aspUser.Password = Password;
-
-                await _unitOfWork.AspNetUser.CreateAsync(aspUser);
-                await _unitOfWork.SaveAsync();
-
-                User user = new()
+                using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    FirstName = model.FirstName!,
-                    LastName = model.LastName,
-                    Email = model.Email!,
-                    AspnetuserId = aspUser.AspnetuserId,
-                    Createddate = DateTime.Now,
-                };
+                    Aspnetuser aspUser = new()
+                    {
+                        CreatedDate = DateTime.Now,
+                        RoleId = (int)Role.User,
+                        Email = model.Email!,
+                        FirstName = model.FirstName!,
+                        LastName = model.LastName
+                    };
 
-                await _unitOfWork.User.CreateAsync(user);
-                await _unitOfWork.SaveAsync();
+                    string salt = BCrypt.Net.BCrypt.GenerateSalt();
+                    string Password = BCrypt.Net.BCrypt.HashPassword(model.Password, salt);
+
+                    aspUser.Password = Password;
+
+                    await _unitOfWork.AspNetUser.CreateAsync(aspUser);
+                    await _unitOfWork.SaveAsync();
+
+                    User user = new()
+                    {
+                        FirstName = model.FirstName!,
+                        LastName = model.LastName,
+                        Email = model.Email!,
+                        AspnetuserId = aspUser.AspnetuserId,
+                        Createddate = DateTime.Now,
+                    };
+
+                    await _unitOfWork.User.CreateAsync(user);
+                    await _unitOfWork.SaveAsync();
+
+                    transactionScope.Complete();
+                }
 
                 return new()
                 {
@@ -230,13 +241,13 @@ namespace JobHunt.Application.Services
                 };
             }
 
-            var otpRecord = _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
+            var otpRecord = await _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
 
-            int otp = otpRecord.Result!.Otp;
+            int otp = otpRecord!.Otp;
 
             if (otp == model.Otp)
             {
-                if (DateTime.Now.AddMinutes(-20) >= otpRecord.Result!.SentDatetime)
+                if (DateTime.Now.AddMinutes(-20) >= otpRecord!.SentDatetime)
                 {
                     return new()
                     {
@@ -249,29 +260,33 @@ namespace JobHunt.Application.Services
                 string salt = BCrypt.Net.BCrypt.GenerateSalt();
                 string password = BCrypt.Net.BCrypt.HashPassword(model.Password, salt);
 
-                Aspnetuser aspUser = new()
+                using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    FirstName = model.CompanyName,
-                    Password = password,
-                    Email = model.Email!,
-                    RoleId = (int)Role.Company,
-                    CreatedDate = DateTime.Now,
-                };
+                    Aspnetuser aspUser = new()
+                    {
+                        FirstName = model.CompanyName,
+                        Password = password,
+                        Email = model.Email!,
+                        RoleId = (int)Role.Company,
+                        CreatedDate = DateTime.Now,
+                    };
 
-                await _unitOfWork.AspNetUser.CreateAsync(aspUser);
-                await _unitOfWork.SaveAsync();
+                    await _unitOfWork.AspNetUser.CreateAsync(aspUser);
+                    await _unitOfWork.SaveAsync();
 
-                Company company = new()
-                {
-                    AspnetuserId = aspUser.AspnetuserId,
-                    CompanyName = model.CompanyName,
-                    Email = model.Email!,
-                    CreatedDate = DateTime.Now,
-                    IsApprove = false,
-                };
+                    Company company = new()
+                    {
+                        AspnetuserId = aspUser.AspnetuserId,
+                        CompanyName = model.CompanyName,
+                        Email = model.Email!,
+                        CreatedDate = DateTime.Now,
+                        IsApprove = false,
+                    };
 
-                await _unitOfWork.Company.CreateAsync(company);
-                await _unitOfWork.SaveAsync();
+                    await _unitOfWork.Company.CreateAsync(company);
+                    await _unitOfWork.SaveAsync();
+                    transactionScope.Complete();
+                }
 
                 return new()
                 {
@@ -289,6 +304,127 @@ namespace JobHunt.Application.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
+        }
+
+        public async Task<ResponseDTO> ForgotPasswordUser(ForgotPasswordDTO model)
+        {
+            var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == model.Role);
+            if (user == null)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    Message = "User Not Found",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+
+
+            var claims = new Claim[]
+                {
+                    new(ClaimTypes.Role,(((Role)model.Role!).ToString())),
+                    new(ClaimTypes.Sid,user.AspnetuserId.ToString()),
+                    new(ClaimTypes.Expiration,user.Password.ToString())
+                };
+
+            var token = Jwt.GenerateToken(claims, DateTime.Now.AddMinutes(20));
+
+            await _emailSender.SendResetPasswordLink(token, user.Email);
+
+            return new()
+            {
+                IsSuccess = true,
+                Message = "Reset Password link sent Successfully",
+                StatusCode = HttpStatusCode.OK
+            };
+        }
+
+        public async Task<ResponseDTO> ValidateResetToken(ValidateTokenDTO model)
+        {
+            bool isValid = await ValidToken(model.Token!);
+            if (isValid)
+            {
+                return new()
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Message = "Token is valid"
+                };
+            }
+            return new()
+            {
+                IsSuccess = false,
+                StatusCode = HttpStatusCode.OK,
+                Message = "Token is not Valid"
+            };
+        }
+
+        public async Task<bool> ValidToken(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return false;
+            }
+
+            return await Task.FromResult(Jwt.ValidateToken(token, out JwtSecurityToken? _));
+        }
+
+        public async Task<ResponseDTO> ResetPassword(ResetPasswordDTO model)
+        {
+            var isValidToken = Jwt.ValidateToken(model.Token!, out JwtSecurityToken? jwtToken);
+            if (!isValidToken)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.OK,
+                    Message = "Reset Password Link Expire",
+                };
+            }
+
+            var userPassword = Jwt.GetClaimValue(ClaimTypes.Expiration, jwtToken!);
+            var userId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
+
+
+            var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.AspnetuserId.ToString() == userId);
+
+            if (user==null || userPassword != user.Password)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = "You have aleready Reset your password using this link"
+                };
+            }
+
+            if (model.Password != model.ConfirmPassword)
+            {
+                return new()
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.OK,
+                    Message = "Password and Confirmpassword Not match"
+                };
+            }
+
+            string salt = BCrypt.Net.BCrypt.GenerateSalt();
+            string password = BCrypt.Net.BCrypt.HashPassword(model.Password, salt);
+
+            user.Password = password;
+            user.ModifiedDate = DateTime.Now;
+
+
+            _unitOfWork.AspNetUser.UpdateAsync(user);
+           await _unitOfWork.SaveAsync();
+
+            return new()
+            {
+                IsSuccess = true,
+                StatusCode= HttpStatusCode.OK,
+                Message = "Password Update Successfully",
+            };
         }
     }
 }

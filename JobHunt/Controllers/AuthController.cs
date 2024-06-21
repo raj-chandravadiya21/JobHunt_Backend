@@ -51,5 +51,23 @@ namespace JobHunt.Controllers
         {
             return await _serviceBundle.AuthService.Login(model, (int)Role.Company);
         }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO model)
+        {
+            return await _serviceBundle.AuthService.ForgotPasswordUser(model);
+        }
+
+        [HttpPost("validate-reset-token")]
+        public async Task<IActionResult> ValidateResetPasswordToken([FromBody] ValidateTokenDTO model)
+        {
+            return await _serviceBundle.AuthService.ValidateResetToken(model);
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+        {
+            return await _serviceBundle.AuthService.ResetPassword(model);
+        }
     }
 }

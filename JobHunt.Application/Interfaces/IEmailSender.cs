@@ -9,5 +9,7 @@ namespace JobHunt.Application.Interfaces
     public interface IEmailSender
     {
         Task SendEmailVerifiaction(int otp, string email);
+
+        Task SendResetPasswordLink(string token,string email);
     }
 }
