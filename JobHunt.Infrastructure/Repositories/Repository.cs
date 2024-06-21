@@ -47,5 +47,10 @@ namespace JobHunt.Infrastructure.Repositories
         {
             _dbSet.Update(entity);
         }
+
+        public async Task AddRangeAsync(List<T> entity)
+        {
+            await _dbSet.AddRangeAsync(entity);
+        }
     }
 }

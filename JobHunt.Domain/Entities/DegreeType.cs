@@ -13,12 +13,13 @@ public partial class DegreeType
     [Column("id")]
     public int Id { get; set; }
 
-    [Column("type")]
-    public int Type { get; set; }
-
     [Column("name")]
-    [StringLength(50)]
+    [StringLength(200)]
     public string Name { get; set; } = null!;
+
+    [Column("type")]
+    [StringLength(50)]
+    public string Type { get; set; } = null!;
 
     [InverseProperty("Degree")]
     public virtual ICollection<UserEducation> UserEducations { get; set; } = new List<UserEducation>();

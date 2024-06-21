@@ -9,18 +9,21 @@ namespace JobHunt.Domain.Entities;
 [Table("user_skill")]
 public partial class UserSkill
 {
-    [Key]
     [Column("user_id")]
     public int UserId { get; set; }
 
     [Column("skill_id")]
     public int SkillId { get; set; }
 
+    [Key]
+    [Column("user_skill_id")]
+    public int UserSkillId { get; set; }
+
     [ForeignKey("SkillId")]
     [InverseProperty("UserSkills")]
     public virtual Skill Skill { get; set; } = null!;
 
     [ForeignKey("UserId")]
-    [InverseProperty("UserSkill")]
+    [InverseProperty("UserSkills")]
     public virtual User User { get; set; } = null!;
 }

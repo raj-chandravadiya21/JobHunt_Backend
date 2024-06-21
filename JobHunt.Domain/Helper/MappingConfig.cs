@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JobHunt.Domain.DataModels.Request;
+using JobHunt.Domain.DataModels.Request.UserRequest.Registration;
 using JobHunt.Domain.Entities;
 
 namespace JobHunt.Domain.Helper

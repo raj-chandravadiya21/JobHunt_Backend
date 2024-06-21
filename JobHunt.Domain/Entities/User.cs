@@ -71,7 +71,10 @@ public partial class User
     public virtual ICollection<UserEducation> UserEducations { get; set; } = new List<UserEducation>();
 
     [InverseProperty("User")]
-    public virtual UserSkill? UserSkill { get; set; }
+    public virtual ICollection<UserLanguage> UserLanguages { get; set; } = new List<UserLanguage>();
+
+    [InverseProperty("User")]
+    public virtual ICollection<UserSkill> UserSkills { get; set; } = new List<UserSkill>();
 
     [InverseProperty("User")]
     public virtual ICollection<UserSocialProfile> UserSocialProfiles { get; set; } = new List<UserSocialProfile>();

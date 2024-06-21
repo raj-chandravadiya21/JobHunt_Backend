@@ -151,7 +151,7 @@ public partial class DefaultdbContext : DbContext
 
         modelBuilder.Entity<EducationType>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("user_education_type_pkey");
+            entity.HasKey(e => e.Id).HasName("education_type_pkey");
 
             entity.Property(e => e.Id).UseIdentityAlwaysColumn();
         });
@@ -252,9 +252,7 @@ public partial class DefaultdbContext : DbContext
 
             entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
-            entity.HasOne(d => d.Degree).WithMany(p => p.UserEducations)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_education_degree_id_fkey");
+            entity.HasOne(d => d.Degree).WithMany(p => p.UserEducations).HasConstraintName("user_education_degree_id_fkey");
 
             entity.HasOne(d => d.UserEducationType).WithMany(p => p.UserEducations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -267,11 +265,11 @@ public partial class DefaultdbContext : DbContext
 
         modelBuilder.Entity<UserLanguage>(entity =>
         {
-            entity.HasOne(d => d.Language).WithMany()
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_languages_language_id_fkey");
+            entity.HasKey(e => e.UserLanguageId).HasName("user_languages_pkey");
 
-            entity.HasOne(d => d.User).WithMany()
+            entity.Property(e => e.UserLanguageId).UseIdentityAlwaysColumn();
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserLanguages)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("user_languages_user_id_fkey");
         });
@@ -289,17 +287,15 @@ public partial class DefaultdbContext : DbContext
 
         modelBuilder.Entity<UserSkill>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("user_skill_pkey");
+            entity.HasKey(e => e.UserSkillId).HasName("user_skill_pkey");
 
-            entity.Property(e => e.UserId)
-                .ValueGeneratedOnAdd()
-                .UseIdentityAlwaysColumn();
+            entity.Property(e => e.UserSkillId).UseIdentityAlwaysColumn();
 
             entity.HasOne(d => d.Skill).WithMany(p => p.UserSkills)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("user_skill_skill_id_fkey");
 
-            entity.HasOne(d => d.User).WithOne(p => p.UserSkill)
+            entity.HasOne(d => d.User).WithMany(p => p.UserSkills)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("user_skill_user_id_fkey");
         });

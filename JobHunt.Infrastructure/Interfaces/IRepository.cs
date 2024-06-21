@@ -13,5 +13,7 @@ namespace JobHunt.Domain.Interfaces
         Task CreateAsync(T entity);
 
         void UpdateAsync(T entity);
+
+        Task AddRangeAsync(List<T> entity);
     }
 }

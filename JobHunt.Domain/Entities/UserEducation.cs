@@ -20,7 +20,7 @@ public partial class UserEducation
     public int UserEducationTypeId { get; set; }
 
     [Column("degree_id")]
-    public int DegreeId { get; set; }
+    public int? DegreeId { get; set; }
 
     [Column("institute_name", TypeName = "character varying")]
     public string InstituteName { get; set; } = null!;
@@ -38,9 +38,12 @@ public partial class UserEducation
     [Column("end_year")]
     public int EndYear { get; set; }
 
+    [Column("created_date", TypeName = "timestamp without time zone")]
+    public DateTime CreatedDate { get; set; }
+
     [ForeignKey("DegreeId")]
     [InverseProperty("UserEducations")]
-    public virtual DegreeType Degree { get; set; } = null!;
+    public virtual DegreeType? Degree { get; set; }
 
     [ForeignKey("UserId")]
     [InverseProperty("UserEducations")]
