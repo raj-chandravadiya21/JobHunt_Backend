@@ -1,4 +1,5 @@
-﻿using JobHunt.Domain.Interfaces;
+﻿using JobHunt.Application.Interfaces.UserInterface;
+using JobHunt.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace JobHunt.Application.Interfaces
     public interface IServiceBundle
     {
         public IAuthService AuthService { get; }
+
+        public IRegistrationService RegistrationService { get; }
     }
 }

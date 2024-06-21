@@ -34,6 +34,9 @@ public partial class WorkExperience
     [StringLength(500)]
     public string? Description { get; set; }
 
+    [Column("created_date", TypeName = "timestamp without time zone")]
+    public DateTime CreatedDate { get; set; }
+
     [ForeignKey("UserId")]
     [InverseProperty("WorkExperiences")]
     public virtual User User { get; set; } = null!;

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JobHunt.Domain.Entities;
 
-[Table("user			")]
+[Table("user")]
 public partial class User
 {
     [Key]
@@ -49,8 +49,13 @@ public partial class User
     [StringLength(100)]
     public string? Photo { get; set; }
 
+    [Column("experience")]
+    [StringLength(10)]
+    public string? Experience { get; set; }
+
     [Column("gender")]
-    public int? Gender { get; set; }
+    [StringLength(10)]
+    public string? Gender { get; set; }
 
     [InverseProperty("User")]
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
@@ -66,7 +71,10 @@ public partial class User
     public virtual ICollection<UserEducation> UserEducations { get; set; } = new List<UserEducation>();
 
     [InverseProperty("User")]
-    public virtual UserSkill? UserSkill { get; set; }
+    public virtual ICollection<UserLanguage> UserLanguages { get; set; } = new List<UserLanguage>();
+
+    [InverseProperty("User")]
+    public virtual ICollection<UserSkill> UserSkills { get; set; } = new List<UserSkill>();
 
     [InverseProperty("User")]
     public virtual ICollection<UserSocialProfile> UserSocialProfiles { get; set; } = new List<UserSocialProfile>();

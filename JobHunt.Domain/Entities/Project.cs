@@ -34,6 +34,9 @@ public partial class Project
     [StringLength(500)]
     public string? Description { get; set; }
 
+    [Column("created_date", TypeName = "timestamp without time zone")]
+    public DateTime CreatedDate { get; set; }
+
     [ForeignKey("UserId")]
     [InverseProperty("Projects")]
     public virtual User User { get; set; } = null!;

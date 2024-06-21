@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JobHunt.Domain.Entities;
 
-[Keyless]
 [Table("user_languages")]
 public partial class UserLanguage
 {
@@ -16,9 +15,11 @@ public partial class UserLanguage
     [Column("language_id")]
     public int LanguageId { get; set; }
 
-    [ForeignKey("LanguageId")]
-    public virtual Language Language { get; set; } = null!;
+    [Key]
+    [Column("user_language_id")]
+    public int UserLanguageId { get; set; }
 
     [ForeignKey("UserId")]
+    [InverseProperty("UserLanguages")]
     public virtual User User { get; set; } = null!;
 }

@@ -12,6 +12,18 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public ICompanyRepo Company { get; }
 
+        public IUserSkillRepo UserSkill { get; }
+
+        public IUserLanguageRepo UserLanguage { get; }
+
+        public IUserSocialProfileRepo UserSocialProfile { get; }
+
+        public IProjectRepo Project { get; }
+
+        public IUserEducationRepo UserEducation { get; }
+
+        public IWorkExperimentRepo WorkExperiment { get; }  
+        
         Task SaveAsync();
     }
 }

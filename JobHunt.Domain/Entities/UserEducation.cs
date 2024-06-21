@@ -20,7 +20,7 @@ public partial class UserEducation
     public int UserEducationTypeId { get; set; }
 
     [Column("degree_id")]
-    public int DegreeId { get; set; }
+    public int? DegreeId { get; set; }
 
     [Column("institute_name", TypeName = "character varying")]
     public string InstituteName { get; set; } = null!;
@@ -28,15 +28,22 @@ public partial class UserEducation
     [Column("percentage/grade", TypeName = "character varying")]
     public string PercentageGrade { get; set; } = null!;
 
-    [Column("startdate")]
-    public DateOnly Startdate { get; set; }
+    [Column("streem")]
+    [StringLength(30)]
+    public string? Streem { get; set; }
 
-    [Column("end_date")]
-    public DateOnly EndDate { get; set; }
+    [Column("start_year")]
+    public int StartYear { get; set; }
+
+    [Column("end_year")]
+    public int EndYear { get; set; }
+
+    [Column("created_date", TypeName = "timestamp without time zone")]
+    public DateTime CreatedDate { get; set; }
 
     [ForeignKey("DegreeId")]
     [InverseProperty("UserEducations")]
-    public virtual DegreeType Degree { get; set; } = null!;
+    public virtual DegreeType? Degree { get; set; }
 
     [ForeignKey("UserId")]
     [InverseProperty("UserEducations")]
@@ -44,5 +51,5 @@ public partial class UserEducation
 
     [ForeignKey("UserEducationTypeId")]
     [InverseProperty("UserEducations")]
-    public virtual UserEducationType UserEducationType { get; set; } = null!;
+    public virtual EducationType UserEducationType { get; set; } = null!;
 }

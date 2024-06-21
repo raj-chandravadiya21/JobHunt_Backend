@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using JobHunt.Application.Interfaces;
+using JobHunt.Application.Interfaces.UserInterface;
+using JobHunt.Application.Services.UserService;
 using JobHunt.Domain.DataModels.Response;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +21,10 @@ namespace JobHunt.Application.Services
             _mapper = mapper;
             _emailSender = emailSender;
             AuthService = new AuthService(_unitOfWork, _mapper, _emailSender);
+            RegistrationService = new RegistrationService(_unitOfWork, _mapper);
         }
         public IAuthService AuthService { get; private set; }
+
+        public IRegistrationService RegistrationService { get; private set; }
     }
 }

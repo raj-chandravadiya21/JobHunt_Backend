@@ -28,6 +28,9 @@ public partial class UserSocialProfile
     [StringLength(100)]
     public string? WebsiteUrl { get; set; }
 
+    [Column("created_date", TypeName = "timestamp without time zone")]
+    public DateTime CreatedDate { get; set; }
+
     [ForeignKey("UserId")]
     [InverseProperty("UserSocialProfiles")]
     public virtual User User { get; set; } = null!;
