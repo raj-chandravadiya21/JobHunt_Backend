@@ -1,13 +1,9 @@
 ﻿using JobHunt.Domain.Entities;
+using JobHunt.Domain.Helper;
 using JobHunt.Domain.Interfaces;
+using JobHunt.Domain.Resource;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobHunt.Infrastructure.Repositories
 {
@@ -23,14 +19,25 @@ namespace JobHunt.Infrastructure.Repositories
         }
         public async Task<T?> GetFirstOrDefault(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.FirstOrDefaultAsync(predicate);
+            var data = await _dbSet.FirstOrDefaultAsync(predicate);
+            var typeName = typeof(T).Name;
+            var message = $"No {typeName} found matching the criteria";
+            if (data == null)
+                throw new NullObjectException(message);
+            return data;
         }
 
         public async Task<T?> GetLastOrDefaultOrderedBy<TProperty>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProperty>> orderByExpression)
         {
-            return await _dbSet.Where(predicate)
+            var data =  await _dbSet.Where(predicate)
                        .OrderBy(orderByExpression)
                        .LastOrDefaultAsync();
+
+            var typeName = typeof(T).Name;
+            var message = $"No {typeName} found matching the criteria";
+            if (data == null)
+                throw new NullObjectException(message);
+            return data;
         }
 
         public async Task<bool?> GetAnyAsync(Expression<Func<T, bool>> predicate)
@@ -51,6 +58,11 @@ namespace JobHunt.Infrastructure.Repositories
         public async Task AddRangeAsync(List<T> entity)
         {
             await _dbSet.AddRangeAsync(entity);
+        }
+
+        public async Task<List<T>> GetAllAsync()
+        {
+           return await _dbSet.ToListAsync();
         }
     }
 }

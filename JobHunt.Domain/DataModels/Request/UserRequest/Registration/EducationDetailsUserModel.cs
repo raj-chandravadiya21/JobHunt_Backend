@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JobHunt.Domain.DataModels.Request.UserRequest.Registration
 {
-    public class EducationDetailsUserDTO
+    public class EducationDetailsUserModel
     {
         public int EducationType { get; set; }
 

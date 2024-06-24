@@ -8,7 +8,7 @@ using System.Text;
 
 namespace JobHunt.Domain.Helper
 {
-    public class Jwt
+    public static class Jwt
     {
         public static string GenerateToken(IEnumerable<Claim> claims, DateTime expires)
         {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JobHunt.Domain.DataModels.Request;
 using JobHunt.Domain.DataModels.Request.UserRequest.Registration;
+using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.Entities;
 
 namespace JobHunt.Domain.Helper
@@ -9,8 +10,11 @@ namespace JobHunt.Domain.Helper
     {
         public MappingConfig()
         {
-            CreateMap<Aspnetuser, RegisterUserDTO>().ReverseMap();
-            CreateMap<User, RegisterUserDTO>().ReverseMap();
+            CreateMap<Aspnetuser, RegisterUserRequest>().ReverseMap();
+            CreateMap<User, RegisterUserRequest>().ReverseMap();
+            CreateMap<Skill, SkillResponse>().ReverseMap();
+            CreateMap<Language, LanguageResponse>().ReverseMap();  
+            CreateMap<DegreeType, DegreeTypeResponse>().ReverseMap();
         }
     }
 }

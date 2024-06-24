@@ -11,36 +11,45 @@ namespace JobHunt.Infrastructure.Repositories
         public UnitOfWork(DefaultdbContext context)
         {
             _context = context;
-            AspNetUser = new AspnetUserRepo(_context);
-            User = new UserRepo(_context);
-            OtpRecord = new OtpRecordRepo(_context);
-            Company = new CompanyRepo(_context);
-            UserSkill = new UserSkillRepo(_context);
-            UserLanguage = new UserLanguageRepo(_context);
-            UserSocialProfile = new UserSocialProfileRepo(_context);
-            Project = new ProjectRepo(_context);
-            UserEducation = new UserEducationRepo(_context);
-            WorkExperiment = new WorkExperienceRepo(_context);
+            AspNetUser = new Repository<Aspnetuser>(_context);
+            User = new Repository<User>(_context);
+            OtpRecord = new Repository<OtpRecord>(_context);
+            Company = new Repository<Company>(_context);
+            UserSkill = new Repository<UserSkill>(_context);
+            UserLanguage = new Repository<UserLanguage>(_context);
+            UserSocialProfile = new Repository<UserSocialProfile>(_context);
+            Project = new Repository<Project>(_context);
+            UserEducation = new Repository<UserEducation>(_context);
+            WorkExperiment = new Repository<WorkExperience>(_context);
+            Skill = new Repository<Skill>(_context);
+            Language = new Repository<Language>(_context);
+            DegreeType = new Repository<DegreeType>(_context);
         }
-        public IAspnetUserRepo AspNetUser { get; private set; }
+        public IRepository<Aspnetuser> AspNetUser { get; private set; }
 
-        public IUserRepo User { get; private set; }
+        public IRepository<User> User { get; private set; }
 
-        public IOtpRecordRepo OtpRecord { get; private set; }
+        public IRepository<OtpRecord> OtpRecord { get; private set; }
 
-        public ICompanyRepo Company { get; private set; }
+        public IRepository<Company> Company { get; private set; }
 
-        public IUserSkillRepo UserSkill { get; private set; }
+        public IRepository<UserSkill> UserSkill { get; private set; }
 
-        public IUserLanguageRepo UserLanguage { get; private set; } 
+        public IRepository<UserLanguage> UserLanguage { get; private set; } 
 
-        public IUserSocialProfileRepo UserSocialProfile { get; private set; }
+        public IRepository<UserSocialProfile> UserSocialProfile { get; private set; }
 
-        public IProjectRepo Project { get; private set; }
+        public IRepository<Project> Project { get; private set; }
 
-        public IUserEducationRepo UserEducation {  get; private set; } 
+        public IRepository<UserEducation> UserEducation {  get; private set; } 
 
-        public IWorkExperimentRepo WorkExperiment { get; private set; }
+        public IRepository<WorkExperience> WorkExperiment { get; private set; }
+
+        public IRepository<Skill> Skill { get; private set; }
+
+        public IRepository<Language> Language { get; private set; }
+
+        public IRepository<DegreeType> DegreeType { get; private set; }
 
         public async Task SaveAsync()
         {

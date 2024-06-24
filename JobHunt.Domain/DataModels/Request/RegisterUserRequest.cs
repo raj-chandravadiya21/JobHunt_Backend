@@ -1,14 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace JobHunt.Domain.DataModels.Request
 {
-    public class RegisterUserDTO
+    public class RegisterUserRequest
     {
 
         [Required]

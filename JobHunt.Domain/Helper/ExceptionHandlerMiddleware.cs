@@ -22,27 +22,46 @@ namespace JobHunt.Domain.Helper
         private static Task HandleExceptionMessageAsync(HttpContext context, Exception exception)
         {
             var innerException = exception.InnerException;
-            var error = $"Exception is thrown ({exception.GetType()}): {exception.Message} \n ";
 
             var errorMessages = new List<string>();
 
             if (innerException != null)
             {
-                error += $"Inner Exception ({innerException.GetType()}) : {innerException.Message}";
                 errorMessages.Add(innerException.Message);
             }
 
-            context.Response.ContentType = "application/json";
-            int statusCode = (int)HttpStatusCode.InternalServerError;
-            var result = JsonSerializer.Serialize(new ResponseDTO()
+            HttpStatusCode statusCode;
+
+            switch (exception)
             {
-                StatusCode = HttpStatusCode.InternalServerError,
+                case CustomException:
+                    statusCode = HttpStatusCode.BadRequest;
+                    break;
+
+                case NullObjectException:
+                    statusCode = HttpStatusCode.NotFound;
+                    break;
+
+                case AlreadyExistsException:
+                    statusCode = HttpStatusCode.Conflict;
+                    break;
+
+                default:
+                    statusCode = HttpStatusCode.InternalServerError;
+                    break;
+            }
+
+            context.Response.ContentType = "application/json";
+            
+            var result = JsonSerializer.Serialize(new ApiResponse()
+            {
+                StatusCode = statusCode,
                 Message = exception.Message,
                 IsSuccess = false,
                 Data = exception.Data,
                 ErrorMessages = errorMessages
             });
-            context.Response.StatusCode = statusCode;
+            context.Response.StatusCode = (int)statusCode;
             return context.Response.WriteAsync(result);
         }
     }

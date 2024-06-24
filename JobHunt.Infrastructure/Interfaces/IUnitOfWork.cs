@@ -1,28 +1,35 @@
-﻿using JobHunt.Domain.Interfaces;
+﻿using JobHunt.Domain.Entities;
+using JobHunt.Domain.Interfaces;
 
 namespace JobHunt.Infrastructure.Interfaces
 {
     public interface IUnitOfWork
     { 
-        public IAspnetUserRepo AspNetUser { get; }
+        public IRepository<Aspnetuser> AspNetUser { get; }
 
-        public IUserRepo User { get; }
+        public IRepository<User> User { get; }
 
-        public IOtpRecordRepo OtpRecord { get; }
+        public IRepository<OtpRecord> OtpRecord { get; }
 
-        public ICompanyRepo Company { get; }
+        public IRepository<Company> Company { get; }
 
-        public IUserSkillRepo UserSkill { get; }
+        public IRepository<UserSkill> UserSkill { get; }
 
-        public IUserLanguageRepo UserLanguage { get; }
+        public IRepository<UserLanguage> UserLanguage { get; }
 
-        public IUserSocialProfileRepo UserSocialProfile { get; }
+        public IRepository<UserSocialProfile> UserSocialProfile { get; }
 
-        public IProjectRepo Project { get; }
+        public IRepository<Project> Project { get; }
 
-        public IUserEducationRepo UserEducation { get; }
+        public IRepository<UserEducation> UserEducation { get; }
 
-        public IWorkExperimentRepo WorkExperiment { get; }  
+        public IRepository<WorkExperience> WorkExperiment { get; }  
+
+        public IRepository<Skill> Skill { get; }
+
+        public IRepository<Language> Language { get; }
+
+        public IRepository<DegreeType> DegreeType { get; }
         
         Task SaveAsync();
     }

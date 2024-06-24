@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace JobHunt.Domain.DataModels.Request.UserRequest.Registration
 {
-    public class WorkExperienceUserDTO
+    public class ProjectsUserModel
     {
-        public string JobTitle { get; set; } = string.Empty;
+        public string Title { get; set; } =string.Empty;
 
-        public string CompanyName { get; set; } = string.Empty;
+        public string Url { get; set; } = string.Empty;
 
         public DateOnly StartDate { get; set; }
 
         public DateOnly EndDate { get; set; }
 
-        public string JobDescription { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
     }
 }
