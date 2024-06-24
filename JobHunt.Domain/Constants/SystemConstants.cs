@@ -1,13 +1,8 @@
 ﻿using JobHunt.Domain.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobHunt.Domain.Constants
 {
-    public class SystemConstants
+    public static class SystemConstants
     {
         #region Jwt
         public static string JWT_KEY = ConfigurationHelper.GetConfigurationSection("Jwt")["Key"];

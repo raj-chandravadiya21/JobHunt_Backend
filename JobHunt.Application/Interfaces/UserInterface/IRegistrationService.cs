@@ -11,6 +11,12 @@ namespace JobHunt.Application.Interfaces.UserInterface
 {
     public interface IRegistrationService
     {
-        Task<ResponseDTO> UserProfile(RegistrationUserDTO model);
+        Task UserProfile(RegistrationUserRequest model);
+
+        Task<List<SkillResponse>> GetAllSkill();
+
+        Task<List<LanguageResponse>> GetAllLanguage();
+
+        Task<List<DegreeTypeResponse>> GetAllDegreeType();
     }
 }

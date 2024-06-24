@@ -1,74 +1,49 @@
 ﻿using AutoMapper;
 using JobHunt.Application.Interfaces;
 using JobHunt.Domain.DataModels.Request;
-using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;
+using JobHunt.Domain.Resource;
 using JobHunt.Infrastructure.Interfaces;
-using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Transactions;
 
 namespace JobHunt.Application.Services
 {
-    public class AuthService(IUnitOfWork _unitOfWork, IMapper _mapper, IEmailSender _emailSender) : IAuthService
+    public class AuthService(IUnitOfWork _unitOfWork, IEmailSender _emailSender) : IAuthService
     {
-
-        public async Task<ResponseDTO> CheckUser(CheckEmailDTO model)
+        #region Check-user & send OTP
+        public async Task CheckUser(CheckEmailRequest model)
         {
-            var user = await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.User);
-            if ((bool)user)
+            if ((bool)await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.User))
             {
-                return new()
-                {
-                    IsSuccess = false,
-                    Message = "User Already Exists",
-                    StatusCode = HttpStatusCode.OK,
-                };
+                throw new AlreadyExistsException("Email Already Registered With Same Email");
             }
 
             int otp = await GenerateAndSaveOtp(model.Email!);
 
             await _emailSender.SendEmailVerifiaction(otp, model.Email!);
-
-            return new()
-            {
-                IsSuccess = true,
-                StatusCode = HttpStatusCode.OK,
-                Message = "Otp Sent Successfully",
-            };
         }
+        #endregion
 
-        public async Task<ResponseDTO> RegisterUser(RegisterUserDTO model)
+        #region RegisterUser
+        public async Task RegisterUser(RegisterUserRequest model)
         {
             if (model.Password != model.ConfirmPassword)
             {
-                return new()
-                {
-                    IsSuccess = false,
-                    Message = "Password and Confirm Password Not match",
-                    StatusCode = HttpStatusCode.BadRequest,
-                };
+                throw new CustomException(string.Format(Messages.PasswordConfirmPasswordNotMatch));
             }
 
             var otpRecord = await _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
 
-            int otp = otpRecord!.Otp;
-
-            if (otp == model.Otp)
+            if (otpRecord!.Otp == model.Otp)
             {
                 if (DateTime.Now.AddMinutes(-20) >= otpRecord!.SentDatetime)
                 {
-                    return new()
-                    {
-                        IsSuccess = false,
-                        Message = "Time Out",
-                        StatusCode = HttpStatusCode.BadRequest,
-                    };
+                    throw new CustomException(string.Format(Messages.TimeExpire));
                 }
 
                 using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -104,25 +79,15 @@ namespace JobHunt.Application.Services
 
                     transactionScope.Complete();
                 }
-
-                return new()
-                {
-                    IsSuccess = true,
-                    Message = "User Created Successfully",
-                    StatusCode = HttpStatusCode.OK,
-                };
             }
             else
             {
-                return new()
-                {
-                    IsSuccess = false,
-                    Message = "Otp Not Match",
-                    StatusCode = HttpStatusCode.BadRequest,
-                };
+                throw new CustomException(string.Format(Messages.OtpNotMatch));
             }
         }
+        #endregion
 
+        #region GenerateOTP
         public static Task<string> GenerateOTP()
         {
             int length = 6;
@@ -140,7 +105,9 @@ namespace JobHunt.Application.Services
             }
             return Task.FromResult(new string(result));
         }
+        #endregion
 
+        #region GenerateAndSaveOTP
         public async Task<int> GenerateAndSaveOtp(string email)
         {
             var generatOtp = await GenerateOTP();
@@ -159,22 +126,14 @@ namespace JobHunt.Application.Services
 
             return otp;
         }
+        #endregion
 
-        public async Task<ResponseDTO> Login(LoginAspNetUserDTO model, int role)
+        #region Login
+        public async Task<string> Login(LoginRequest model, int role)
         {
             var aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == role);
 
-            if (aspnetuser == null)
-            {
-                return new()
-                {
-                    IsSuccess = false,
-                    Message = "Email Id does not exists!",
-                    StatusCode = HttpStatusCode.OK,
-                };
-            }
-
-            if (BCrypt.Net.BCrypt.Verify(model.Password, aspnetuser.Password))
+            if (BCrypt.Net.BCrypt.Verify(model.Password, aspnetuser!.Password))
             {
                 var claims = new Claim[]
                 {
@@ -184,77 +143,44 @@ namespace JobHunt.Application.Services
 
                 var token = Jwt.GenerateToken(claims, DateTime.Now.AddDays(1));
 
-                return new()
-                {
-                    Data = new
-                    {
-                        token,
-                    },
-                    IsSuccess = true,
-                    StatusCode = HttpStatusCode.OK,
-                    Message = "Login Successfully",
-                };
+                return token;
             }
-
-            return new()
+            else
             {
-                IsSuccess = false,
-                StatusCode = HttpStatusCode.BadRequest,
-                Message = "Enter valid Crendential",
-            };
+                throw new CustomException(string.Format(Messages.EnterValidCredentials));
+            }
         }
+        #endregion
 
-        public async Task<ResponseDTO> CheckCompany(CheckEmailDTO model)
+        #region check-company-sendOTP
+        public async Task CheckCompany(CheckEmailRequest model)
         {
-            var company = await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.Company);
-            if ((bool)company)
+            if ((bool)await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.Company))
             {
-                return new()
-                {
-                    IsSuccess = false,
-                    Message = "Company Email Id Already Exists",
-                    StatusCode = HttpStatusCode.OK,
-                };
+                throw new AlreadyExistsException("Email Already Registered With Same Email");
             }
 
             int otp = await GenerateAndSaveOtp(model.Email!);
 
             await _emailSender.SendEmailVerifiaction(otp, model.Email!);
-
-            return new()
-            {
-                IsSuccess = true,
-                StatusCode = HttpStatusCode.OK,
-                Message = "Otp Sent Successfully",
-            };
         }
+        #endregion
 
-        public async Task<ResponseDTO> RegisterCompany(RegisterCompanyDTO model)
+        #region Register-company
+        public async Task RegisterCompany(RegisterCompanyRequest model)
         {
             if (model.Password != model.ConfirmPassword)
             {
-                return new()
-                {
-                    IsSuccess = false,
-                    Message = "Password and Confirm Password Not match",
-                    StatusCode = HttpStatusCode.BadRequest,
-                };
+                throw new CustomException(string.Format(Messages.PasswordConfirmPasswordNotMatch));
             }
 
             var otpRecord = await _unitOfWork.OtpRecord.GetLastOrDefaultOrderedBy(u => u.Email == model.Email, u => u.SentDatetime);
 
-            int otp = otpRecord!.Otp;
-
-            if (otp == model.Otp)
+            if (otpRecord!.Otp == model.Otp)
             {
                 if (DateTime.Now.AddMinutes(-20) >= otpRecord!.SentDatetime)
                 {
-                    return new()
-                    {
-                        IsSuccess = false,
-                        Message = "Time Out",
-                        StatusCode = HttpStatusCode.BadRequest,
-                    };
+                    throw new CustomException(string.Format(Messages.TimeExpire));
                 }
 
                 string salt = BCrypt.Net.BCrypt.GenerateSalt();
@@ -285,102 +211,55 @@ namespace JobHunt.Application.Services
 
                     await _unitOfWork.Company.CreateAsync(company);
                     await _unitOfWork.SaveAsync();
+
                     transactionScope.Complete();
                 }
-
-                return new()
-                {
-                    IsSuccess = true,
-                    Message = "Company Registered Successfully",
-                    StatusCode = HttpStatusCode.OK,
-                };
             }
             else
             {
-                return new()
-                {
-                    IsSuccess = false,
-                    Message = "Otp Not Match",
-                    StatusCode = HttpStatusCode.BadRequest,
-                };
+                throw new CustomException(string.Format(Messages.OtpNotMatch));
             }
         }
+        #endregion
 
-        public async Task<ResponseDTO> ForgotPasswordUser(ForgotPasswordDTO model)
+        #region ForgotPassword
+        public async Task ForgotPasswordUser(ForgotPasswordRequest model)
         {
             var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == model.Role);
-            if (user == null)
-            {
-                return new()
-                {
-                    IsSuccess = false,
-                    Message = "User Not Found",
-                    StatusCode = HttpStatusCode.OK,
-                };
-            }
-
-
 
             var claims = new Claim[]
                 {
                     new(ClaimTypes.Role,(((Role)model.Role!).ToString())),
-                    new(ClaimTypes.Sid,user.AspnetuserId.ToString()),
+                    new(ClaimTypes.Sid,user!.AspnetuserId.ToString()),
                     new(ClaimTypes.Expiration,user.Password.ToString())
                 };
 
             var token = Jwt.GenerateToken(claims, DateTime.Now.AddMinutes(20));
 
             await _emailSender.SendResetPasswordLink(token, user.Email);
-
-            return new()
-            {
-                IsSuccess = true,
-                Message = "Reset Password link sent Successfully",
-                StatusCode = HttpStatusCode.OK
-            };
         }
+        #endregion
 
-        public async Task<ResponseDTO> ValidateResetToken(ValidateTokenDTO model)
+        #region ValidateResetToken
+        public Task ValidateResetToken(ValidateTokenRequest model)
         {
-            bool isValid = await ValidToken(model.Token!);
-            if (isValid)
+            var isValid = Jwt.ValidateToken(model.Token!, out JwtSecurityToken? _);
+            if (!isValid)
             {
-                return new()
-                {
-                    IsSuccess = true,
-                    StatusCode = HttpStatusCode.OK,
-                    Message = "Token is valid"
-                };
-            }
-            return new()
-            {
-                IsSuccess = false,
-                StatusCode = HttpStatusCode.OK,
-                Message = "Token is not Valid"
-            };
-        }
-
-        public async Task<bool> ValidToken(string token)
-        {
-            if (string.IsNullOrEmpty(token))
-            {
-                return false;
+                throw new CustomException(string.Format(Messages.TimeExpire, Messages.ResetPasswordLink));
             }
 
-            return await Task.FromResult(Jwt.ValidateToken(token, out JwtSecurityToken? _));
+            return Task.CompletedTask;
         }
+        #endregion
 
-        public async Task<ResponseDTO> ResetPassword(ResetPasswordDTO model)
+        #region ResetPassword
+        public async Task ResetPassword(ResetPasswordRequest model)
         {
             var isValidToken = Jwt.ValidateToken(model.Token!, out JwtSecurityToken? jwtToken);
             if (!isValidToken)
             {
-                return new()
-                {
-                    IsSuccess = false,
-                    StatusCode = HttpStatusCode.OK,
-                    Message = "Reset Password Link Expire",
-                };
+                throw new CustomException(string.Format(Messages.TimeExpire, Messages.ResetPasswordLink));
             }
 
             var userPassword = Jwt.GetClaimValue(ClaimTypes.Expiration, jwtToken!);
@@ -389,24 +268,14 @@ namespace JobHunt.Application.Services
 
             var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.AspnetuserId.ToString() == userId);
 
-            if (user==null || userPassword != user.Password)
+            if (userPassword != user!.Password)
             {
-                return new()
-                {
-                    IsSuccess = false,
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Message = "You have aleready Reset your password using this link"
-                };
+                throw new CustomException(string.Format(Messages.TimeExpire, Messages.ResetPasswordLink));
             }
 
             if (model.Password != model.ConfirmPassword)
             {
-                return new()
-                {
-                    IsSuccess = false,
-                    StatusCode = HttpStatusCode.OK,
-                    Message = "Password and Confirmpassword Not match"
-                };
+                throw new CustomException(string.Format(Messages.PasswordConfirmPasswordNotMatch));
             }
 
             string salt = BCrypt.Net.BCrypt.GenerateSalt();
@@ -417,14 +286,8 @@ namespace JobHunt.Application.Services
 
 
             _unitOfWork.AspNetUser.UpdateAsync(user);
-           await _unitOfWork.SaveAsync();
-
-            return new()
-            {
-                IsSuccess = true,
-                StatusCode= HttpStatusCode.OK,
-                Message = "Password Update Successfully",
-            };
+            await _unitOfWork.SaveAsync();
         }
+        #endregion
     }
 }

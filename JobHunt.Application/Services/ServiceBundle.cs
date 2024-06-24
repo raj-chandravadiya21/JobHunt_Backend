@@ -20,7 +20,7 @@ namespace JobHunt.Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _emailSender = emailSender;
-            AuthService = new AuthService(_unitOfWork, _mapper, _emailSender);
+            AuthService = new AuthService(_unitOfWork, _emailSender);
             RegistrationService = new RegistrationService(_unitOfWork, _mapper);
         }
         public IAuthService AuthService { get; private set; }

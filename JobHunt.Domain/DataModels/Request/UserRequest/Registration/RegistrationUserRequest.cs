@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace JobHunt.Domain.DataModels.Request.UserRequest.Registration
 {
-    public class RegistrationUserDTO
+    public class RegistrationUserRequest
     {
         public string? Token { get; set; }
 
@@ -23,7 +23,7 @@ namespace JobHunt.Domain.DataModels.Request.UserRequest.Registration
 
         public string? Photo { get; set; }
 
-        public List<EducationDetailsUserDTO> EducationDetails { get; set; } = new List<EducationDetailsUserDTO>();
+        public List<EducationDetailsUserModel> EducationDetails { get; set; } = new List<EducationDetailsUserModel>();
 
         public string? LinkedInUrl { get; set; }
 
@@ -31,8 +31,8 @@ namespace JobHunt.Domain.DataModels.Request.UserRequest.Registration
 
         public string? WebsiteUrl { get; set; }
 
-        public List<ProjectsUserDTO> Projects { get; set; } = new List<ProjectsUserDTO>();
+        public List<ProjectsUserModel> Projects { get; set; } = new List<ProjectsUserModel>();
 
-        public List<WorkExperienceUserDTO> WorkExperience { get; set; } = new List<WorkExperienceUserDTO>();
+        public List<WorkExperienceUserModel> WorkExperience { get; set; } = new List<WorkExperienceUserModel>();
     }
 }

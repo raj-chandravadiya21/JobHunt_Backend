@@ -5,11 +5,12 @@ using System.Security.Claims;
 
 namespace JobHunt.Domain.Helper
 {
-    public class CustomAuthorize(string roleList = "") : Attribute, IAuthorizationFilter
+    [AttributeUsage(AttributeTargets.All)]
+    public class CustomAuthorizeAttribute(string roleList = "") : Attribute, IAuthorizationFilter
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var unauthorizedResponse = new ResponseDTO()
+            var unauthorizedResponse = new ApiResponse()
             {
                 IsSuccess = false,
                 StatusCode = System.Net.HttpStatusCode.Unauthorized,
@@ -19,7 +20,7 @@ namespace JobHunt.Domain.Helper
                 Message = "User is not authenticated."
             };
 
-            var forbiddenResponse = new ResponseDTO()
+            var forbiddenResponse = new ApiResponse()
             {
                 IsSuccess = false,
                 StatusCode = System.Net.HttpStatusCode.Forbidden,
