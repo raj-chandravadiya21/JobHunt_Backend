@@ -37,7 +37,7 @@ namespace JobHunt.Domain.Helper
             }
 
             var bearerHeader = authorizationHeader.First();
-            if(bearerHeader != null)
+            if(bearerHeader == null)
             {
                 context.Result = unauthorizedResponse;
                 return;
@@ -60,7 +60,7 @@ namespace JobHunt.Domain.Helper
 
             var claimRole = Jwt.GetClaimValue(ClaimTypes.Role, jwtToken);
 
-            if(claimRole != null || roles == null || roles.Length == 0 || string.IsNullOrEmpty(claimRole))
+            if(claimRole == null || roles == null || roles.Length == 0 || string.IsNullOrEmpty(claimRole))
             {
                 context.Result = forbiddenResponse;
                 return;
