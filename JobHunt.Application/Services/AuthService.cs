@@ -211,12 +211,13 @@ namespace JobHunt.Application.Services
         #region ForgotPassword
         public async Task ForgotPasswordUser(ForgotPasswordRequest model)
         {
-            var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == model.Role);
+            Aspnetuser? user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == model.Role);
+
+            var aspNetUserId = SHAHelper.EncryptionHelper.Encrypt(user!.AspnetuserId.ToString());
 
             var claims = new Claim[]
                 {
-                    new(ClaimTypes.Role,(((Role)model.Role!).ToString())),
-                    new(ClaimTypes.Sid,user!.AspnetuserId.ToString()),
+                    new(ClaimTypes.Sid,aspNetUserId),
                     new(ClaimTypes.Expiration,user.Password.ToString())
                 };
 
@@ -249,8 +250,9 @@ namespace JobHunt.Application.Services
             }
 
             var userPassword = Jwt.GetClaimValue(ClaimTypes.Expiration, jwtToken!);
-            var userId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
+            var encryorionUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
+            var userId = SHAHelper.EncryptionHelper.Decrypt(encryorionUserId!);
 
             var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.AspnetuserId.ToString() == userId);
 

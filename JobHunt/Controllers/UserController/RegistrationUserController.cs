@@ -1,5 +1,6 @@
 ﻿using JobHunt.Application.Interfaces;
 using JobHunt.Domain.DataModels.Request.UserRequest.Registration;
+using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;
 using JobHunt.Domain.Resource;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace JobHunt.Controllers.UserController
         }
 
         [HttpPost("user-profile")]
+        [CustomAuthorize("User")]
         public async Task<IResult> RegisterUser([FromBody] RegistrationUserRequest model)
         {
              await _serviceBundle.RegistrationService.UserProfile(model);
