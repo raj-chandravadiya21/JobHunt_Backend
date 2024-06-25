@@ -6,11 +6,11 @@ namespace JobHunt.Application.Interfaces
     {
         Task RegisterUser(RegisterUserRequest model);
 
-        Task CheckUser(CheckEmailRequest model);
+        Task CheckEmail(CheckEmailRequest model, int role);
 
         Task<string> Login(LoginRequest model, int role);
 
-        Task CheckCompany(CheckEmailRequest model);
+        //Task CheckCompany(CheckEmailRequest model);
 
         Task RegisterCompany(RegisterCompanyRequest model);
 

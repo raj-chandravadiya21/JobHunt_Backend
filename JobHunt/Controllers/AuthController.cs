@@ -22,7 +22,7 @@ namespace JobHunt.Controllers
         [HttpPost("check-user")]
         public async Task<IResult> CheckUser([FromBody] CheckEmailRequest model)
         {
-             await _serviceBundle.AuthService.CheckUser(model);
+             await _serviceBundle.AuthService.CheckEmail(model, (int)Role.User);
             return Results.Ok(ResponseHelper.SuccessResponse(new(), string.Format(Messages.OtpSent)));
         }
         #endregion  
@@ -50,7 +50,7 @@ namespace JobHunt.Controllers
         [HttpPost("check-company")]
         public async Task<IResult> CheckCompany([FromBody] CheckEmailRequest model)
         {
-             await _serviceBundle.AuthService.CheckCompany(model);
+             await _serviceBundle.AuthService.CheckEmail(model, (int)Role.Company);
             return Results.Ok(ResponseHelper.SuccessResponse(new(), string.Format(Messages.OtpSent)));
         }
         #endregion

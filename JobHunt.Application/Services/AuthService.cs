@@ -15,10 +15,10 @@ namespace JobHunt.Application.Services
 {
     public class AuthService(IUnitOfWork _unitOfWork, IEmailSender _emailSender) : IAuthService
     {
-        #region Check-user & send OTP
-        public async Task CheckUser(CheckEmailRequest model)
+        #region Check-Email & send OTP
+        public async Task CheckEmail(CheckEmailRequest model, int role)
         {
-            if ((bool)await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.User))
+            if ((bool)await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == role))
             {
                 throw new AlreadyExistsException("Email Already Registered With Same Email");
             }
@@ -152,19 +152,19 @@ namespace JobHunt.Application.Services
         }
         #endregion
 
-        #region check-company-sendOTP
-        public async Task CheckCompany(CheckEmailRequest model)
-        {
-            if ((bool)await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.Company))
-            {
-                throw new AlreadyExistsException("Email Already Registered With Same Email");
-            }
+        //#region check-company-sendOTP
+        //public async Task CheckCompany(CheckEmailRequest model)
+        //{
+        //    if ((bool)await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.Company))
+        //    {
+        //        throw new AlreadyExistsException("Email Already Registered With Same Email");
+        //    }
 
-            int otp = await GenerateAndSaveOtp(model.Email!);
+        //    int otp = await GenerateAndSaveOtp(model.Email!);
 
-            await _emailSender.SendEmailVerifiaction(otp, model.Email!);
-        }
-        #endregion
+        //    await _emailSender.SendEmailVerifiaction(otp, model.Email!);
+        //}
+        //#endregion
 
         #region Register-company
         public async Task RegisterCompany(RegisterCompanyRequest model)
