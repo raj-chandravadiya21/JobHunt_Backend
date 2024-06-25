@@ -152,20 +152,6 @@ namespace JobHunt.Application.Services
         }
         #endregion
 
-        //#region check-company-sendOTP
-        //public async Task CheckCompany(CheckEmailRequest model)
-        //{
-        //    if ((bool)await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.Company))
-        //    {
-        //        throw new AlreadyExistsException("Email Already Registered With Same Email");
-        //    }
-
-        //    int otp = await GenerateAndSaveOtp(model.Email!);
-
-        //    await _emailSender.SendEmailVerifiaction(otp, model.Email!);
-        //}
-        //#endregion
-
         #region Register-company
         public async Task RegisterCompany(RegisterCompanyRequest model)
         {

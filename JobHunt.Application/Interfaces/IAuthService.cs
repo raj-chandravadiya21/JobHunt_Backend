@@ -10,8 +10,6 @@ namespace JobHunt.Application.Interfaces
 
         Task<string> Login(LoginRequest model, int role);
 
-        //Task CheckCompany(CheckEmailRequest model);
-
         Task RegisterCompany(RegisterCompanyRequest model);
 
         Task ForgotPasswordUser(ForgotPasswordRequest model);
