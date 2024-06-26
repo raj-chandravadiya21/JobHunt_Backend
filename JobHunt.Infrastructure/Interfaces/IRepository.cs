@@ -19,5 +19,7 @@ namespace JobHunt.Domain.Interfaces
         Task<List<T>> WhereList(Expression<Func<T, bool>> predicate);
 
         Task<List<T>> GetAllAsync();
+
+        IQueryable<T?> GetWhere(Expression<Func<T, bool>> predicate);
     }
 }

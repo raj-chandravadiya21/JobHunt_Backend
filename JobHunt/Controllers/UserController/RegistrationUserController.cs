@@ -22,7 +22,9 @@ namespace JobHunt.Controllers.UserController
         [CustomAuthorize("User")]
         public async Task<IResult> RegisterUser([FromBody] RegistrationUserRequest model)
         {
-             await _serviceBundle.RegistrationService.UserProfile(model);
+            string token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last()!;
+
+            await _serviceBundle.RegistrationService.UserProfile(model, token);
             return Results.Ok(ResponseHelper.SuccessResponse(new(),string.Format(Messages.CompleteSuccessfully,Messages.Register)));
         }
 
@@ -44,6 +46,15 @@ namespace JobHunt.Controllers.UserController
         public async Task<IResult> GetAllDegreeType()
         {
             var data = await _serviceBundle.RegistrationService.GetAllDegreeType();
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
+
+        [HttpGet("get-user-details")]
+        public async Task<IResult> GetUserDetails()
+        {
+            string token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last()!;
+
+            var data = await _serviceBundle.RegistrationService.GetUserDetails(token);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
     }

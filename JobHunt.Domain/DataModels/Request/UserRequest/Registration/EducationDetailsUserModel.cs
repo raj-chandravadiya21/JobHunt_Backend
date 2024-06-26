@@ -9,8 +9,6 @@ namespace JobHunt.Domain.DataModels.Request.UserRequest.Registration
 {
     public class EducationDetailsUserModel
     {
-        public int EducationType { get; set; }
-
         public string InstitudeName { get; set; } = string.Empty;
 
         public string Percentage { get; set; } = string.Empty;

@@ -3,9 +3,13 @@ using JobHunt.Application.Interfaces.UserInterface;
 using JobHunt.Domain.DataModels.Request.UserRequest.Registration;
 using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.Entities;
+using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;
+using JobHunt.Domain.Resource;
 using JobHunt.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Transactions;
 
@@ -13,9 +17,9 @@ namespace JobHunt.Application.Services.UserService
 {
     public class RegistrationService(IUnitOfWork _unitOfWork, IMapper _mapper) : IRegistrationService
     {
-        public async Task UserProfile(RegistrationUserRequest model)
+        public async Task UserProfile(RegistrationUserRequest model, string token)
         {
-            var isValidToken = Jwt.ValidateToken(model.Token!, out JwtSecurityToken? jwtToken);
+            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
             if (!isValidToken)
             {
                 throw new CustomException("User is not valid");
@@ -65,7 +69,6 @@ namespace JobHunt.Application.Services.UserService
                     UserEducation userEducation = new()
                     {
                         UserId = user.UserId,
-                        UserEducationTypeId = model.EducationDetails[i].EducationType,
                         DegreeId = model.EducationDetails[i].Degree,
                         InstituteName = model.EducationDetails[i].InstitudeName,
                         PercentageGrade = model.EducationDetails[i].Percentage,
@@ -126,12 +129,52 @@ namespace JobHunt.Application.Services.UserService
         }
 
         public async Task<List<SkillResponse>> GetAllSkill()
-            =>  _mapper.Map<List<SkillResponse>>(await _unitOfWork.Skill.GetAllAsync());
+        {
+            return _mapper.Map<List<SkillResponse>>(await _unitOfWork.Skill.GetAllAsync());
+        }
 
         public async Task<List<LanguageResponse>> GetAllLanguage()
-            => _mapper.Map<List<LanguageResponse>>(await _unitOfWork.Language.GetAllAsync());
+        { 
+            return _mapper.Map<List<LanguageResponse>>(await _unitOfWork.Language.GetAllAsync());
+        }
 
         public async Task<List<DegreeTypeResponse>> GetAllDegreeType()
-            => _mapper.Map<List<DegreeTypeResponse>>(await _unitOfWork.DegreeType.GetAllAsync());
+        {
+            List<DegreeTypeResponse> SSC =_mapper.Map<List<DegreeTypeResponse>>(_unitOfWork.DegreeType.GetWhere(x=>x.Type == "SSC"));
+            List<DegreeTypeResponse> HSC =_mapper.Map<List<DegreeTypeResponse>>(_unitOfWork.DegreeType.GetWhere(x=>x.Type == "HSC"));
+            List<DegreeTypeResponse> Bachelor =_mapper.Map<List<DegreeTypeResponse>>(_unitOfWork.DegreeType.GetWhere(x=>x.Type == "Bachelor"));
+            List<DegreeTypeResponse> Master =_mapper.Map<List<DegreeTypeResponse>>(_unitOfWork.DegreeType.GetWhere(x=>x.Type == "Master"));
+
+            return SSC.Concat(HSC).Concat(Bachelor).Concat(Master).ToList();
+        }
+
+        public async Task<UserDetailsModel> GetUserDetails(string token)
+        {
+            if (token == null)
+            {
+                throw new CustomException(string.Format(Messages.DataNotFound));
+            }
+
+            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
+            if (!isValidToken)
+            {
+                throw new CustomException("Session is Expired.");
+            }
+
+            var aspNetUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
+
+            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspNetUserId);
+
+            User? user = await _unitOfWork.User.GetFirstOrDefault(x => x.AspnetuserId == aspnetuser!.AspnetuserId);
+
+            UserDetailsModel model = new UserDetailsModel()
+            {
+                FirstName = user!.FirstName, 
+                LastName = user.LastName,
+                EmailId = user.Email
+            };
+            
+            return model;
+        }
     }
 }

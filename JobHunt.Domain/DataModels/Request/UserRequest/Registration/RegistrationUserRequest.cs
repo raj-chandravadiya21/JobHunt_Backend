@@ -5,8 +5,6 @@ namespace JobHunt.Domain.DataModels.Request.UserRequest.Registration
 {
     public class RegistrationUserRequest
     {
-        public string? Token { get; set; }
-
         public string? Contact { get; set; }
 
         public DateOnly? DOB { get; set; }
