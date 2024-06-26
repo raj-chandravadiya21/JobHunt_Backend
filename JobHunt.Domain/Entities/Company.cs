@@ -49,6 +49,9 @@ public partial class Company
     [Column("description", TypeName = "character varying")]
     public string? Description { get; set; }
 
+    [Column("mobile_number", TypeName = "character varying")]
+    public string? MobileNumber { get; set; }
+
     [ForeignKey("AspnetuserId")]
     [InverseProperty("Companies")]
     public virtual Aspnetuser Aspnetuser { get; set; } = null!;

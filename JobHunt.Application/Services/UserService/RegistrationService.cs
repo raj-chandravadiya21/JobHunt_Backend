@@ -29,7 +29,7 @@ namespace JobHunt.Application.Services.UserService
 
             Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
 
-            User? user = await _unitOfWork.User.GetFirstOrDefault(x => x.Email == aspnetuser!.Email);
+            User? user = await _unitOfWork.User.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
 
             using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {

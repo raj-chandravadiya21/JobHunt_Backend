@@ -1,4 +1,5 @@
-﻿using JobHunt.Application.Interfaces.UserInterface;
+﻿using JobHunt.Application.Interfaces.CompanyInterface;
+using JobHunt.Application.Interfaces.UserInterface;
 using JobHunt.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,7 @@ namespace JobHunt.Application.Interfaces
         public IAuthService AuthService { get; }
 
         public IRegistrationService RegistrationService { get; }
+
+        public ICompanyRegistrationService CompanyRegistrationService { get; }
     }
 }

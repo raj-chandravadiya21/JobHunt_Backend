@@ -9,17 +9,17 @@ namespace JobHunt.Controllers.UserController
 {
     [Route("api/user")]
     [ApiController]
-    public class RegistrationUserController : ControllerBase
+    [CustomAuthorize("User")]
+    public class UserRegistrationController : ControllerBase
     {
         private readonly IServiceBundle _serviceBundle;
 
-        public RegistrationUserController(IServiceBundle serviceBundle)
+        public UserRegistrationController(IServiceBundle serviceBundle)
         {
             _serviceBundle = serviceBundle;
         }
 
         [HttpPost("user-profile")]
-        [CustomAuthorize("User")]
         public async Task<IResult> RegisterUser([FromBody] RegistrationUserRequest model)
         {
             string token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last()!;
