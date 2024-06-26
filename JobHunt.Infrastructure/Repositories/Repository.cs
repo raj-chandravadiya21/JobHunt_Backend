@@ -3,6 +3,7 @@ using JobHunt.Domain.Helper;
 using JobHunt.Domain.Interfaces;
 using JobHunt.Domain.Resource;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace JobHunt.Infrastructure.Repositories
@@ -63,6 +64,11 @@ namespace JobHunt.Infrastructure.Repositories
         public async Task<List<T>> GetAllAsync()
         {
            return await _dbSet.ToListAsync();
+        }
+
+        public IQueryable<T?> GetWhere(Expression<Func<T, bool>> predicate)
+        {
+            return _dbSet.Where(predicate);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace JobHunt.Infrastructure.Interfaces
         public IRepository<Language> Language { get; }
 
         public IRepository<DegreeType> DegreeType { get; }
-        
+
         Task SaveAsync();
     }
 }
