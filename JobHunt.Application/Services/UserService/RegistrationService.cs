@@ -7,18 +7,22 @@ using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;
 using JobHunt.Domain.Resource;
 using JobHunt.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Transactions;
+using static System.Net.WebRequestMethods;
 
 namespace JobHunt.Application.Services.UserService
 {
-    public class RegistrationService(IUnitOfWork _unitOfWork, IMapper _mapper) : IRegistrationService
+    public class RegistrationService(IUnitOfWork _unitOfWork, IMapper _mapper, IHttpContextAccessor http) : IRegistrationService
     {
-        public async Task UserProfile(RegistrationUserRequest model, string token)
+        public async Task UserProfile(RegistrationUserRequest model)
         {
+            var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
+
             var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
             if (!isValidToken)
             {
@@ -148,12 +152,9 @@ namespace JobHunt.Application.Services.UserService
             return SSC.Concat(HSC).Concat(Bachelor).Concat(Master).ToList();
         }
 
-        public async Task<UserDetailsModel> GetUserDetails(string token)
+        public async Task<UserDetailsModel> GetUserDetails()
         {
-            if (token == null)
-            {
-                throw new CustomException(string.Format(Messages.DataNotFound));
-            }
+            var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
 
             var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
             if (!isValidToken)
