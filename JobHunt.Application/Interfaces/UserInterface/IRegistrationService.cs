@@ -14,7 +14,9 @@ namespace JobHunt.Application.Interfaces.UserInterface
     {
         Task UserProfile(RegistrationUserRequest model);
 
-        
+        Task<List<SkillResponse>> GetAllSkill();
+
+        Task<List<LanguageResponse>> GetAllLanguage();
 
         Task<List<DegreeTypeResponse>> GetAllDegreeType();
 
