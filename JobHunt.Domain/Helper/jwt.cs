@@ -10,6 +10,7 @@ namespace JobHunt.Domain.Helper
 {
     public static class Jwt
     {
+        #region Generate Token
         public static string GenerateToken(IEnumerable<Claim> claims, DateTime expires)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SystemConstants.JWT_KEY));
@@ -25,7 +26,9 @@ namespace JobHunt.Domain.Helper
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        #endregion
 
+        #region Validate Token
         public static bool ValidateToken(string token, out JwtSecurityToken? jwtSecurityToken)
         {
             jwtSecurityToken = null;
@@ -61,7 +64,9 @@ namespace JobHunt.Domain.Helper
                 return false;
             }
         }
+        #endregion
 
+        #region Claims
         public static string? GetClaimValue(string claimType, JwtSecurityToken token)
         {
             var claim = token.Claims.FirstOrDefault(a => a.Type == claimType);
@@ -71,5 +76,6 @@ namespace JobHunt.Domain.Helper
             }
             return null;
         }
+        #endregion
     }
 }
