@@ -33,6 +33,7 @@ namespace JobHunt.Domain.Helper
             if(!context.HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
             {
                 context.Result = unauthorizedResponse;
+                LogHelper.LogInformation("User Tried Access Without login");
                 return;
             }
 
@@ -40,6 +41,7 @@ namespace JobHunt.Domain.Helper
             if(bearerHeader == null)
             {
                 context.Result = unauthorizedResponse;
+                LogHelper.LogInformation("User Tried Access Without login");
                 return;
             }
 
@@ -47,12 +49,14 @@ namespace JobHunt.Domain.Helper
             if(tokenString == null || !Jwt.ValidateToken(tokenString, out JwtSecurityToken? jwtToken)) 
             {
                 context.Result = unauthorizedResponse;
+                LogHelper.LogInformation("User Tried Access Without login");
                 return;
             }
 
             if(jwtToken == null)
             {
                 context.Result = unauthorizedResponse;
+                LogHelper.LogInformation("Unauthorized user tried to access");
                 return;
             }
 

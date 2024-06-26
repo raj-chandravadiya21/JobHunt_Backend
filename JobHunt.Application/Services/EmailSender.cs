@@ -60,6 +60,15 @@ namespace JobHunt.Application.Services
             await SendEmailAsync(email, subject, htmlBody);
         }
 
+        public async Task DailyNotificationEmail(string email)
+        {
+            var subject = "Notification From JobHunt";
+
+            var message = "Daily Email Check";
+
+            await SendEmailAsync(email, subject, message);
+        }
+
         public string ReadHtmlTemplateFromFile(string filePath)
         {
             string htmlBody = string.Empty;

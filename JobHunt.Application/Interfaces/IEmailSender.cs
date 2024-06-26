@@ -11,5 +11,7 @@ namespace JobHunt.Application.Interfaces
         Task SendEmailVerifiaction(int otp, string email);
 
         Task SendResetPasswordLink(string token,string email);
+
+        Task DailyNotificationEmail(string email);
     }
 }
