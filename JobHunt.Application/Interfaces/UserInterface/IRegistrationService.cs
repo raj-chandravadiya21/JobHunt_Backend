@@ -12,7 +12,7 @@ namespace JobHunt.Application.Interfaces.UserInterface
 {
     public interface IRegistrationService
     {
-        Task UserProfile(RegistrationUserRequest model, string token);
+        Task UserProfile(RegistrationUserRequest model);
 
         Task<List<SkillResponse>> GetAllSkill();
 
@@ -20,6 +20,6 @@ namespace JobHunt.Application.Interfaces.UserInterface
 
         Task<List<DegreeTypeResponse>> GetAllDegreeType();
 
-        Task<UserDetailsModel> GetUserDetails(string token);
+        Task<UserDetailsModel> GetUserDetails();
     }
 }

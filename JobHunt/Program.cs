@@ -67,6 +67,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<DefaultdbContext>();
 
 builder.Services.AddHostedService<DailyEmailSender>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 //SERVICES
 builder.Services.AddScoped<IServiceBundle, ServiceBundle>();
