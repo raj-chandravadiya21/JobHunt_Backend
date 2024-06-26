@@ -4,8 +4,11 @@ using JobHunt.Domain.DataModels.Request.UserRequest.Registration;
 using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Helper;
+using JobHunt.Domain.Resource;
 using JobHunt.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Transactions;
 
@@ -126,12 +129,41 @@ namespace JobHunt.Application.Services.UserService
         }
 
         public async Task<List<SkillResponse>> GetAllSkill()
-            =>  _mapper.Map<List<SkillResponse>>(await _unitOfWork.Skill.GetAllAsync());
+            => _mapper.Map<List<SkillResponse>>(await _unitOfWork.Skill.GetAllAsync());
 
         public async Task<List<LanguageResponse>> GetAllLanguage()
             => _mapper.Map<List<LanguageResponse>>(await _unitOfWork.Language.GetAllAsync());
 
         public async Task<List<DegreeTypeResponse>> GetAllDegreeType()
             => _mapper.Map<List<DegreeTypeResponse>>(await _unitOfWork.DegreeType.GetAllAsync());
+
+        public async Task<UserDetailsModel> GetUserDetails(string token)
+        {
+            if (token == null)
+            {
+                throw new CustomException(string.Format(Messages.DataNotFound));
+            }
+
+            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
+            if (!isValidToken)
+            {
+                throw new CustomException("Session is Expired.");
+            }
+
+            var aspNetUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
+
+            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspNetUserId);
+
+            User? user = await _unitOfWork.User.GetFirstOrDefault(x => x.AspnetuserId == aspnetuser!.AspnetuserId);
+
+            UserDetailsModel model = new UserDetailsModel()
+            {
+                FirstName = user!.FirstName, 
+                LastName = user.LastName,
+                EmailId = user.Email
+            };
+            
+            return model;
+        }
     }
 }

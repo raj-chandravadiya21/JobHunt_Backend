@@ -46,5 +46,14 @@ namespace JobHunt.Controllers.UserController
             var data = await _serviceBundle.RegistrationService.GetAllDegreeType();
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
+
+        [HttpGet("get-user-details")]
+        public async Task<IResult> GetUserDetails()
+        {
+            string token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last()!;
+
+            var data = await _serviceBundle.RegistrationService.GetUserDetails(token);
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
     }
 }
