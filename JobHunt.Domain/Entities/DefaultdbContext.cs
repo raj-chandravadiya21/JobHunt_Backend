@@ -29,8 +29,6 @@ public partial class DefaultdbContext : DbContext
 
     public virtual DbSet<DegreeType> DegreeTypes { get; set; }
 
-    public virtual DbSet<EducationType> EducationTypes { get; set; }
-
     public virtual DbSet<EmailLog> EmailLogs { get; set; }
 
     public virtual DbSet<InterviewDetail> InterviewDetails { get; set; }
@@ -149,13 +147,6 @@ public partial class DefaultdbContext : DbContext
             entity.Property(e => e.Id).UseIdentityAlwaysColumn();
         });
 
-        modelBuilder.Entity<EducationType>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("education_type_pkey");
-
-            entity.Property(e => e.Id).UseIdentityAlwaysColumn();
-        });
-
         modelBuilder.Entity<EmailLog>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("email_log			_pkey");
@@ -253,10 +244,6 @@ public partial class DefaultdbContext : DbContext
             entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
             entity.HasOne(d => d.Degree).WithMany(p => p.UserEducations).HasConstraintName("user_education_degree_id_fkey");
-
-            entity.HasOne(d => d.UserEducationType).WithMany(p => p.UserEducations)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_education_user_education_type_id_fkey");
 
             entity.HasOne(d => d.User).WithMany(p => p.UserEducations)
                 .OnDelete(DeleteBehavior.ClientSetNull)

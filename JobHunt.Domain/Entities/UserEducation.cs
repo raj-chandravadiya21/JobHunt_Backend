@@ -16,9 +16,6 @@ public partial class UserEducation
     [Column("user_id")]
     public int UserId { get; set; }
 
-    [Column("user_education_type_id")]
-    public int UserEducationTypeId { get; set; }
-
     [Column("degree_id")]
     public int? DegreeId { get; set; }
 
@@ -48,8 +45,4 @@ public partial class UserEducation
     [ForeignKey("UserId")]
     [InverseProperty("UserEducations")]
     public virtual User User { get; set; } = null!;
-
-    [ForeignKey("UserEducationTypeId")]
-    [InverseProperty("UserEducations")]
-    public virtual EducationType UserEducationType { get; set; } = null!;
 }

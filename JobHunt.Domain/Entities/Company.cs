@@ -43,9 +43,6 @@ public partial class Company
     [Column("created_by", TypeName = "character varying")]
     public string? CreatedBy { get; set; }
 
-    [Column("modified_by", TypeName = "character varying")]
-    public string? ModifiedBy { get; set; }
-
     [Column("is_approve")]
     public bool IsApprove { get; set; }
 

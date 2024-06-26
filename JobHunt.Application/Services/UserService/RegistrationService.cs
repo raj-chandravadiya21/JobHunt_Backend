@@ -17,9 +17,9 @@ namespace JobHunt.Application.Services.UserService
 {
     public class RegistrationService(IUnitOfWork _unitOfWork, IMapper _mapper) : IRegistrationService
     {
-        public async Task UserProfile(RegistrationUserRequest model)
+        public async Task UserProfile(RegistrationUserRequest model, string token)
         {
-            var isValidToken = Jwt.ValidateToken(model.Token!, out JwtSecurityToken? jwtToken);
+            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
             if (!isValidToken)
             {
                 throw new CustomException("User is not valid");
@@ -69,7 +69,6 @@ namespace JobHunt.Application.Services.UserService
                     UserEducation userEducation = new()
                     {
                         UserId = user.UserId,
-                        UserEducationTypeId = model.EducationDetails[i].EducationType,
                         DegreeId = model.EducationDetails[i].Degree,
                         InstituteName = model.EducationDetails[i].InstitudeName,
                         PercentageGrade = model.EducationDetails[i].Percentage,
