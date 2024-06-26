@@ -3,6 +3,7 @@ using JobHunt.Application.Interfaces.UserInterface;
 using JobHunt.Domain.DataModels.Request.UserRequest.Registration;
 using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.Entities;
+using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;
 using JobHunt.Domain.Resource;
 using JobHunt.Infrastructure.Interfaces;
@@ -128,14 +129,17 @@ namespace JobHunt.Application.Services.UserService
             }
         }
 
-        public async Task<List<SkillResponse>> GetAllSkill()
-            => _mapper.Map<List<SkillResponse>>(await _unitOfWork.Skill.GetAllAsync());
-
-        public async Task<List<LanguageResponse>> GetAllLanguage()
-            => _mapper.Map<List<LanguageResponse>>(await _unitOfWork.Language.GetAllAsync());
+        
 
         public async Task<List<DegreeTypeResponse>> GetAllDegreeType()
-            => _mapper.Map<List<DegreeTypeResponse>>(await _unitOfWork.DegreeType.GetAllAsync());
+        {
+            List<DegreeTypeResponse> SSC =_mapper.Map<List<DegreeTypeResponse>>(_unitOfWork.DegreeType.GetWhere(x=>x.Type == "SSC"));
+            List<DegreeTypeResponse> HSC =_mapper.Map<List<DegreeTypeResponse>>(_unitOfWork.DegreeType.GetWhere(x=>x.Type == "HSC"));
+            List<DegreeTypeResponse> Bachelor =_mapper.Map<List<DegreeTypeResponse>>(_unitOfWork.DegreeType.GetWhere(x=>x.Type == "Bachelor"));
+            List<DegreeTypeResponse> Master =_mapper.Map<List<DegreeTypeResponse>>(_unitOfWork.DegreeType.GetWhere(x=>x.Type == "Master"));
+
+            return SSC.Concat(HSC).Concat(Bachelor).Concat(Master).ToList();
+        }
 
         public async Task<UserDetailsModel> GetUserDetails(string token)
         {
