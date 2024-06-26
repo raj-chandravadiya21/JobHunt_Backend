@@ -22,13 +22,17 @@ namespace JobHunt.Domain.Helper
         private static Task HandleExceptionMessageAsync(HttpContext context, Exception exception)
         {
             var innerException = exception.InnerException;
+            var error = $"Exception is thrown ({exception.GetType()}): {exception.Message} \n ";
 
             var errorMessages = new List<string>();
 
             if (innerException != null)
             {
+                error += $"Inner Exception ({innerException.GetType()}) : {innerException.Message}";
                 errorMessages.Add(innerException.Message);
             }
+
+            LogHelper.LogError(error);
 
             HttpStatusCode statusCode;
 

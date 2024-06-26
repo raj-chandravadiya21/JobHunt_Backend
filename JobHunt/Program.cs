@@ -5,10 +5,18 @@ using JobHunt.Infrastructure.Repositories;
 using JobHunt.Domain.Helper;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.OpenApi.Models;
+using JobHunt.Application.HostServices;
+using JobHunt.Application.Interfaces.IHostHelper;
+using JobHunt.Application.Services.HostHelper;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+Log.Logger = new LoggerConfiguration().MinimumLevel.Information()
+    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day).CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -58,9 +66,12 @@ builder.Services.AddCors(options =>
 //DATABASE CONNECTION
 builder.Services.AddDbContext<DefaultdbContext>();
 
+builder.Services.AddHostedService<DailyEmailSender>();
+
 //SERVICES
 builder.Services.AddScoped<IServiceBundle, ServiceBundle>();
-builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
+builder.Services.AddSingleton<IHostHelper, HostHelper>();
 
 //REPOSITORY
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -69,6 +80,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 var app = builder.Build();
+
+LogHelper.SetLogger(app.Logger);
 ConfigurationHelper.Configure(app.Configuration);
 
 // Configure the HTTP request pipeline.

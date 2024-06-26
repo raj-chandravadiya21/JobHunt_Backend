@@ -64,5 +64,10 @@ namespace JobHunt.Infrastructure.Repositories
         {
            return await _dbSet.ToListAsync();
         }
+
+        public async Task<List<T>> WhereList(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
     }
 }
