@@ -129,7 +129,15 @@ namespace JobHunt.Application.Services.UserService
             }
         }
 
-        
+        public async Task<List<SkillResponse>> GetAllSkill()
+        {
+            return _mapper.Map<List<SkillResponse>>(await _unitOfWork.Skill.GetAllAsync());
+        }
+
+        public async Task<List<LanguageResponse>> GetAllLanguage()
+        { 
+            return _mapper.Map<List<LanguageResponse>>(await _unitOfWork.Language.GetAllAsync());
+        }
 
         public async Task<List<DegreeTypeResponse>> GetAllDegreeType()
         {

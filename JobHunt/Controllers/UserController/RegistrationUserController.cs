@@ -26,7 +26,19 @@ namespace JobHunt.Controllers.UserController
             return Results.Ok(ResponseHelper.SuccessResponse(new(),string.Format(Messages.CompleteSuccessfully,Messages.Register)));
         }
 
-        
+        [HttpGet("get-skill")]
+        public async Task<IResult> GetAllSkills()
+        {
+            var data = await _serviceBundle.RegistrationService.GetAllSkill();
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
+
+        [HttpGet("get-language")]
+        public async Task<IResult> GetAllLanguage()
+        {
+            var data = await _serviceBundle.RegistrationService.GetAllLanguage();
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
 
         [HttpGet("get-degree-type")]
         public async Task<IResult> GetAllDegreeType()
