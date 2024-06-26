@@ -213,7 +213,7 @@ namespace JobHunt.Application.Services
         {
             Aspnetuser? user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == model.Role);
 
-            var aspNetUserId = SHAHelper.EncryptionHelper.Encrypt(user!.AspnetuserId.ToString());
+            var aspNetUserId = EncryptionHelper.Encrypt(user!.AspnetuserId.ToString());
 
             var claims = new Claim[]
                 {
@@ -252,7 +252,7 @@ namespace JobHunt.Application.Services
             var userPassword = Jwt.GetClaimValue(ClaimTypes.Expiration, jwtToken!);
             var encryorionUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            var userId = SHAHelper.EncryptionHelper.Decrypt(encryorionUserId!);
+            var userId = `EncryptionHelper.Decrypt(encryorionUserId!);
 
             var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.AspnetuserId.ToString() == userId);
 

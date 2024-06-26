@@ -9,60 +9,43 @@ using System.Threading.Tasks;
 
 namespace JobHunt.Domain.Helper
 {
-    public static class SHAHelper
+    public static class EncryptionHelper
     {
-        public static class EncryptionHelper
+        private static readonly byte[] Key = Encoding.UTF8.GetBytes(SystemConstants.SHA_KEY).Take(32).ToArray();
+        private static readonly byte[] IV = Encoding.UTF8.GetBytes(SystemConstants.SHA_IV).Take(16).ToArray();
+
+        public static string Encrypt(string plainText)
         {
-            private static readonly byte[] Key = Encoding.UTF8.GetBytes(SystemConstants.SHA_KEY).Take(32).ToArray();
-            private static readonly byte[] IV = Encoding.UTF8.GetBytes(SystemConstants.SHA_IV).Take(16).ToArray();
+            using Aes aesAlg = Aes.Create();
+            aesAlg.Key = Key;
+            aesAlg.IV = IV;
 
-            public static string Encrypt(string plainText)
+            ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+            using MemoryStream msEncrypt = new();
+            using (CryptoStream csEncrypt = new(msEncrypt, encryptor, CryptoStreamMode.Write))
             {
-                using (Aes aesAlg = Aes.Create())
-                {
-                    aesAlg.Key = Key;
-                    aesAlg.IV = IV;
-
-                    ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-
-                    using (MemoryStream msEncrypt = new MemoryStream())
-                    {
-                        using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                        {
-                            using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                            {
-                                swEncrypt.Write(plainText);
-                            }
-                        }
-
-                        return Convert.ToBase64String(msEncrypt.ToArray());
-                    }
-                }
+                using StreamWriter swEncrypt = new(csEncrypt);
+                swEncrypt.Write(plainText);
             }
 
-            public static string Decrypt(string cipherText)
-            {
-                byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            return Convert.ToBase64String(msEncrypt.ToArray());
+        }
 
-                using (Aes aesAlg = Aes.Create())
-                {
-                    aesAlg.Key = Key;
-                    aesAlg.IV = IV;
+        public static string Decrypt(string cipherText)
+        {
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
 
-                    ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+            using Aes aesAlg = Aes.Create();
+            aesAlg.Key = Key;
+            aesAlg.IV = IV;
 
-                    using (MemoryStream msDecrypt = new MemoryStream(cipherBytes))
-                    {
-                        using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                        {
-                            using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-                            {
-                                return srDecrypt.ReadToEnd();
-                            }
-                        }
-                    }
-                }
-            }
+            ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+            using MemoryStream msDecrypt = new(cipherBytes);
+            using CryptoStream csDecrypt = new(msDecrypt, decryptor, CryptoStreamMode.Read);
+            using StreamReader srDecrypt = new(csDecrypt);
+            return srDecrypt.ReadToEnd();
         }
     }
 }
