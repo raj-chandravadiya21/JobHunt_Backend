@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddSuccessfully" xml:space="preserve">
+    <value>{0} Added Successfully</value>
+  </data>
   <data name="Company" xml:space="preserve">
     <value>Company</value>
   </data>
@@ -128,6 +131,12 @@
   </data>
   <data name="DataNotFound" xml:space="preserve">
     <value>Data not found</value>
+  </data>
+  <data name="DeleteSuccessfully" xml:space="preserve">
+    <value>{0} Delete Successfully</value>
+  </data>
+  <data name="Education" xml:space="preserve">
+    <value>Education</value>
   </data>
   <data name="EmailSent" xml:space="preserve">
     <value>Email Sent Successfully</value>
@@ -153,6 +162,9 @@
   <data name="PasswordConfirmPasswordNotMatch" xml:space="preserve">
     <value>Password and ConfirmPassword not match</value>
   </data>
+  <data name="Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
   <data name="Register" xml:space="preserve">
     <value>Register</value>
   </data>
@@ -162,6 +174,12 @@
   <data name="SentSuccessfully" xml:space="preserve">
     <value>{0} Sent Successfully</value>
   </data>
+  <data name="SocialProfile" xml:space="preserve">
+    <value>Social Profile</value>
+  </data>
+  <data name="StartDateGreaterThenEndDate" xml:space="preserve">
+    <value>Start Date Should be Greater then End Date</value>
+  </data>
   <data name="TimeExpire" xml:space="preserve">
     <value>{0} Time Expire</value>
   </data>
@@ -170,5 +188,8 @@
   </data>
   <data name="User" xml:space="preserve">
     <value>User</value>
+  </data>
+  <data name="WorkExperience" xml:space="preserve">
+    <value>Work Experience</value>
   </data>
 </root>

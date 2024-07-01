@@ -6,6 +6,8 @@ namespace JobHunt.Domain.Interfaces
     {
         Task<T?> GetFirstOrDefault(Expression<Func<T, bool>> predicate);
 
+        Task<T?> GetFirstOrDefaultNullable(Expression<Func<T, bool>> predicate);
+
         Task<T?> GetLastOrDefaultOrderedBy<TProperty>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProperty>> orderByExpression);
 
         Task<bool?> GetAnyAsync(Expression<Func<T, bool>> predicate);
@@ -21,5 +23,9 @@ namespace JobHunt.Domain.Interfaces
         Task<List<T>> GetAllAsync();
 
         IQueryable<T?> GetWhere(Expression<Func<T, bool>> predicate);
+
+        void RemoveRange(List<T> entities);
+
+        void Remove(T entity);
     }
 }
