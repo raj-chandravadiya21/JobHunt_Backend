@@ -74,9 +74,8 @@ namespace JobHunt.Application.Services.UserService
                     {
                         UserId = user.UserId,
                         DegreeId = model.EducationDetails[i].Degree,
-                        InstituteName = model.EducationDetails[i].InstitudeName,
+                        InstituteName = model.EducationDetails[i].InstituteName,
                         PercentageGrade = model.EducationDetails[i].Percentage,
-                        Streem = model.EducationDetails[i].Stream,
                         StartYear = model.EducationDetails[i].StartYear,
                         EndYear = model.EducationDetails[i].EndYear,
                         CreatedDate = DateTime.Now,
