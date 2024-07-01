@@ -1,6 +1,7 @@
 ﻿using JobHunt.Domain.DataModels.Request;
 using JobHunt.Domain.DataModels.Request.UserRequest.Registration;
 using JobHunt.Domain.DataModels.Response;
+using JobHunt.Domain.DataModels.Response.User;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,7 @@ namespace JobHunt.Application.Interfaces.UserInterface
         Task<List<DegreeTypeResponse>> GetAllDegreeType();
 
         Task<UserDetailsModel> GetUserDetails();
+
+        
     }
 }

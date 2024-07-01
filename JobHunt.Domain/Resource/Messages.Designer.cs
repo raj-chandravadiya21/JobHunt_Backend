@@ -61,6 +61,15 @@ namespace JobHunt.Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} Added Successfully.
+        /// </summary>
+        public static string AddSuccessfully {
+            get {
+                return ResourceManager.GetString("AddSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company.
         /// </summary>
         public static string Company {
@@ -93,6 +102,24 @@ namespace JobHunt.Domain.Resource {
         public static string DataNotFound {
             get {
                 return ResourceManager.GetString("DataNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Delete Successfully.
+        /// </summary>
+        public static string DeleteSuccessfully {
+            get {
+                return ResourceManager.GetString("DeleteSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Education.
+        /// </summary>
+        public static string Education {
+            get {
+                return ResourceManager.GetString("Education", resourceCulture);
             }
         }
         
@@ -169,6 +196,15 @@ namespace JobHunt.Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project.
+        /// </summary>
+        public static string Project {
+            get {
+                return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Register.
         /// </summary>
         public static string Register {
@@ -196,6 +232,24 @@ namespace JobHunt.Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Social Profile.
+        /// </summary>
+        public static string SocialProfile {
+            get {
+                return ResourceManager.GetString("SocialProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Date Should be Greater then End Date.
+        /// </summary>
+        public static string StartDateGreaterThenEndDate {
+            get {
+                return ResourceManager.GetString("StartDateGreaterThenEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} Time Expire.
         /// </summary>
         public static string TimeExpire {
@@ -219,6 +273,15 @@ namespace JobHunt.Domain.Resource {
         public static string User {
             get {
                 return ResourceManager.GetString("User", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Work Experience.
+        /// </summary>
+        public static string WorkExperience {
+            get {
+                return ResourceManager.GetString("WorkExperience", resourceCulture);
             }
         }
     }

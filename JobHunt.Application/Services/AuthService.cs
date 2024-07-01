@@ -141,7 +141,7 @@ namespace JobHunt.Application.Services
                     new(ClaimTypes.Sid,aspnetuser.AspnetuserId.ToString())
                 };
 
-                var token = Jwt.GenerateToken(claims, DateTime.Now.AddDays(1));
+                var token = Jwt.GenerateToken(claims, DateTime.Now.AddDays(365));
 
                 return token;
             }
@@ -252,7 +252,7 @@ namespace JobHunt.Application.Services
             var userPassword = Jwt.GetClaimValue(ClaimTypes.Expiration, jwtToken!);
             var encryorionUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            var userId = `EncryptionHelper.Decrypt(encryorionUserId!);
+            var userId = EncryptionHelper.Decrypt(encryorionUserId!);
 
             var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.AspnetuserId.ToString() == userId);
 

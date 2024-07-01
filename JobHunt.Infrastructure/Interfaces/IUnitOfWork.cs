@@ -7,8 +7,6 @@ namespace JobHunt.Infrastructure.Interfaces
     { 
         public IRepository<Aspnetuser> AspNetUser { get; }
 
-        public IRepository<User> User { get; }
-
         public IRepository<OtpRecord> OtpRecord { get; }
 
         public IRepository<Company> Company { get; }
@@ -32,5 +30,7 @@ namespace JobHunt.Infrastructure.Interfaces
         public IRepository<DegreeType> DegreeType { get; }
 
         Task SaveAsync();
+
+        public IUserRepository User { get; }
     }
 }

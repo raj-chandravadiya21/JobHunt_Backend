@@ -57,6 +57,15 @@ public partial class User
     [StringLength(10)]
     public string? Gender { get; set; }
 
+    [Column("country", TypeName = "character varying")]
+    public string? Country { get; set; }
+
+    [Column("state", TypeName = "character varying")]
+    public string? State { get; set; }
+
+    [Column("city", TypeName = "character varying")]
+    public string? City { get; set; }
+
     [InverseProperty("User")]
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
 

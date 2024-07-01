@@ -1,9 +1,7 @@
 ﻿using JobHunt.Domain.Entities;
 using JobHunt.Domain.Helper;
 using JobHunt.Domain.Interfaces;
-using JobHunt.Domain.Resource;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace JobHunt.Infrastructure.Repositories
@@ -28,9 +26,14 @@ namespace JobHunt.Infrastructure.Repositories
             return data;
         }
 
+        public async Task<T?> GetFirstOrDefaultNullable(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.FirstOrDefaultAsync(predicate);
+        }
+
         public async Task<T?> GetLastOrDefaultOrderedBy<TProperty>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProperty>> orderByExpression)
         {
-            var data =  await _dbSet.Where(predicate)
+            var data = await _dbSet.Where(predicate)
                        .OrderBy(orderByExpression)
                        .LastOrDefaultAsync();
 
@@ -63,7 +66,7 @@ namespace JobHunt.Infrastructure.Repositories
 
         public async Task<List<T>> GetAllAsync()
         {
-           return await _dbSet.ToListAsync();
+            return await _dbSet.ToListAsync();
         }
 
 
@@ -75,6 +78,16 @@ namespace JobHunt.Infrastructure.Repositories
         public IQueryable<T?> GetWhere(Expression<Func<T, bool>> predicate)
         {
             return _dbSet.Where(predicate);
+        }
+
+        public void RemoveRange(List<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
+        }
+
+        public void Remove(T entity)
+        {
+            _dbSet.Remove(entity);
         }
     }
 }

@@ -2,6 +2,7 @@
 using JobHunt.Application.Interfaces.UserInterface;
 using JobHunt.Domain.DataModels.Request.UserRequest.Registration;
 using JobHunt.Domain.DataModels.Response;
+using JobHunt.Domain.DataModels.Response.User;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;
@@ -76,7 +77,6 @@ namespace JobHunt.Application.Services.UserService
                         DegreeId = model.EducationDetails[i].Degree,
                         InstituteName = model.EducationDetails[i].InstitudeName,
                         PercentageGrade = model.EducationDetails[i].Percentage,
-                        Streem = model.EducationDetails[i].Stream,
                         StartYear = model.EducationDetails[i].StartYear,
                         EndYear = model.EducationDetails[i].EndYear,
                         CreatedDate = DateTime.Now,

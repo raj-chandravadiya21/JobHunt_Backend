@@ -25,10 +25,6 @@ public partial class UserEducation
     [Column("percentage/grade", TypeName = "character varying")]
     public string PercentageGrade { get; set; } = null!;
 
-    [Column("streem")]
-    [StringLength(30)]
-    public string? Streem { get; set; }
-
     [Column("start_year")]
     public int StartYear { get; set; }
 

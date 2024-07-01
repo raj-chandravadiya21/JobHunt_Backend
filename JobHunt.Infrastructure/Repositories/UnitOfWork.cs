@@ -12,7 +12,7 @@ namespace JobHunt.Infrastructure.Repositories
         {
             _context = context;
             AspNetUser = new Repository<Aspnetuser>(_context);
-            User = new Repository<User>(_context);
+            User = new UserRepository(_context);
             OtpRecord = new Repository<OtpRecord>(_context);
             Company = new Repository<Company>(_context);
             UserSkill = new Repository<UserSkill>(_context);
@@ -27,7 +27,7 @@ namespace JobHunt.Infrastructure.Repositories
         }
         public IRepository<Aspnetuser> AspNetUser { get; private set; }
 
-        public IRepository<User> User { get; private set; }
+        public IUserRepository User { get; private set; }
 
         public IRepository<OtpRecord> OtpRecord { get; private set; }
 

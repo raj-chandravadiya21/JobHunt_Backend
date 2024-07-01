@@ -28,11 +28,14 @@ namespace JobHunt.Application.Services
             AuthService = new AuthService(_unitOfWork, _emailSender);
             RegistrationService = new RegistrationService(_unitOfWork, _mapper, _contextAccessor);
             CompanyRegistrationService = new CompanyRegistrationService(_unitOfWork, _mapper, _contextAccessor);
+            UserProfileService = new UserProfileService(_unitOfWork, _contextAccessor, _mapper);
         }
         public IAuthService AuthService { get; private set; }
 
         public IRegistrationService RegistrationService { get; private set; }
 
         public ICompanyRegistrationService CompanyRegistrationService { get; private set;}
+
+        public IUserProfileService UserProfileService { get; private set; }
     }
 }
