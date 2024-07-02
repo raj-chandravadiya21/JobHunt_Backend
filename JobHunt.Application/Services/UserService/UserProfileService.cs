@@ -38,11 +38,11 @@ namespace JobHunt.Application.Services.UserService
             return await _unitOfWork.User.GetUserProfile(user!.UserId);
         }
 
-        public async Task<List<UserSocialProfileResponse>> GetSocialProfile()
+        public async Task<UserSocialProfileResponse> GetSocialProfile()
         {
             var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
 
-            return _mapper.Map<List<UserSocialProfileResponse>>(await _unitOfWork.UserSocialProfile.WhereList(u => u.UserId == user!.UserId));
+            return _mapper.Map<UserSocialProfileResponse>(await _unitOfWork.UserSocialProfile.GetFirstOrDefault(u => u.UserId == user!.UserId));
         }
 
         public async Task<List<UserEducationResponse>> GetUserEducation()

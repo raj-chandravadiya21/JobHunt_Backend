@@ -7,7 +7,7 @@ namespace JobHunt.Application.Interfaces.UserInterface
     {
         Task<UserProfileModel> GetUserProfile();
 
-        Task<List<UserSocialProfileResponse>> GetSocialProfile();
+        Task<UserSocialProfileResponse> GetSocialProfile();
 
         Task<List<UserEducationResponse>> GetUserEducation();
 
