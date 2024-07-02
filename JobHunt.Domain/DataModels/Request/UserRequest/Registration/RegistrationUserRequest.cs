@@ -13,7 +13,11 @@ namespace JobHunt.Domain.DataModels.Request.UserRequest.Registration
 
         public string? Experience { get; set; }
 
-        public string? Address { get; set; }
+        public string? Country { get; set; }
+
+        public string? State { get; set; }
+
+        public string? City { get; set; }
 
         public List<int> Skills { get; set; } = new List<int>();
 

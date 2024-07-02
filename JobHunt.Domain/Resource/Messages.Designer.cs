@@ -142,6 +142,15 @@ namespace JobHunt.Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Job.
+        /// </summary>
+        public static string Job {
+            get {
+                return ResourceManager.GetString("Job", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} Login Successfully.
         /// </summary>
         public static string LoginSuccessfully {

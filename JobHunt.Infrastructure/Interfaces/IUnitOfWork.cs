@@ -29,6 +29,8 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public IRepository<DegreeType> DegreeType { get; }
 
+        public IRepository<Job> Job { get; }
+
         Task SaveAsync();
 
         public IUserRepository User { get; }
