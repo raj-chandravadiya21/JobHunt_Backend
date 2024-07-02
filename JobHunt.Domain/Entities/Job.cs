@@ -62,4 +62,13 @@ public partial class Job
     [ForeignKey("CompanyId")]
     [InverseProperty("Jobs")]
     public virtual Company Company { get; set; } = null!;
+
+    [InverseProperty("Job")]
+    public virtual ICollection<JobPerk> JobPerks { get; set; } = new List<JobPerk>();
+
+    [InverseProperty("Job")]
+    public virtual ICollection<JobResponsibility> JobResponsibilities { get; set; } = new List<JobResponsibility>();
+
+    [InverseProperty("Job")]
+    public virtual ICollection<JobSkill> JobSkills { get; set; } = new List<JobSkill>();
 }

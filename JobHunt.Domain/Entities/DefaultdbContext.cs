@@ -36,6 +36,10 @@ public partial class DefaultdbContext : DbContext
 
     public virtual DbSet<Job> Jobs { get; set; }
 
+    public virtual DbSet<JobPerk> JobPerks { get; set; }
+
+    public virtual DbSet<JobResponsibility> JobResponsibilities { get; set; }
+
     public virtual DbSet<JobSkill> JobSkills { get; set; }
 
     public virtual DbSet<Language> Languages { get; set; }
@@ -63,7 +67,6 @@ public partial class DefaultdbContext : DbContext
     public virtual DbSet<WorkExperience> WorkExperiences { get; set; }
 
     public virtual DbSet<UserProfileModel> UserProfiles { get; set; }
-
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -185,13 +188,39 @@ public partial class DefaultdbContext : DbContext
                 .HasConstraintName("job_company_id_fkey");
         });
 
+        modelBuilder.Entity<JobPerk>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("job_perks_pkey");
+
+            entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+            entity.HasOne(d => d.Job).WithMany(p => p.JobPerks)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("job_perks_job_id_fkey");
+        });
+
+        modelBuilder.Entity<JobResponsibility>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("job_responsibility_pkey");
+
+            entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+            entity.HasOne(d => d.Job).WithMany(p => p.JobResponsibilities)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("job_responsibility_job_id_fkey");
+        });
+
         modelBuilder.Entity<JobSkill>(entity =>
         {
-            entity.HasOne(d => d.Job).WithMany()
+            entity.HasKey(e => e.Id).HasName("job_skills_pkey");
+
+            entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+            entity.HasOne(d => d.Job).WithMany(p => p.JobSkills)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("job_skills_job_id_fkey");
 
-            entity.HasOne(d => d.Skill).WithMany()
+            entity.HasOne(d => d.Skill).WithMany(p => p.JobSkills)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("job_skills_skill_id_fkey");
         });
