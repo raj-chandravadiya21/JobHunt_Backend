@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JobHunt.Application.Interfaces.CompanyInterface;
 using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
+using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Helper;
 using JobHunt.Infrastructure.Interfaces;
@@ -81,6 +82,11 @@ namespace JobHunt.Application.Services.CompanyService
             }
 
             await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<JobDetails> GetJobDetails(int jobId)
+        {
+            return await _unitOfWork.Company.JobDetails(jobId);
         }
     }
 }

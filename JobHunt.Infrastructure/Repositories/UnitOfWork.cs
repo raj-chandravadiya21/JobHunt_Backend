@@ -14,7 +14,6 @@ namespace JobHunt.Infrastructure.Repositories
             AspNetUser = new Repository<Aspnetuser>(_context);
             User = new UserRepository(_context);
             OtpRecord = new Repository<OtpRecord>(_context);
-            Company = new Repository<Company>(_context);
             UserSkill = new Repository<UserSkill>(_context);
             UserLanguage = new Repository<UserLanguage>(_context);
             UserSocialProfile = new Repository<UserSocialProfile>(_context);
@@ -28,12 +27,11 @@ namespace JobHunt.Infrastructure.Repositories
             JobSkill = new Repository<JobSkill>(_context);
             JobResponsibility = new Repository<JobResponsibility>(_context);
             JobPerks = new Repository<JobPerk>(_context);
+            Company = new CompanyRepository(_context);
         }
         public IRepository<Aspnetuser> AspNetUser { get; private set; }
 
         public IRepository<OtpRecord> OtpRecord { get; private set; }
-
-        public IRepository<Company> Company { get; private set; }
 
         public IRepository<UserSkill> UserSkill { get; private set; }
 
@@ -67,5 +65,7 @@ namespace JobHunt.Infrastructure.Repositories
         }
 
         public IUserRepository User { get; private set; }
+
+        public ICompanyRepository Company { get; private set; }
     }
 }
