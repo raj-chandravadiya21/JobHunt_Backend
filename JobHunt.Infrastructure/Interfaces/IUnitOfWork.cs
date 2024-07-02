@@ -9,10 +9,6 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public IRepository<OtpRecord> OtpRecord { get; }
 
-        public IRepository<UserSkill> UserSkill { get; }
-
-        public IRepository<UserLanguage> UserLanguage { get; }
-
         public IRepository<UserSocialProfile> UserSocialProfile { get; }
 
         public IRepository<Project> Project { get; }
@@ -40,5 +36,9 @@ namespace JobHunt.Infrastructure.Interfaces
         public IUserRepository User { get; }
 
         public ICompanyRepository Company { get; }
+      
+        public IUserSkillRepository UserSkill { get; }
+
+        public IUserLanguageRepository UserLanguage { get; }
     }
 }

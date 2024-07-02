@@ -40,7 +40,7 @@ namespace JobHunt.Application.Services.CompanyService
                 StartDate = model.JobStartDate,
                 CtcStart = model.CTCStart,
                 CtcEnd = model.CTCEnd,
-                ExperienceInYears = model.Experience,
+                ExperienceInYears = (int)model.Experience,
                 LastDateToApply = model.LastDate,
                 NoOfOpenings = model.NoOfOpening,
                 JobDescription = model.Description,
