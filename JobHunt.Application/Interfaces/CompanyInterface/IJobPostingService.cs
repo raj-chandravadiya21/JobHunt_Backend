@@ -1,5 +1,6 @@
 ﻿using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
 using JobHunt.Domain.DataModels.Request.CompanyRequest.Registration;
+using JobHunt.Domain.DataModels.Response.Company;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
     public interface IJobPostingService
     {
         Task CreateJob(CreateJobRequest model);
+
+        Task<JobDetails> GetJobDetails(int jobId);
     }
 }

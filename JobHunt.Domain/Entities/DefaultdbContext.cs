@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.DataModels.Response.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -68,6 +69,8 @@ public partial class DefaultdbContext : DbContext
 
     public virtual DbSet<UserProfileModel> UserProfiles { get; set; }
 
+    public virtual DbSet<JobDetails> JobDetails { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseNpgsql("Host=test-pateldemo979-2f5a.f.aivencloud.com;Port=24996;Database=defaultdb;Username=avnadmin;Password=AVNS_f8q4IBOurtCLjsuwOsq");
@@ -75,6 +78,11 @@ public partial class DefaultdbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserProfileModel>(entity =>
+        {
+            entity.HasNoKey();
+        });
+
+        modelBuilder.Entity<JobDetails>(entity =>
         {
             entity.HasNoKey();
         });
