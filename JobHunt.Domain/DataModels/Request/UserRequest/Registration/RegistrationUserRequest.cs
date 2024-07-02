@@ -11,7 +11,7 @@ namespace JobHunt.Domain.DataModels.Request.UserRequest.Registration
 
         public string? Gender { get; set; }
 
-        public string? Experience { get; set; }
+        public double Experience { get; set; }
 
         public string? Country { get; set; }
 

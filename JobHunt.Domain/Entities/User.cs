@@ -49,10 +49,6 @@ public partial class User
     [StringLength(100)]
     public string? Photo { get; set; }
 
-    [Column("experience")]
-    [StringLength(10)]
-    public string? Experience { get; set; }
-
     [Column("gender")]
     [StringLength(10)]
     public string? Gender { get; set; }
@@ -65,6 +61,9 @@ public partial class User
 
     [Column("city", TypeName = "character varying")]
     public string? City { get; set; }
+
+    [Column("experience")]
+    public double? Experience { get; set; }
 
     [InverseProperty("User")]
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
