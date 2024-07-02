@@ -49,6 +49,38 @@ namespace JobHunt.Application.Services.CompanyService
 
             await _unitOfWork.Job.CreateAsync(job);
             await _unitOfWork.SaveAsync();
+
+            for (int i = 0; i < model.Skills.Count; i++)
+            {
+                JobSkill jobSkill = new()
+                {
+                    JobId = job.Id,
+                    SkillId = model.Skills[i]
+                };
+                await _unitOfWork.JobSkill.CreateAsync(jobSkill);
+            }
+
+            for (int i = 0; i < model.Responsibility.Count; i++)
+            {
+                JobResponsibility jobResponsibility = new()
+                {
+                    JobId = job.Id,
+                    Responsibility = model.Responsibility[i]
+                };
+                await _unitOfWork.JobResponsibility.CreateAsync(jobResponsibility);
+            }
+
+            for (int i = 0; i < model.Perks.Count; i++)
+            {
+                JobPerk jobPerks = new()
+                {
+                    JobId = job.Id,
+                    Perks = model.Perks[i]
+                };
+                await _unitOfWork.JobPerks.CreateAsync(jobPerks);
+            }
+
+            await _unitOfWork.SaveAsync();
         }
     }
 }

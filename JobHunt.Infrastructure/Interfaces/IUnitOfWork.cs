@@ -31,6 +31,12 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public IRepository<Job> Job { get; }
 
+        public IRepository<JobSkill> JobSkill { get; }
+
+        public IRepository<JobResponsibility> JobResponsibility { get; }
+
+        public IRepository<JobPerk> JobPerks { get; }
+
         Task SaveAsync();
 
         public IUserRepository User { get; }

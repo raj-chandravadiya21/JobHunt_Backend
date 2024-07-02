@@ -25,6 +25,9 @@ namespace JobHunt.Infrastructure.Repositories
             Language = new Repository<Language>(_context);
             DegreeType = new Repository<DegreeType>(_context);
             Job = new Repository<Job>(_context);
+            JobSkill = new Repository<JobSkill>(_context);
+            JobResponsibility = new Repository<JobResponsibility>(_context);
+            JobPerks = new Repository<JobPerk>(_context);
         }
         public IRepository<Aspnetuser> AspNetUser { get; private set; }
 
@@ -51,6 +54,12 @@ namespace JobHunt.Infrastructure.Repositories
         public IRepository<DegreeType> DegreeType { get; private set; }
 
         public IRepository<Job> Job { get; private set; }
+
+        public IRepository<JobSkill> JobSkill { get; private set; }
+
+        public IRepository<JobResponsibility> JobResponsibility { get; private set; }
+
+        public IRepository<JobPerk> JobPerks { get; private set; }
 
         public async Task SaveAsync()
         {
