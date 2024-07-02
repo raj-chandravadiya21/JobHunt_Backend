@@ -43,7 +43,10 @@ namespace JobHunt.Application.Services.UserService
                 user.DateOfBirth = model.DOB;
                 user.Gender = model.Gender;
                 user.Experience = model.Experience;
-                user.Address = model.Address;
+                user.Country = model.Country;
+                user.State = model.State;
+                user.City = model.City;
+                user.Address = model.City + ", " + model.State + ", " + model.Country;
                 user.Photo = model.Photo;
                 user.ModifiedDate = DateTime.Now;
 
