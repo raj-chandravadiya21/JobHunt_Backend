@@ -17,8 +17,7 @@ namespace JobHunt.Infrastructure.Repositories
                 new("@user_id",userId),
             };
 
-            var result = await _context.UserProfiles.FromSqlRaw("SELECT * FROM get_user_profile(@user_id)", parameter).ToListAsync();
-            return result[0];
+            return await _context.UserProfiles.FromSqlRaw("SELECT * FROM get_user_profile(@user_id)", parameter).FirstAsync();
         }
     }
 }
