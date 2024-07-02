@@ -11,6 +11,10 @@ namespace JobHunt.Domain.Helper
         {
             try
             {
+                var ipAddress =  context.Connection.RemoteIpAddress?.ToString();
+
+                LogHelper.LogInformation($"Incoming request from : {ipAddress}");
+
                 await next.Invoke(context);
             }
             catch (Exception ex)

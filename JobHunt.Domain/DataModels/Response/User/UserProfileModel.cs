@@ -16,7 +16,7 @@
 
         public string Photo { get; set; } = null!;
 
-        public string Experience { get; set; } = null!;
+        public Double? Experience { get; set; }
 
         public string Gender { get; set; } = null!;
 

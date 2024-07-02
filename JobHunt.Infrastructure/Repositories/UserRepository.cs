@@ -1,4 +1,4 @@
-﻿using JobHunt.Domain.DataModels.Response.User;
+﻿    using JobHunt.Domain.DataModels.Response.User;
 using JobHunt.Domain.Entities;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +17,8 @@ namespace JobHunt.Infrastructure.Repositories
                 new("@user_id",userId),
             };
 
-            var result = await _context.UserProfiles.FromSqlRaw("SELECT * FROM get_user_profile(@user_id)", parameter).FirstAsync();
-            return result;
+            var result = await _context.UserProfiles.FromSqlRaw("SELECT * FROM get_user_profile(@user_id)", parameter).ToListAsync();
+            return result[0];
         }
     }
 }

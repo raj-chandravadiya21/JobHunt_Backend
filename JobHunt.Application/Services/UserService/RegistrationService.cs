@@ -53,25 +53,9 @@ namespace JobHunt.Application.Services.UserService
                 _unitOfWork.User.UpdateAsync(user);
                 await _unitOfWork.SaveAsync();
 
-                for (int i = 0; i < model.Skills.Count; i++)
-                {
-                    UserSkill userSkill = new()
-                    {
-                        UserId = user.UserId,
-                        SkillId = model.Skills[i]
-                    };
-                    await _unitOfWork.UserSkill.CreateAsync(userSkill);
-                }
+                await _unitOfWork.UserLanguage.AddLanguage(user.UserId, model.Languages);
 
-                for (int i = 0; i < model.Languages.Count; i++)
-                {
-                    UserLanguage userLanguage = new()
-                    {
-                        UserId = user.UserId,
-                        LanguageId = model.Languages[i]
-                    };
-                    await _unitOfWork.UserLanguage.CreateAsync(userLanguage);
-                }
+                await _unitOfWork.UserSkill.AddUserSkill(user.UserId, model.Skills);
 
                 for (int i = 0; i < model.EducationDetails.Count; i++)
                 {
