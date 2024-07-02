@@ -29,6 +29,7 @@ namespace JobHunt.Application.Services
             RegistrationService = new RegistrationService(_unitOfWork, _mapper, _contextAccessor);
             CompanyRegistrationService = new CompanyRegistrationService(_unitOfWork, _mapper, _contextAccessor);
             UserProfileService = new UserProfileService(_unitOfWork, _contextAccessor, _mapper);
+            JobPostingService = new JobPostingService(_unitOfWork, _contextAccessor, _mapper);
         }
         public IAuthService AuthService { get; private set; }
 
@@ -37,5 +38,7 @@ namespace JobHunt.Application.Services
         public ICompanyRegistrationService CompanyRegistrationService { get; private set;}
 
         public IUserProfileService UserProfileService { get; private set; }
+
+        public IJobPostingService JobPostingService { get; private set;}
     }
 }

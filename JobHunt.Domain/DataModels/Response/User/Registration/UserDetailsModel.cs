@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JobHunt.Domain.DataModels.Request.UserRequest.Registration
+namespace JobHunt.Domain.DataModels.Response.User.Registration
 {
     public class UserDetailsModel
     {

@@ -34,7 +34,7 @@ public partial class Job
     public int CtcEnd { get; set; }
 
     [Column("experience_in_years")]
-    public int ExperienceInYears { get; set; }
+    public double ExperienceInYears { get; set; }
 
     [Column("last_date_to_apply")]
     public DateOnly LastDateToApply { get; set; }

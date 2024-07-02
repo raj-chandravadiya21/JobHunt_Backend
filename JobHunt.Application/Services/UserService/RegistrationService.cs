@@ -3,6 +3,7 @@ using JobHunt.Application.Interfaces.UserInterface;
 using JobHunt.Domain.DataModels.Request.UserRequest.Registration;
 using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.DataModels.Response.User;
+using JobHunt.Domain.DataModels.Response.User.Registration;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;

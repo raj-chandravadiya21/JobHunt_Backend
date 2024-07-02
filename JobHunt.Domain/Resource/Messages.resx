@@ -144,6 +144,9 @@
   <data name="EnterValidCredentials" xml:space="preserve">
     <value>Enter Valid Credentials</value>
   </data>
+  <data name="Job" xml:space="preserve">
+    <value>Job</value>
+  </data>
   <data name="LoginSuccessfully" xml:space="preserve">
     <value>{0} Login Successfully</value>
   </data>
