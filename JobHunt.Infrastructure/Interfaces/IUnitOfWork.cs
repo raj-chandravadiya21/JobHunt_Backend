@@ -11,10 +11,6 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public IRepository<Company> Company { get; }
 
-        public IRepository<UserSkill> UserSkill { get; }
-
-        public IRepository<UserLanguage> UserLanguage { get; }
-
         public IRepository<UserSocialProfile> UserSocialProfile { get; }
 
         public IRepository<Project> Project { get; }
@@ -34,5 +30,9 @@ namespace JobHunt.Infrastructure.Interfaces
         Task SaveAsync();
 
         public IUserRepository User { get; }
+
+        public IUserSkillRepository UserSkill { get; }
+
+        public IUserLanguageRepository UserLanguage { get; }
     }
 }
