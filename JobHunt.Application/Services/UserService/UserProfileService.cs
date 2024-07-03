@@ -215,6 +215,16 @@ namespace JobHunt.Application.Services.UserService
 
             var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
 
+            var userEducationList = await _unitOfWork.UserEducation.WhereList(u => u.UserId == user!.UserId);
+
+            foreach(var data in userEducationList)
+            {
+                if(data.DegreeId == model.DegreeId)
+                {
+                    throw new CustomException("You have Already Added this Job");
+                }
+            }
+
             UserEducation userEducation = new();
 
             _mapper.Map<AddEducationRequest, UserEducation>(model, userEducation!);

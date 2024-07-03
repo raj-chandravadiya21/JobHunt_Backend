@@ -23,7 +23,7 @@ namespace JobHunt.Infrastructure.Repositories
             Skill = new Repository<Skill>(_context);
             Language = new Repository<Language>(_context);
             DegreeType = new Repository<DegreeType>(_context);
-            Job = new Repository<Job>(_context);
+            Job = new JobRepository(_context);
             JobSkill = new Repository<JobSkill>(_context);
             JobResponsibility = new Repository<JobResponsibility>(_context);
             JobPerks = new Repository<JobPerk>(_context);
@@ -47,8 +47,6 @@ namespace JobHunt.Infrastructure.Repositories
 
         public IRepository<DegreeType> DegreeType { get; private set; }
 
-        public IRepository<Job> Job { get; private set; }
-
         public IRepository<JobSkill> JobSkill { get; private set; }
 
         public IRepository<JobResponsibility> JobResponsibility { get; private set; }
@@ -67,5 +65,7 @@ namespace JobHunt.Infrastructure.Repositories
         public IUserSkillRepository UserSkill { get; private set; }
 
         public IUserLanguageRepository UserLanguage { get; private set; }
+
+        public IJobRepository Job { get; private set; }
     }
 }

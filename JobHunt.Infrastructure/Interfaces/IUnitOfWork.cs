@@ -23,8 +23,6 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public IRepository<DegreeType> DegreeType { get; }
 
-        public IRepository<Job> Job { get; }
-
         public IRepository<JobSkill> JobSkill { get; }
 
         public IRepository<JobResponsibility> JobResponsibility { get; }
@@ -40,5 +38,7 @@ namespace JobHunt.Infrastructure.Interfaces
         public IUserSkillRepository UserSkill { get; }
 
         public IUserLanguageRepository UserLanguage { get; }
+
+        public IJobRepository Job { get; }
     }
 }
