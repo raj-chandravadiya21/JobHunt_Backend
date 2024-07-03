@@ -1,11 +1,9 @@
 ﻿using JobHunt.Application.Interfaces;
 using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
-using JobHunt.Domain.DataModels.Request.CompanyRequest.Registration;
 using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.Helper;
 using JobHunt.Domain.Resource;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace JobHunt.Controllers.Company
 {
@@ -32,6 +30,13 @@ namespace JobHunt.Controllers.Company
         public async Task<IResult> ViewJobDetails(int jobId)
         {
             JobDetails data = await _serviceBundle.JobPostingService.GetJobDetails(jobId);
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
+
+        [HttpGet("get-job-details/{jobId}")]
+        public async Task<IResult> GetJobDetails(int jobId)
+        {
+            var data = await _serviceBundle.JobPostingService.GetEditJobDetails(jobId);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
     }

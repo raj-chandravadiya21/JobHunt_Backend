@@ -88,5 +88,8 @@ namespace JobHunt.Application.Services.CompanyService
         {
             return await _unitOfWork.Company.JobDetails(jobId);
         }
+
+        public async Task<EditJobDetailsResponse> GetEditJobDetails(int jobId)
+            => await _unitOfWork.Job.GetJobDetails(jobId);
     }
 }
