@@ -7,6 +7,8 @@ namespace JobHunt.Infrastructure.Interfaces
     public interface IJobRepository : IRepository<Job>
     {
         Task<EditJobDetailsResponse> GetJobDetails(int jobId);
+
+        Task<List<GetJobsResponse>> GetJobs(int companyId);
     }
 }
     

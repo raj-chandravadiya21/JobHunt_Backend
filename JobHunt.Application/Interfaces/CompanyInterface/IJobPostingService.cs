@@ -10,5 +10,7 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
         Task<JobDetails> GetJobDetails(int jobId);
 
         Task<EditJobDetailsResponse> GetEditJobDetails(int jobId);
+
+        Task<List<GetJobsResponse>> GetJobs();
     }
 }

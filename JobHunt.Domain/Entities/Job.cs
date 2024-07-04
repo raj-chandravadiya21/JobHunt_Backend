@@ -30,7 +30,7 @@ public partial class Job
     [Column("ctc_start")]
     public int CtcStart { get; set; }
 
-    [Column("ctc_end ")]
+    [Column("ctc_end")]
     public int CtcEnd { get; set; }
 
     [Column("experience_in_years")]

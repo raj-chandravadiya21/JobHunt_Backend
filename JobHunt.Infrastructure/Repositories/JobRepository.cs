@@ -19,5 +19,17 @@ namespace JobHunt.Infrastructure.Repositories
 
             return await _context.EditJobDetailsResponses.FromSqlRaw("SELECT * FROM get_job_details(@jobId)", parameter).FirstAsync();
         }
+
+        public async Task<List<GetJobsResponse>> GetJobs(int companyId)
+        {
+            var parameter = new NpgsqlParameter[]
+            {
+                new("@companyId", companyId),
+            };
+
+            var data = await _context.GetJobsResponses.FromSqlRaw("SELECT * FROM get_jobs(@companyId)", parameter).ToListAsync();
+
+            return data;
+        }
     }
 }
