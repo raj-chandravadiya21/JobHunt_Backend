@@ -258,5 +258,6 @@ namespace JobHunt.Application.Services.UserService
             }
         }
 
+
     }
 }
