@@ -168,9 +168,7 @@ namespace JobHunt.Application.Services.UserService
 
             var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
 
-            Project project = new();
-
-            _mapper.Map<AddProjectRequest, Project>(model, project);
+            Project project = _mapper.Map<AddProjectRequest, Project>(model);
 
             project.UserId = user!.UserId;
             project.CreatedDate = DateTime.Now;
