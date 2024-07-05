@@ -1,6 +1,5 @@
 ﻿using JobHunt.Application.Interfaces;
 using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
-using JobHunt.Domain.DataModels.Request.CompanyRequest.Registration;
 using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.Helper;
 using JobHunt.Domain.Resource;
@@ -28,13 +27,25 @@ namespace JobHunt.Controllers.Company
             return Results.Ok(ResponseHelper.SuccessResponse(new(), string.Format(Messages.AddSuccessfully, Messages.Job)));
         }
 
-        [HttpGet("view-job/{jobId}")]
+        [HttpGet("view-job/{id}")]
         public async Task<IResult> ViewJobDetails(int jobId)
         {
             JobDetails data = await _serviceBundle.JobPostingService.GetJobDetails(jobId);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
+        [HttpGet("get-job-details/{id}")]
+        public async Task<IResult> GetJobDetails(int jobId)
+        {
+            var data = await _serviceBundle.JobPostingService.GetEditJobDetails(jobId);
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
 
+        [HttpGet("get-jobs")]
+        public async Task<IResult> GetJobs()
+        {
+            var data = await _serviceBundle.JobPostingService.GetJobs();
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
     }
 }

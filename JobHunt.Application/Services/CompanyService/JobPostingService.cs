@@ -85,8 +85,29 @@ namespace JobHunt.Application.Services.CompanyService
         }
 
         public async Task<JobDetails> GetJobDetails(int jobId)
+            => await _unitOfWork.Company.JobDetails(jobId);
+
+        public async Task<EditJobDetailsResponse> GetEditJobDetails(int jobId)
+            => await _unitOfWork.Job.GetJobDetails(jobId);
+
+        public async Task<List<GetJobsResponse>> GetJobs()
         {
-            return await _unitOfWork.Company.JobDetails(jobId);
+            var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
+
+            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
+            if (!isValidToken)
+            {
+                throw new CustomException("User is not valid");
+            }
+
+            var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
+
+            Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
+
+
+            var jobResponses = await _unitOfWork.Job.GetJobs(company.CompanyId);
+
+            return jobResponses;
         }
     }
 }

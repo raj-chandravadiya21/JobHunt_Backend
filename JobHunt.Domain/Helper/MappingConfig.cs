@@ -26,6 +26,7 @@ namespace JobHunt.Domain.Helper
             CreateMap<UpdateProjectRequest, Project>().ReverseMap();
             CreateMap<AddEducationRequest, UserEducation>().ReverseMap();
             CreateMap<UserSocialProfileRequest, UserSocialProfile>().ReverseMap();
+            CreateMap<AddProjectRequest, Project>().ReverseMap();
         }
     }
 }

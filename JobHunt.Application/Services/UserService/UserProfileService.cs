@@ -168,9 +168,7 @@ namespace JobHunt.Application.Services.UserService
 
             var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
 
-            Project project = new();
-
-            _mapper.Map<AddProjectRequest, Project>(model, project);
+            Project project = _mapper.Map<AddProjectRequest, Project>(model);
 
             project.UserId = user!.UserId;
             project.CreatedDate = DateTime.Now;
@@ -215,6 +213,16 @@ namespace JobHunt.Application.Services.UserService
 
             var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
 
+            var userEducationList = await _unitOfWork.UserEducation.WhereList(u => u.UserId == user!.UserId);
+
+            foreach(var data in userEducationList)
+            {
+                if(data.DegreeId == model.DegreeId)
+                {
+                    throw new CustomException("You have Already Added this Job");
+                }
+            }
+
             UserEducation userEducation = new();
 
             _mapper.Map<AddEducationRequest, UserEducation>(model, userEducation!);
@@ -249,5 +257,7 @@ namespace JobHunt.Application.Services.UserService
                 await _unitOfWork.SaveAsync();
             }
         }
+
+
     }
 }
