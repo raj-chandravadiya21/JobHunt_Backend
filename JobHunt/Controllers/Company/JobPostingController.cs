@@ -28,11 +28,13 @@ namespace JobHunt.Controllers.Company
             return Results.Ok(ResponseHelper.SuccessResponse(new(), string.Format(Messages.AddSuccessfully, Messages.Job)));
         }
 
-        [HttpGet("view-job")]
+        [HttpGet("view-job/{jobId}")]
         public async Task<IResult> ViewJobDetails(int jobId)
         {
             JobDetails data = await _serviceBundle.JobPostingService.GetJobDetails(jobId);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
+
+
     }
 }
