@@ -257,5 +257,6 @@ namespace JobHunt.Application.Services.UserService
                 await _unitOfWork.SaveAsync();
             }
         }
+
     }
 }
