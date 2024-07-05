@@ -9,7 +9,7 @@ namespace JobHunt.Controllers.UserController
 {
     [Route("api/user")]
     [ApiController]
-    [CustomAuthorize("User")]
+   
     public class UserRegistrationController : ControllerBase
     {
         private readonly IServiceBundle _serviceBundle;
@@ -20,6 +20,7 @@ namespace JobHunt.Controllers.UserController
         }
 
         [HttpPost("user-profile")]
+        [CustomAuthorize("User")]
         public async Task<IResult> RegisterUser([FromBody] RegistrationUserRequest model)
         {
             await _serviceBundle.RegistrationService.UserProfile(model);
@@ -27,6 +28,7 @@ namespace JobHunt.Controllers.UserController
         }
 
         [HttpGet("get-skill")]
+        [CustomAuthorize("User Company")]
         public async Task<IResult> GetAllSkills()
         {
             var data = await _serviceBundle.RegistrationService.GetAllSkill();
@@ -34,6 +36,7 @@ namespace JobHunt.Controllers.UserController
         }
 
         [HttpGet("get-language")]
+        [CustomAuthorize("User Company")]
         public async Task<IResult> GetAllLanguage()
         {
             var data = await _serviceBundle.RegistrationService.GetAllLanguage();
@@ -41,6 +44,7 @@ namespace JobHunt.Controllers.UserController
         }
 
         [HttpGet("get-degree-type")]
+        [CustomAuthorize("User")]
         public async Task<IResult> GetAllDegreeType()
         {
             var data = await _serviceBundle.RegistrationService.GetAllDegreeType();
@@ -48,6 +52,7 @@ namespace JobHunt.Controllers.UserController
         }
 
         [HttpGet("get-user-details")]
+        [CustomAuthorize("User")]
         public async Task<IResult> GetUserDetails()
         {
             var data = await _serviceBundle.RegistrationService.GetUserDetails();
