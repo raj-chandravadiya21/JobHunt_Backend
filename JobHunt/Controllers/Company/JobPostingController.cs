@@ -27,14 +27,14 @@ namespace JobHunt.Controllers.Company
             return Results.Ok(ResponseHelper.SuccessResponse(new(), string.Format(Messages.AddSuccessfully, Messages.Job)));
         }
 
-        [HttpGet("view-job/{id}")]
+        [HttpGet("view-job/{jobId}")]
         public async Task<IResult> ViewJobDetails(int jobId)
         {
             JobDetails data = await _serviceBundle.JobPostingService.GetJobDetails(jobId);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
-        [HttpGet("get-job-details/{id}")]
+        [HttpGet("get-job-details/{jobId}")]
         public async Task<IResult> GetJobDetails(int jobId)
         {
             var data = await _serviceBundle.JobPostingService.GetEditJobDetails(jobId);
@@ -42,9 +42,9 @@ namespace JobHunt.Controllers.Company
         }
 
         [HttpGet("get-jobs")]
-        public async Task<IResult> GetJobs()
+        public async Task<IResult> GetJobs([FromQuery] FilterJobRequest model)
         {
-            var data = await _serviceBundle.JobPostingService.GetJobs();
+            var data = await _serviceBundle.JobPostingService.GetJobs(model);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
     }
