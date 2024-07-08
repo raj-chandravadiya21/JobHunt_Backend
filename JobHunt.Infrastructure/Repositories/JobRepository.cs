@@ -34,7 +34,9 @@ namespace JobHunt.Infrastructure.Repositories
                 new NpgsqlParameter("@ctcStart", model.CtcStart),
                 new NpgsqlParameter("@ctcEnd", model.CtcEnd),
                 new NpgsqlParameter("@experience", model.Experience),
-                new NpgsqlParameter("@job_skills", NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = jobSkillsArray }
+                new NpgsqlParameter("@job_skills", NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = jobSkillsArray },
+                new NpgsqlParameter("@currentPage", model.CurrentPage),
+                new NpgsqlParameter("@pageSize", model.PageSize),
             };
 
             string sqlQuery = @"SELECT * FROM public.get_jobs(
@@ -43,7 +45,9 @@ namespace JobHunt.Infrastructure.Repositories
                 @ctcStart, 
                 @ctcEnd, 
                 @experience, 
-                @job_skills
+                @job_skills,
+                @currentPage,
+                @pageSize
             )";
 
             var data = await _context.GetJobsResponses.FromSqlRaw(sqlQuery.ToString(), parameter.ToArray()).ToListAsync();
