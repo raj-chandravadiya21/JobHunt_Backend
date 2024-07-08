@@ -11,6 +11,6 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
 
         Task<EditJobDetailsResponse> GetEditJobDetails(int jobId);
 
-        Task<List<GetJobsResponse>> GetJobs();
+        Task<List<GetJobsResponse>> GetJobs(FilterJobRequest model);
     }
 }

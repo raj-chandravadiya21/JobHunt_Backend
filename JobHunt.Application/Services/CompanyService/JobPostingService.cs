@@ -90,7 +90,7 @@ namespace JobHunt.Application.Services.CompanyService
         public async Task<EditJobDetailsResponse> GetEditJobDetails(int jobId)
             => await _unitOfWork.Job.GetJobDetails(jobId);
 
-        public async Task<List<GetJobsResponse>> GetJobs()
+        public async Task<List<GetJobsResponse>> GetJobs(FilterJobRequest model)
         {
             var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
 
@@ -105,7 +105,7 @@ namespace JobHunt.Application.Services.CompanyService
             Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
 
 
-            var jobResponses = await _unitOfWork.Job.GetJobs(company.CompanyId);
+            var jobResponses = await _unitOfWork.Job.GetJobs(company.CompanyId, model);
 
             return jobResponses;
         }
