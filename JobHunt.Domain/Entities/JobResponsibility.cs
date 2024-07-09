@@ -17,7 +17,7 @@ public partial class JobResponsibility
     public int JobId { get; set; }
 
     [Column("responsibility")]
-    [StringLength(500)]
+    [StringLength(5000)]
     public string? Responsibility { get; set; }
 
     [ForeignKey("JobId")]

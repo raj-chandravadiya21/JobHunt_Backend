@@ -65,12 +65,12 @@ public partial class User
     [Column("experience")]
     public double? Experience { get; set; }
 
-    [InverseProperty("User")]
-    public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
-
     [ForeignKey("AspnetuserId")]
     [InverseProperty("Users")]
     public virtual Aspnetuser Aspnetuser { get; set; } = null!;
+
+    [InverseProperty("User")]
+    public virtual ICollection<JobApplication> JobApplications { get; set; } = new List<JobApplication>();
 
     [InverseProperty("User")]
     public virtual ICollection<Project> Projects { get; set; } = new List<Project>();

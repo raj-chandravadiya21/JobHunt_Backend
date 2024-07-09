@@ -1,13 +1,10 @@
 ﻿using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
 using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.Entities;
-using JobHunt.Domain.Helper;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Npgsql;
 using NpgsqlTypes;
-using System.Text;
 
 namespace JobHunt.Infrastructure.Repositories
 {
@@ -41,16 +38,7 @@ namespace JobHunt.Infrastructure.Repositories
                 new NpgsqlParameter("@pageSize", model.PageSize),
             };
             
-            string sqlQuery = @"SELECT * FROM public.get_jobs(
-                @companyId, 
-                @jobTitle, 
-                @ctcStart, 
-                @ctcEnd, 
-                @experience, 
-                @job_skills,
-                @currentPage,
-                @pageSize
-            )";
+            string sqlQuery = @"SELECT * FROM public.get_jobs(@companyId, @jobTitle, @ctcStart, @ctcEnd, @experience, @job_skills, @currentPage, @pageSize)";
 
             return await _context.GetJobsResponses.FromSqlRaw(sqlQuery.ToString(), parameter.ToArray()).ToListAsync();
         }

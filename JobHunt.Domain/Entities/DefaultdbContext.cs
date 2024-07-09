@@ -19,8 +19,6 @@ public partial class DefaultdbContext : DbContext
 
     public virtual DbSet<Admin> Admins { get; set; }
 
-    public virtual DbSet<Application> Applications { get; set; }
-
     public virtual DbSet<ApplicationStatus> ApplicationStatuses { get; set; }
 
     public virtual DbSet<ApplicationStatusLog> ApplicationStatusLogs { get; set; }
@@ -36,6 +34,8 @@ public partial class DefaultdbContext : DbContext
     public virtual DbSet<InterviewDetail> InterviewDetails { get; set; }
 
     public virtual DbSet<Job> Jobs { get; set; }
+
+    public virtual DbSet<JobApplication> JobApplications { get; set; }
 
     public virtual DbSet<JobPerk> JobPerks { get; set; }
 
@@ -109,25 +109,6 @@ public partial class DefaultdbContext : DbContext
             entity.HasOne(d => d.Aspnetuser).WithMany(p => p.Admins)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("admin_aspnetuser_id_fkey");
-        });
-
-        modelBuilder.Entity<Application>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("application_pkey");
-
-            entity.Property(e => e.Id).UseIdentityAlwaysColumn();
-
-            entity.HasOne(d => d.Job).WithMany(p => p.Applications)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("application_job_id_fkey");
-
-            entity.HasOne(d => d.Status).WithMany(p => p.Applications)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("application_status_id_fkey");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Applications)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("application_user_id_fkey");
         });
 
         modelBuilder.Entity<ApplicationStatus>(entity =>
@@ -207,6 +188,25 @@ public partial class DefaultdbContext : DbContext
             entity.HasOne(d => d.Company).WithMany(p => p.Jobs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("job_company_id_fkey");
+        });
+
+        modelBuilder.Entity<JobApplication>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("application_pkey");
+
+            entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+            entity.HasOne(d => d.Job).WithMany(p => p.JobApplications)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("application_job_id_fkey");
+
+            entity.HasOne(d => d.Status).WithMany(p => p.JobApplications)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("application_status_id_fkey");
+
+            entity.HasOne(d => d.User).WithMany(p => p.JobApplications)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("application_user_id_fkey");
         });
 
         modelBuilder.Entity<JobPerk>(entity =>

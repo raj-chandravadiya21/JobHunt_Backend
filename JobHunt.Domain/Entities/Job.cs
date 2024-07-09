@@ -43,7 +43,7 @@ public partial class Job
     public int? NoOfOpenings { get; set; }
 
     [Column("job_description")]
-    [StringLength(500)]
+    [StringLength(5000)]
     public string JobDescription { get; set; } = null!;
 
     [Column("created_date", TypeName = "timestamp without time zone")]
@@ -53,15 +53,15 @@ public partial class Job
     public DateTime? ModifyDate { get; set; }
 
     [Column("requirements")]
-    [StringLength(500)]
+    [StringLength(5000)]
     public string Requirements { get; set; } = null!;
-
-    [InverseProperty("Job")]
-    public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
 
     [ForeignKey("CompanyId")]
     [InverseProperty("Jobs")]
     public virtual Company Company { get; set; } = null!;
+
+    [InverseProperty("Job")]
+    public virtual ICollection<JobApplication> JobApplications { get; set; } = new List<JobApplication>();
 
     [InverseProperty("Job")]
     public virtual ICollection<JobPerk> JobPerks { get; set; } = new List<JobPerk>();

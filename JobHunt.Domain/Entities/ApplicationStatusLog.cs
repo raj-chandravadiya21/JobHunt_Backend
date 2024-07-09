@@ -28,7 +28,7 @@ public partial class ApplicationStatusLog
 
     [ForeignKey("ApplicationId")]
     [InverseProperty("ApplicationStatusLogs")]
-    public virtual Application Application { get; set; } = null!;
+    public virtual JobApplication Application { get; set; } = null!;
 
     [ForeignKey("StatusId")]
     [InverseProperty("ApplicationStatusLogs")]

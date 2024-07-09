@@ -116,6 +116,7 @@ namespace JobHunt.Application.Services.UserService
                 aspnetuser.ModifiedDate = DateTime.Now;
 
                 await _unitOfWork.SaveAsync();
+
                 transactionScope.Complete();
             }
         }

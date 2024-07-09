@@ -17,7 +17,7 @@ public partial class JobPerk
     public int JobId { get; set; }
 
     [Column("perks")]
-    [StringLength(50)]
+    [StringLength(5000)]
     public string Perks { get; set; } = null!;
 
     [ForeignKey("JobId")]

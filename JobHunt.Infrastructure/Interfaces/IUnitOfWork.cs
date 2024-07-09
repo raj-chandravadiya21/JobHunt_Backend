@@ -29,6 +29,8 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public IRepository<JobPerk> JobPerks { get; }
 
+        public IRepository<JobApplication> JobApplication { get; }
+
         Task SaveAsync();
 
         public IUserRepository User { get; }
