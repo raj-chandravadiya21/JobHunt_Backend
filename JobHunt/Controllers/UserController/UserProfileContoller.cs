@@ -52,7 +52,7 @@ namespace JobHunt.Controllers.UserController
         public async Task<IResult> UpdateUserProfile(UserProfileRequest model)
         {
             await _serviceBundle.UserProfileService.UpdateUserProfile(model);
-            return Results.Ok(ResponseHelper.SuccessResponse(new()));
+            return Results.Ok(ResponseHelper.SuccessResponse(new(), String.Format(Messages.UpdateSuccessfully, Messages.UserProfile)));
         }
 
         [HttpPut("update-work-experience")]

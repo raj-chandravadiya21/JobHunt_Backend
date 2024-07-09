@@ -1,7 +1,10 @@
 ﻿using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
+using JobHunt.Domain.DataModels.Request.UserRequest.JobApplication;
 using JobHunt.Domain.DataModels.Response.Company;
+using JobHunt.Domain.DataModels.Response.User.JobApplication;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Interfaces;
+using System.Numerics;
 
 namespace JobHunt.Infrastructure.Interfaces
 {
@@ -10,6 +13,10 @@ namespace JobHunt.Infrastructure.Interfaces
         Task<EditJobDetailsResponse> GetJobDetails(int jobId);
 
         Task<List<GetJobsResponse>> GetJobs(int companyId, FilterJobRequest model);
+
+        Task<List<JobListModel>> GetPaginationAndFilterJob(int userId, JobListRequest model);
+
+        Task<long> GetTotalCountOfFilter(int userId, JobListRequest model);
     }
 }
     
