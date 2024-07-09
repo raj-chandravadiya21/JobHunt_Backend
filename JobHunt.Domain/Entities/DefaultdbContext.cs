@@ -73,7 +73,7 @@ public partial class DefaultdbContext : DbContext
 
     public virtual DbSet<EditJobDetailsResponse> EditJobDetailsResponses { get; set; }
 
-    public virtual DbSet<GetJobsResponse> GetJobsResponses { get; set; }    
+    public virtual DbSet<GetJobsResponse> GetJobsResponses { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -90,12 +90,12 @@ public partial class DefaultdbContext : DbContext
             entity.HasNoKey();
         });
 
-        modelBuilder.Entity<GetJobsResponse>(entity =>
+        modelBuilder.Entity<JobDetails>(entity =>
         {
             entity.HasNoKey();
         });
 
-        modelBuilder.Entity<JobDetails>(entity =>
+        modelBuilder.Entity<GetJobsResponse>(entity =>
         {
             entity.HasNoKey();
         });

@@ -1,6 +1,7 @@
 ﻿using JobHunt.Domain.Entities;
 using JobHunt.Domain.Interfaces;
 using JobHunt.Infrastructure.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace JobHunt.Infrastructure.Repositories
 {
