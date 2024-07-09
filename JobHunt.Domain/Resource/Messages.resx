@@ -192,6 +192,9 @@
   <data name="User" xml:space="preserve">
     <value>User</value>
   </data>
+  <data name="UserProfile" xml:space="preserve">
+    <value>User Profile</value>
+  </data>
   <data name="WorkExperience" xml:space="preserve">
     <value>Work Experience</value>
   </data>
