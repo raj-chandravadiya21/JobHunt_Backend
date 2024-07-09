@@ -37,5 +37,5 @@ public partial class InterviewDetail
 
     [ForeignKey("ApplicationId")]
     [InverseProperty("InterviewDetails")]
-    public virtual Application Application { get; set; } = null!;
+    public virtual JobApplication Application { get; set; } = null!;
 }

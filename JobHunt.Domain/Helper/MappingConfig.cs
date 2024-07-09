@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JobHunt.Domain.DataModels.Request;
+using JobHunt.Domain.DataModels.Request.UserRequest.Application;
 using JobHunt.Domain.DataModels.Request.UserRequest.Profile;
 using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.DataModels.Response.User;
@@ -28,6 +29,7 @@ namespace JobHunt.Domain.Helper
             CreateMap<AddEducationRequest, UserEducation>().ReverseMap();
             CreateMap<UserSocialProfileRequest, UserSocialProfile>().ReverseMap();
             CreateMap<AddProjectRequest, Project>().ReverseMap();
+            CreateMap<JobApplication, ApplyJobRequest>().ReverseMap();
             CreateMap<UpdateEducationRequest, UserEducation>().ReverseMap();
             CreateMap<JobListResponse, JobListModel>().ReverseMap();
         }

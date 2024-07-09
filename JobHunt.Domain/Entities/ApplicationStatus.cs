@@ -21,5 +21,5 @@ public partial class ApplicationStatus
     public virtual ICollection<ApplicationStatusLog> ApplicationStatusLogs { get; set; } = new List<ApplicationStatusLog>();
 
     [InverseProperty("Status")]
-    public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
+    public virtual ICollection<JobApplication> JobApplications { get; set; } = new List<JobApplication>();
 }
