@@ -22,10 +22,12 @@ namespace JobHunt.Domain.DataModels.Response.Company
 
         public DateOnly LastDate { get; set; }
 
-        public int? Openings {  get; set; }
+        public int? Openings { get; set; }
 
         public double? Experience { get; set; }
 
         public List<int> JobSkills { get; set; } = new List<int>();
+
+        public int TotalCount { get; set; }
     }
 }

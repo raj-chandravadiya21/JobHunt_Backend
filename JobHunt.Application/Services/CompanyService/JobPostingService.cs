@@ -104,10 +104,7 @@ namespace JobHunt.Application.Services.CompanyService
 
             Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
 
-
-            var jobResponses = await _unitOfWork.Job.GetJobs(company.CompanyId, model);
-
-            return jobResponses;
+            return await _unitOfWork.Job.GetJobs(company.CompanyId, model);
         }
     }
 }
