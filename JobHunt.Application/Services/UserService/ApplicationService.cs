@@ -5,40 +5,66 @@ using JobHunt.Domain.DataModels.Response.User;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;
+using JobHunt.Domain.Resource;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Transactions;
+using static System.Net.WebRequestMethods;
 
 namespace JobHunt.Application.Services.UserService
 {
-    public class ApplicationService(IUnitOfWork _unitOfWork, IHttpContextAccessor http, IMapper _mapper) : IApplicationService
+    public class ApplicationService(IUnitOfWork unitOfWork, IHttpContextAccessor http, IMapper mapper) : IApplicationService
     {
-        public async Task ApplyForJob(ApplyJobRequest model)
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IHttpContextAccessor _http = http;
+        private readonly IMapper _mapper = mapper;
+
+        public string GetUserId()
         {
-            var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
+            var token = GetTokenFromHeader.GetToken(_http);
 
             var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
             if (!isValidToken)
             {
-                throw new CustomException("User is not valid");
+                throw new CustomException(string.Format(Messages.TimeExpire, Messages.ResetPasswordLink));
             }
 
-            var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
+            return Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!)!;
+        }
 
-            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
 
-            User? user = await _unitOfWork.User.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
+        public async Task ApplyForJob(ApplyJobRequest model)
+        {
+            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
 
-            JobApplication jobApplication = _mapper.Map<JobApplication>(model);
+            var current_timestamp = DateTime.Now;
 
-            jobApplication.UserId = user.UserId;
-            jobApplication.StatusId = (int)ApplicationStatuses.Applied;
-            jobApplication.AppliedDate = DateTime.Now;
+            JobApplication jobApplication = new()
+            {
+                JobId = model.JobId,
+                UserId = user!.UserId,
+                Description = model.Description,
+                AppliedDate = current_timestamp,
+                StatusId = (int)ApplicationStatuses.Applied,
+            };
 
             await _unitOfWork.JobApplication.CreateAsync(jobApplication);
             await _unitOfWork.SaveAsync();
+
+            if (model.IsUploadFromProfile && model.Resume != null && model.Resume.Length > 0)
+            {
+                string newFileName = $"{jobApplication.Id}_{current_timestamp:ddMMyy_hhmmss}_" + model.Resume.FileName;
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Domain/Resumes", newFileName);
+                using var stream = System.IO.File.Create(filePath);
+                await model.Resume.CopyToAsync(stream);
+            }
         }
+
+        
     }
 }

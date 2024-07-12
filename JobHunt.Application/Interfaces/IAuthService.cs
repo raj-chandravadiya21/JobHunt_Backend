@@ -1,4 +1,5 @@
-﻿using JobHunt.Domain.DataModels.Request;
+﻿using JobHunt.Domain.DataModels;
+using JobHunt.Domain.DataModels.Request;
 
 namespace JobHunt.Application.Interfaces
 {
@@ -8,7 +9,7 @@ namespace JobHunt.Application.Interfaces
 
         Task CheckEmail(CheckEmailRequest model, int role);
 
-        Task<string> Login(LoginRequest model, int role);
+        Task<LoginResponse> Login(LoginRequest model, int role);
 
         Task RegisterCompany(RegisterCompanyRequest model);
 
