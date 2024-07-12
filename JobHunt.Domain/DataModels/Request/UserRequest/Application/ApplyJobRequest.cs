@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace JobHunt.Domain.DataModels.Request.UserRequest.Application
 {
@@ -10,8 +6,10 @@ namespace JobHunt.Domain.DataModels.Request.UserRequest.Application
     {
         public int JobId { get; set; }
 
-        public string Resume { get; set; } = string.Empty;
+        public IFormFile? Resume { get; set; }
 
-        public string Description { get; set; } = string.Empty;
+        public string Description { get; set; } = null!;
+
+        public bool IsUploadFromProfile { get; set; }
     }
 }

@@ -12,8 +12,8 @@ namespace JobHunt.Controllers.UserController
     {
         private readonly IServiceBundle _sereviceBundle = serviceBundle;
 
-        [HttpGet("get-jobs")]
-        public async Task<IResult> GetJobsForUser([FromQuery]JobListRequest model)
+        [HttpPost("get-jobs")]
+        public async Task<IResult> GetJobsForUser([FromBody]JobListRequest model)
         {
            var data = await _sereviceBundle.UserJobService.FilterJobList(model);
            return Results.Ok(ResponseHelper.SuccessResponse(data));

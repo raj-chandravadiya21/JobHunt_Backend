@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JobHunt.Application.Interfaces;
+using JobHunt.Domain.DataModels;
 using JobHunt.Domain.DataModels.Request;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Enum;
@@ -129,7 +130,7 @@ namespace JobHunt.Application.Services
         #endregion
 
         #region Login
-        public async Task<string> Login(LoginRequest model, int role)
+        public async Task<LoginResponse> Login(LoginRequest model, int role)
         {
             var aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == role);
 
@@ -143,7 +144,12 @@ namespace JobHunt.Application.Services
 
                 var token = Jwt.GenerateToken(claims, DateTime.Now.AddDays(365));
 
-                return token;
+                LoginResponse data = new()
+                {
+                    Token = token,
+                    IsRegister = aspnetuser.IsRegistered,
+                };
+                return data;
             }
             else
             {

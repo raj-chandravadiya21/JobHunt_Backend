@@ -43,9 +43,13 @@ namespace JobHunt.Application.Services.UserService
             {
                 Data = data,
                 CurrentPage = model.PageNumber,
-                TotalCount = (int)jobList[0].TotalCount,
                 PageSize = model.PageSize
             };
+
+            if (data.Count > 0)
+            {
+                response.TotalCount = (int)jobList[0].TotalCount;
+            }
 
             return response;
         }
