@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using JobHunt.Application.Interfaces.CompanyInterface;
 using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
+using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.DataModels.Response.Company;
+using JobHunt.Domain.DataModels.Response.User.JobApplication;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Helper;
 using JobHunt.Infrastructure.Interfaces;
@@ -90,7 +92,7 @@ namespace JobHunt.Application.Services.CompanyService
         public async Task<EditJobDetailsResponse> GetEditJobDetails(int jobId)
             => await _unitOfWork.Job.GetJobDetails(jobId);
 
-        public async Task<List<GetJobsResponse>> GetJobs(FilterJobRequest model)
+        public async Task<PaginatedResponse> GetJobs(FilterJobRequest model)
         {
             var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
 
@@ -104,7 +106,23 @@ namespace JobHunt.Application.Services.CompanyService
 
             Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
 
-            return await _unitOfWork.Job.GetJobs(company.CompanyId, model);
+            List<GetJobsResponse> jobReponse = await _unitOfWork.Job.GetJobs(company.CompanyId, model);
+
+            List<GetJobListResponce> data = _mapper.Map<List<GetJobListResponce>>(jobReponse);
+
+            PaginatedResponse response = new()
+            {
+                ListOfData = data,
+                CurrentPage = model.PageNumber,
+                PageSize = model.PageSize
+            };
+
+            if (data.Count > 0)
+            {
+                response.TotalCount = (int)jobReponse[0].TotalCount;
+            }
+
+            return response;
         }
     }
 }

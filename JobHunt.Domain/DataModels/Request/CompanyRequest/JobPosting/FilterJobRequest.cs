@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting
 {
-    public class FilterJobRequest
+    public class FilterJobRequest : PaginationParameter
     {
         public string JobTitle { get; set; } = string.Empty;
 
@@ -17,9 +17,5 @@ namespace JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting
         public double Experience { get; set; }
 
         public List<int> Skills { get; set; } = new List<int>();
-
-        public int CurrentPage { get; set; }
-
-        public int PageSize { get; set; }
     }
 }

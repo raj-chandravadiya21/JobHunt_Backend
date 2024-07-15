@@ -38,7 +38,7 @@ namespace JobHunt.Infrastructure.Repositories
                 new NpgsqlParameter("@ctcEnd", model.CtcEnd),
                 new NpgsqlParameter("@experience", model.Experience),
                 new NpgsqlParameter("@job_skills", NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = jobSkillsArray },
-                new NpgsqlParameter("@currentPage", model.CurrentPage),
+                new NpgsqlParameter("@currentPage", model.PageNumber),
                 new NpgsqlParameter("@pageSize", model.PageSize),
             };
             

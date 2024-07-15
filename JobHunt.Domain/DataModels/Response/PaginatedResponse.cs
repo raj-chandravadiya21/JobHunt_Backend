@@ -2,7 +2,7 @@
 {
     public class PaginatedResponse
     {
-        public dynamic Data { get; set; } = null!;
+        public dynamic ListOfData { get; set; } = null!;
 
         public int CurrentPage { get; set; }
 

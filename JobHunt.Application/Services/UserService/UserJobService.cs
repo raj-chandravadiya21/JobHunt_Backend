@@ -41,7 +41,7 @@ namespace JobHunt.Application.Services.UserService
 
             PaginatedResponse response = new()
             {
-                Data = data,
+                ListOfData = data,
                 CurrentPage = model.PageNumber,
                 PageSize = model.PageSize
             };
