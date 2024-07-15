@@ -4,7 +4,6 @@ using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.Helper;
 using JobHunt.Domain.Resource;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace JobHunt.Controllers.Company
 {

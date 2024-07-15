@@ -40,6 +40,13 @@ namespace JobHunt.Application.Services.CompanyService
 
             _unitOfWork.Company.UpdateAsync(company);
             await _unitOfWork.SaveAsync();
+
+            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
+
+            aspnetuser.IsRegistered = true;
+
+            _unitOfWork.AspNetUser.UpdateAsync(aspnetuser);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<CompanyDetailsModel> GetCompanyDetails()
