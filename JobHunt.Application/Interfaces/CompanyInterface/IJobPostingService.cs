@@ -1,4 +1,5 @@
 ﻿using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
+using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.DataModels.Response.Company;
 
 namespace JobHunt.Application.Interfaces.CompanyInterface
@@ -11,6 +12,6 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
 
         Task<EditJobDetailsResponse> GetEditJobDetails(int jobId);
 
-        Task<List<GetJobsResponse>> GetJobs(FilterJobRequest model);
+        Task<PaginatedResponse> GetJobs(FilterJobRequest model);
     }
 }

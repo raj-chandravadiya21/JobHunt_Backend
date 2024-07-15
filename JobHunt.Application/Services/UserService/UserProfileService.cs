@@ -188,9 +188,9 @@ namespace JobHunt.Application.Services.UserService
 
             var userEducation = await _unitOfWork.UserEducation.GetFirstOrDefault(u => u.Id == model.Id && u.UserId == user!.UserId);
 
-            if ((bool) await _unitOfWork.UserEducation.GetAnyAsync(u => u.DegreeId == model.DegreeId && u.Id == model.Id))
+            if ((bool)await _unitOfWork.UserEducation.GetAnyAsync(u => u.DegreeId == model.DegreeId && u.Id != model.Id && u.UserId == user!.UserId))
             {
-                throw new CustomException("You have Already Added this Job");
+                throw new CustomException("You have Already Added this Education");
             }
 
             _mapper.Map<UpdateEducationRequest, UserEducation>(model, userEducation!);
