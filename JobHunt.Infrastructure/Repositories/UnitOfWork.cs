@@ -19,7 +19,7 @@ namespace JobHunt.Infrastructure.Repositories
             UserLanguage = new UserLanguageRepository(_context);
             UserSocialProfile = new Repository<UserSocialProfile>(_context);
             Project = new Repository<Project>(_context);
-            UserEducation = new Repository<UserEducation>(_context);
+            UserEducation = new UserEducationRepository(_context);
             WorkExperiment = new Repository<WorkExperience>(_context);
             Skill = new Repository<Skill>(_context);
             Language = new Repository<Language>(_context);
@@ -38,8 +38,6 @@ namespace JobHunt.Infrastructure.Repositories
         public IRepository<UserSocialProfile> UserSocialProfile { get; private set; }
 
         public IRepository<Project> Project { get; private set; }
-
-        public IRepository<UserEducation> UserEducation {  get; private set; } 
 
         public IRepository<WorkExperience> WorkExperiment { get; private set; }
 
@@ -71,5 +69,7 @@ namespace JobHunt.Infrastructure.Repositories
         public IJobRepository Job { get; private set; }
 
         public IJobApplicationRepository JobApplication { get; private set; }
+        
+        public IUserEducationRepository UserEducation { get; private set; } 
     }
 }

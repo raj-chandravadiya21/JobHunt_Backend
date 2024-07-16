@@ -1,4 +1,5 @@
-﻿using JobHunt.Domain.Entities;
+﻿using JobHunt.Domain.DataModels.Response.User;
+using JobHunt.Domain.Entities;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -19,6 +20,16 @@ namespace JobHunt.Infrastructure.Repositories
 
             var query = "SELECT public.create_user_skills(@user_id, @skill)";
             await _context.Database.ExecuteSqlRawAsync(query, parameter);
+        }
+
+        public async Task<UserSkillAndLanguage> GetSkillAndLanguage(int userId)
+        {
+            var parameter = new NpgsqlParameter[]
+            {
+               new("@userId", userId)
+            };
+
+            return await _context.UserSkillAndLanguage.FromSqlRaw("SELECT * FROM public.get_user_skills_language(@userId)", parameter).FirstAsync();
         }
     }
 }
