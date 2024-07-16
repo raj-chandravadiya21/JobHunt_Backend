@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Folder Include="Entities\" />
+    <Folder Include="Icons\" />
+    <Folder Include="Resumes\" />
   </ItemGroup>
 
   <ItemGroup>

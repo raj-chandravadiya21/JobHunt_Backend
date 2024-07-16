@@ -13,8 +13,6 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public IRepository<Project> Project { get; }
 
-        public IRepository<UserEducation> UserEducation { get; }
-
         public IRepository<WorkExperience> WorkExperiment { get; }  
 
         public IRepository<Skill> Skill { get; }
@@ -42,5 +40,7 @@ namespace JobHunt.Infrastructure.Interfaces
         public IUserLanguageRepository UserLanguage { get; }
 
         public IJobRepository Job { get; }
+
+        public IUserEducationRepository UserEducation { get; }
     }
 }
