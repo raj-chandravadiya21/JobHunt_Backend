@@ -20,11 +20,18 @@ namespace JobHunt.Controllers.Company
             _serviceBundle = serviceBundle;
         }
 
-        [HttpPost("company-profile")]
+        [HttpPost("company-registration")]
         public async Task<IResult> RegisterCompany([FromBody] CompanyRegistrationRequest model)
         {
             await _serviceBundle.CompanyRegistrationService.CompanyProfile(model);
             return Results.Ok(ResponseHelper.SuccessResponse(new(), string.Format(Messages.CompleteSuccessfully, Messages.Register)));
+        }
+
+        [HttpGet("get-company")]
+        public async Task<IResult> GetCompany()
+        {
+            var data = await _serviceBundle.CompanyRegistrationService.GetCompany();
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
         [HttpGet("get-company-details")]

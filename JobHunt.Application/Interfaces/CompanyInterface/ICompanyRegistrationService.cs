@@ -1,6 +1,7 @@
 ﻿using JobHunt.Domain.DataModels.Request.CompanyRequest;
 using JobHunt.Domain.DataModels.Request.CompanyRequest.Registration;
 using JobHunt.Domain.DataModels.Request.UserRequest.Registration;
+using JobHunt.Domain.DataModels.Response.Company;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
     {
         Task CompanyProfile(CompanyRegistrationRequest model);
 
-        Task<CompanyDetailsModel> GetCompanyDetails();
+        Task<CompanyDetailsModel> GetCompany();
+
+        Task<CompanyDetailsResponse> GetCompanyDetails();
     }
 }
