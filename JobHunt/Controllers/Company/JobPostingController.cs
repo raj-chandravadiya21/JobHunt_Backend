@@ -42,7 +42,7 @@ namespace JobHunt.Controllers.Company
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
-        [CustomAuthorize("Company")]
+        [CustomAuthorize("Company")]    
         [HttpGet("get-jobs")]
         public async Task<IResult> GetJobs([FromQuery] FilterJobRequest model)
         {

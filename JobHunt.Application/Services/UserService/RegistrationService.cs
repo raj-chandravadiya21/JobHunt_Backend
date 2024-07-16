@@ -157,12 +157,19 @@ namespace JobHunt.Application.Services.UserService
 
             User? user = await _unitOfWork.User.GetFirstOrDefault(x => x.AspnetuserId == aspnetuser!.AspnetuserId);
 
-            UserDetailsModel model = new UserDetailsModel()
+            UserDetailsModel model = new UserDetailsModel();
+
+            if (aspnetuser.IsRegistered)
             {
-                FirstName = user!.FirstName, 
-                LastName = user.LastName,
-                EmailId = user.Email
-            };
+                    model.FirstName = user!.FirstName;
+                    model.LastName = user.LastName;
+                    model.EmailId = user.Email;
+                    model.IsRegistered = true;
+            }
+            else
+            {
+                model.IsRegistered = false;
+            }
             
             return model;
         }
