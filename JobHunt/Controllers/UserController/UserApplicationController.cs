@@ -14,7 +14,7 @@ namespace JobHunt.Controllers.UserController
         private readonly IServiceBundle _serviceBundle = serviceBundle;
 
         [HttpPost("apply-for-job")]
-        public async Task<IResult> ApplyJob(ApplyJobRequest model)
+        public async Task<IResult> ApplyJob([FromForm]ApplyJobRequest model)
         {
             await _serviceBundle.ApplicationService.ApplyForJob(model);
             return Results.Ok(ResponseHelper.SuccessResponse(new(), String.Format(Messages.JobApplied)));
