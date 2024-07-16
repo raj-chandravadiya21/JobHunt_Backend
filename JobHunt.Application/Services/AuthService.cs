@@ -134,6 +134,17 @@ namespace JobHunt.Application.Services
         {
             var aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == role);
 
+            object? userOrCompany = null;
+
+            if (role == (int)Role.User)
+            {
+                userOrCompany = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId == aspnetuser!.AspnetuserId);
+            }
+            else
+            {
+                userOrCompany = await _unitOfWork.Company.GetFirstOrDefault(u => u.AspnetuserId == aspnetuser!.AspnetuserId);
+            }
+
             if (BCrypt.Net.BCrypt.Verify(model.Password, aspnetuser!.Password))
             {
                 var claims = new Claim[]
@@ -144,10 +155,13 @@ namespace JobHunt.Application.Services
 
                 var token = Jwt.GenerateToken(claims, DateTime.Now.AddDays(365));
 
+                string? photo = role == (int)Role.User ? ((User)userOrCompany!)?.Photo : ((Company)userOrCompany!)?.Logo;
+
                 LoginResponse data = new()
                 {
                     Token = token,
                     IsRegister = aspnetuser.IsRegistered,
+                    Photo = photo
                 };
                 return data;
             }
