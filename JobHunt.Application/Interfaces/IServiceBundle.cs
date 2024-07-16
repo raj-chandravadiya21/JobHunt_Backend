@@ -17,6 +17,8 @@ namespace JobHunt.Application.Interfaces
 
         public IApplicationService ApplicationService { get; }
 
-      public IUserJobService UserJobService { get; }
+        public IUserJobService UserJobService { get; }
+
+        public IApplicationDetailsService ApplicationDetailsService { get; }
     }
 }

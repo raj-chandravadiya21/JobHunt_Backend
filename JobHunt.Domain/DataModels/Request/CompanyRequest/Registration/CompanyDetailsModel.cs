@@ -11,5 +11,7 @@ namespace JobHunt.Domain.DataModels.Request.CompanyRequest.Registration
         public string? Name { get; set; }
 
         public string? Email { get; set; }
+
+        public bool IsRegistred { get; set; }
     }
 }

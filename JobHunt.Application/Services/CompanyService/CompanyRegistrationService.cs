@@ -65,11 +65,18 @@ namespace JobHunt.Application.Services.CompanyService
 
             Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId == aspnetuser!.AspnetuserId);
 
-            CompanyDetailsModel model = new ()
+            CompanyDetailsModel model = new();
+
+            if (aspnetuser.IsRegistered)
             {
-                Name = company.CompanyName,
-                Email = company.Email
-            };
+                model.Name = company.CompanyName;
+                model.Email = company.Email;
+                model.IsRegistred = true;
+            }
+            else
+            {
+                model.IsRegistred = false;
+            }
 
             return model;
         }

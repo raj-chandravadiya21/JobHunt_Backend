@@ -13,5 +13,7 @@ namespace JobHunt.Domain.DataModels.Response.User.Registration
         public string? LastName { get; set; }
 
         public string? EmailId { get; set; }
+
+        public bool IsRegistered { get; set; }
     }
 }
