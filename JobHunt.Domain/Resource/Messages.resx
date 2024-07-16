@@ -123,6 +123,9 @@
   <data name="Company" xml:space="preserve">
     <value>Company</value>
   </data>
+  <data name="CompanyDetails" xml:space="preserve">
+    <value>Company Details</value>
+  </data>
   <data name="CompleteSuccessfully" xml:space="preserve">
     <value>{0} Completed Successfully</value>
   </data>

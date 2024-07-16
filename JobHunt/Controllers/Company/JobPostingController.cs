@@ -43,8 +43,8 @@ namespace JobHunt.Controllers.Company
         }
 
         [CustomAuthorize("Company")]    
-        [HttpGet("get-jobs")]
-        public async Task<IResult> GetJobs([FromQuery] FilterJobRequest model)
+        [HttpPost("get-jobs")]
+        public async Task<IResult> GetJobs([FromBody] FilterJobRequest model)
         {
             var data = await _serviceBundle.JobPostingService.GetJobs(model);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
