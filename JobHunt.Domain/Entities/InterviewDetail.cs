@@ -19,21 +19,21 @@ public partial class InterviewDetail
     [Column("interview_date")]
     public DateOnly InterviewDate { get; set; }
 
-    [Column("start_time", TypeName = "timestamp without time zone")]
-    public DateTime StartTime { get; set; }
-
-    [Column("end_time", TypeName = "timestamp without time zone")]
-    public DateTime EndTime { get; set; }
-
     [Column("location")]
     [StringLength(500)]
-    public string Location { get; set; } = null!;
+    public string? Location { get; set; }
 
     [Column("created_date", TypeName = "timestamp without time zone")]
     public DateTime CreatedDate { get; set; }
 
     [Column("modified_date", TypeName = "timestamp without time zone")]
     public DateTime? ModifiedDate { get; set; }
+
+    [Column("start_time")]
+    public TimeOnly? StartTime { get; set; }
+
+    [Column("end_time")]
+    public TimeOnly? EndTime { get; set; }
 
     [ForeignKey("ApplicationId")]
     [InverseProperty("InterviewDetails")]

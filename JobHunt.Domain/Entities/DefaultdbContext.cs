@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Emit;
-using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.DataModels.Response.Company.ApplicationDetails;
-using JobHunt.Domain.DataModels.Response.User;
+using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.DataModels.Response.User.JobApplication;
+using JobHunt.Domain.DataModels.Response.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobHunt.Domain.Entities;
@@ -80,8 +79,8 @@ public partial class DefaultdbContext : DbContext
 
     public virtual DbSet<JobListModel> GetJobList { get; set; }
 
-    public virtual DbSet<JobSeekerDetailsResponse> GetJobSeekerDetails {  get; set; }
-    
+    public virtual DbSet<JobSeekerDetailsResponse> GetJobSeekerDetails { get; set; }
+
     public virtual DbSet<UserEducationModel> UserEducationModel { get; set; }
 
     public virtual DbSet<UserSkillAndLanguage> UserSkillAndLanguage { get; set; }
