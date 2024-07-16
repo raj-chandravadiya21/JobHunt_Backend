@@ -119,7 +119,7 @@ namespace JobHunt.Application.Services.CompanyService
 
             if (data.Count > 0)
             {
-                response.TotalCount = (int)jobReponse[0].TotalCount;
+                response.TotalCount = jobReponse[0].TotalCount;
             }
 
             return response;

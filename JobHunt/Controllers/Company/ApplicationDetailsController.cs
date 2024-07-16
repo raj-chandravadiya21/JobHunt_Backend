@@ -27,5 +27,12 @@ namespace JobHunt.Controllers.Company
             var data = await _serviceBundle.ApplicationDetailsService.GetApplicantDetail(model);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
+
+        [HttpPost("jobSeeker-count-with-status")]
+        public async Task<IResult> GetApplicantCount()
+        {
+            var data = await _serviceBundle.ApplicationDetailsService.GetJobSeekerCount();
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
     }
 }

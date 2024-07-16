@@ -88,5 +88,10 @@ namespace JobHunt.Infrastructure.Repositories
         {
             _dbSet.Remove(entity);
         }
+
+        public async Task<int> ConditionalCount(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).CountAsync();
+        }
     }
 }

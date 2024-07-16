@@ -12,5 +12,7 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
     public interface IApplicationDetailsService
     {
         Task<PaginatedResponse> GetApplicantDetail(JobSeekerDetailRequest model);
+
+        Task<JobSeekerCountWithStatus> GetJobSeekerCount();
     }
 }

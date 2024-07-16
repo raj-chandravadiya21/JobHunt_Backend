@@ -27,5 +27,7 @@ namespace JobHunt.Domain.Interfaces
         void RemoveRange(List<T> entities);
 
         void Remove(T entity);
+
+        Task<int> ConditionalCount(Expression<Func<T, bool>> predicate);
     }
 }
