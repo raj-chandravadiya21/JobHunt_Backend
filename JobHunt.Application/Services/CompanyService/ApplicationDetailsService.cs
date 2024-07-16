@@ -10,6 +10,7 @@ using System.Security.Claims;
 using JobHunt.Domain.DataModels.Request.CompanyRequest.ApplicationDetails;
 using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.DataModels.Response;
+using JobHunt.Domain.Enum;
 
 namespace JobHunt.Application.Services.CompanyService
 {
@@ -48,6 +49,35 @@ namespace JobHunt.Application.Services.CompanyService
             }
 
             return response;
+        }
+
+        public async Task<JobSeekerCountWithStatus> GetJobSeekerCount()
+        {
+            var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
+
+            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
+            if (!isValidToken)
+            {
+                throw new CustomException("Session is Expired.");
+            }
+
+            var aspNetUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
+
+            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspNetUserId);
+
+            Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspNetUserId);
+
+            JobSeekerCountWithStatus model = new()
+            {
+                AppliedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Applied),
+                UnderReviewCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.UnderReview),
+                ScheduleInterviewCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.ScheduleInterview),
+                InterviewedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Interviewed),
+                SelectedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Selected),
+                RejectedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Rejected),
+            };
+
+            return model;
         }
     }
 }
