@@ -79,6 +79,15 @@ namespace JobHunt.Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company Details.
+        /// </summary>
+        public static string CompanyDetails {
+            get {
+                return ResourceManager.GetString("CompanyDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} Completed Successfully.
         /// </summary>
         public static string CompleteSuccessfully {
