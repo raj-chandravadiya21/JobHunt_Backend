@@ -53,7 +53,7 @@ namespace JobHunt.Application.Services
 
             var htmlTemplate = ReadHtmlTemplateFromFile(filePath);
 
-            var resetLink = $"http://localhost:3000/reset-password/{token}";
+            var resetLink = $"http://localhost:5173/reset-password/{token}";
 
             var htmlBody =  htmlTemplate.Replace("{{action_url}}", resetLink);
 
