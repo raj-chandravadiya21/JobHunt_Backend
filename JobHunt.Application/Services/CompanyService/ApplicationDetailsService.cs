@@ -51,7 +51,7 @@ namespace JobHunt.Application.Services.CompanyService
             return response;
         }
 
-        public async Task<JobSeekerCountWithStatus> GetJobSeekerCount()
+        public async Task<JobSeekerCountWithStatus> GetJobSeekerCount(int jobId)
         {
             var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
 
@@ -69,12 +69,12 @@ namespace JobHunt.Application.Services.CompanyService
 
             JobSeekerCountWithStatus model = new()
             {
-                AppliedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Applied),
-                UnderReviewCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.UnderReview),
-                ScheduleInterviewCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.ScheduleInterview),
-                InterviewedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Interviewed),
-                SelectedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Selected),
-                RejectedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Rejected),
+                AppliedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Applied && x.JobId == jobId),
+                UnderReviewCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.UnderReview && x.JobId == jobId),
+                ScheduleInterviewCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.ScheduleInterview && x.JobId == jobId),
+                InterviewedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Interviewed && x.JobId == jobId),
+                SelectedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Selected && x.JobId == jobId),
+                RejectedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Rejected && x.JobId == jobId),
             };
 
             return model;

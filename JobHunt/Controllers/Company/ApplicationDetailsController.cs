@@ -29,9 +29,9 @@ namespace JobHunt.Controllers.Company
         }
 
         [HttpPost("jobSeeker-count-with-status")]
-        public async Task<IResult> GetApplicantCount()
+        public async Task<IResult> GetApplicantCount(int jobId)
         {
-            var data = await _serviceBundle.ApplicationDetailsService.GetJobSeekerCount();
+            var data = await _serviceBundle.ApplicationDetailsService.GetJobSeekerCount(jobId);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
     }

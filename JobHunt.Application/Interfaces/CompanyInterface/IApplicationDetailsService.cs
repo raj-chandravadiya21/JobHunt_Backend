@@ -13,6 +13,6 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
     {
         Task<PaginatedResponse> GetApplicantDetail(JobSeekerDetailRequest model);
 
-        Task<JobSeekerCountWithStatus> GetJobSeekerCount();
+        Task<JobSeekerCountWithStatus> GetJobSeekerCount(int jobId);
     }
 }

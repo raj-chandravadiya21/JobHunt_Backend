@@ -28,6 +28,8 @@ namespace JobHunt.Domain.DataModels.Response.Company.ApplicationDetails
 
         public string? Location { get; set; } = string.Empty;
 
+        public string? CoverDescription {  get; set; } = string.Empty;
+
         public List<string>? Notes { get; set; } = new List<string>();
 
         public int TotalCount { get; set; } = 0;
