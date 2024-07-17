@@ -19,5 +19,12 @@ namespace JobHunt.Controllers.UserController
             await _serviceBundle.ApplicationService.ApplyForJob(model);
             return Results.Ok(ResponseHelper.SuccessResponse(new(), String.Format(Messages.JobApplied)));
         }
+
+        [HttpPost("user-applications")]
+        public async Task<IResult> UserApplication([FromBody]UserApplicationsRequest model)
+        {
+           var data =  await _serviceBundle.ApplicationService.UserApplication(model);
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
     }
 }

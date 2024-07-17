@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using JobHunt.Application.Interfaces.UserInterface;
 using JobHunt.Domain.DataModels.Request.UserRequest.Application;
+using JobHunt.Domain.DataModels.Response;
+using JobHunt.Domain.DataModels.Response.User.JobApplication;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;
@@ -60,7 +62,7 @@ namespace JobHunt.Application.Services.UserService
 
             var timeStamp = current_timestamp.ToString("ddMMyy_hhmmss");
 
-            if (model.IsUploadFromProfile && model.Resume != null && model.Resume.Length > 0)
+            if (!model.IsUploadFromProfile && model.Resume != null && model.Resume.Length > 0)
             {
                 string newFileName = $"{jobApplication.Id}_{timeStamp}_" + model.Resume.FileName;
 
@@ -357,6 +359,29 @@ namespace JobHunt.Application.Services.UserService
             }
 
             document.Save(fileStream);
+        }
+
+        public async Task<PaginatedResponse> UserApplication(UserApplicationsRequest model)
+        {
+            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+
+            List<UserApplicationModel> applicationList = await _unitOfWork.JobApplication.GetUserApplication(user!.UserId, model);
+
+            List<UserApplicationResponse> data = _mapper.Map<List<UserApplicationResponse>>(applicationList);
+
+            PaginatedResponse response = new()
+            {
+                ListOfData = data,
+                CurrentPage = model.PageNumber,
+                PageSize = model.PageSize
+            };
+
+            if(data.Count > 0)
+            {
+                response.TotalCount = (int)applicationList[0].TotalCount;
+            }
+
+            return response;
         }
     }
 }

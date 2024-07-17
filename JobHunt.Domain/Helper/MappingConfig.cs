@@ -36,6 +36,7 @@ namespace JobHunt.Domain.Helper
             CreateMap<JobListResponse, JobListModel>().ReverseMap();
             CreateMap<GetJobListResponce, GetJobsResponse>().ReverseMap();
             CreateMap<JobSeekerDetailsResponse, JobSeekerDetailsModel>().ReverseMap();
+            CreateMap<UserApplicationResponse, UserApplicationModel>().ReverseMap();
         }
     }
 }
