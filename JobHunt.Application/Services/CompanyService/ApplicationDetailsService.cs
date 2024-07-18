@@ -82,14 +82,6 @@ namespace JobHunt.Application.Services.CompanyService
 
         public async Task AcceptApplication(ApplicationStatusDetailRequest model)
         {
-            var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
-
-            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
-            if (!isValidToken)
-            {
-                throw new CustomException("Session is Expired.");
-            }
-
             JobApplication? application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(x => x.Id == model.ApplicationId);
 
             application.StatusId = (int)ApplicationStatuses.UnderReview;
@@ -107,6 +99,111 @@ namespace JobHunt.Application.Services.CompanyService
             };
 
              await _unitOfWork.ApplicationStatusLog.CreateAsync(log);
+            await _unitOfWork.SaveAsync();
+        }
+
+        public async Task SelectApplication(ApplicationStatusDetailRequest model)
+        {
+            JobApplication? application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(x => x.Id == model.ApplicationId);
+
+            application.StatusId = (int)ApplicationStatuses.Selected;
+            application.ModifiedDate = DateTime.Now;
+
+            _unitOfWork.JobApplication.UpdateAsync(application);
+            await _unitOfWork.SaveAsync();
+
+            ApplicationStatusLog log = new ApplicationStatusLog()
+            {
+                ApplicationId = model.ApplicationId,
+                StatusId = (int)ApplicationStatuses.Selected,
+                Notes = model.Notes,
+                CreatedDate = DateTime.Now,
+            };
+
+            await _unitOfWork.ApplicationStatusLog.CreateAsync(log);
+            await _unitOfWork.SaveAsync();
+        }
+
+        public async Task RejectApplication(ApplicationStatusDetailRequest model)
+        {
+            JobApplication? application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(x => x.Id == model.ApplicationId);
+
+            application.StatusId = (int)ApplicationStatuses.Rejected;
+            application.ModifiedDate = DateTime.Now;
+
+            _unitOfWork.JobApplication.UpdateAsync(application);
+            await _unitOfWork.SaveAsync();
+
+            ApplicationStatusLog log = new ApplicationStatusLog()
+            {
+                ApplicationId = model.ApplicationId,
+                StatusId = (int)ApplicationStatuses.Rejected,
+                Notes = model.Notes,
+                CreatedDate = DateTime.Now,
+            };
+
+            await _unitOfWork.ApplicationStatusLog.CreateAsync(log);
+            await _unitOfWork.SaveAsync();
+        }
+
+        public async Task InterviewedApplication(ApplicationStatusDetailRequest model)
+        {
+            JobApplication? application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(x => x.Id == model.ApplicationId);
+
+            application.StatusId = (int)ApplicationStatuses.Interviewed;
+            application.ModifiedDate = DateTime.Now;
+
+            _unitOfWork.JobApplication.UpdateAsync(application);
+            await _unitOfWork.SaveAsync();
+
+            ApplicationStatusLog log = new ApplicationStatusLog()
+            {
+                ApplicationId = model.ApplicationId,
+                StatusId = (int)ApplicationStatuses.Interviewed,
+                Notes = model.Notes,
+                CreatedDate = DateTime.Now,
+            };
+
+            await _unitOfWork.ApplicationStatusLog.CreateAsync(log);
+            await _unitOfWork.SaveAsync();
+        }
+
+        public async Task ScheduleInterview(InterviewDetailsRequest model)
+        {
+            InterviewDetail interviewDetail = _mapper.Map<InterviewDetail>(model);
+
+            interviewDetail.CreatedDate = DateTime.Now;
+
+            await _unitOfWork.InterviewDetail.CreateAsync(interviewDetail);
+            await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<InterviewDetailsReponse> GetInterviewDetails(int applicationId)
+        {
+            InterviewDetail? interviewDetail = await _unitOfWork.InterviewDetail.GetFirstOrDefaultAsync(x => x.ApplicationId == applicationId);
+
+            InterviewDetailsReponse interviewDetailsReponse = new()
+            {
+                EndTime = interviewDetail.EndTime,
+                StartTime = interviewDetail.StartTime,
+                Location = interviewDetail.Location,
+                InterviewDate = interviewDetail.InterviewDate
+            };
+
+            return interviewDetailsReponse;
+        }
+
+        public async Task UpdateInterviewDetails(InterviewDetailsRequest model)
+        {
+            InterviewDetail? details = await _unitOfWork.InterviewDetail.GetFirstOrDefaultAsync(x => x.ApplicationId == model.ApplicationId);
+
+            details.InterviewDate = model.InterviewDate;
+            details.Location = model.Location;
+            details.StartTime= model.StartTime;
+            details.EndTime = model.EndTime;
+            details.ModifiedDate = DateTime.Now;
+
+            _unitOfWork.InterviewDetail.UpdateAsync(details);
             await _unitOfWork.SaveAsync();
         }
     }
