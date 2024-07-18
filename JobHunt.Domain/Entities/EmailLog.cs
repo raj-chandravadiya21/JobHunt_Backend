@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JobHunt.Domain.Entities;
 
-[Table("email_log			")]
+[Table("email_log")]
 public partial class EmailLog
 {
     [Key]

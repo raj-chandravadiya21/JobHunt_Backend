@@ -6,6 +6,7 @@ using JobHunt.Domain.Helper;
 using JobHunt.Domain.Resource;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace JobHunt.Controllers.Company
 {
@@ -28,11 +29,18 @@ namespace JobHunt.Controllers.Company
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
-        [HttpPost("jobSeeker-count-with-status")]
+        [HttpPost("jobSeeker-count-with-status/{jobId}")]
         public async Task<IResult> GetApplicantCount(int jobId)
         {
             var data = await _serviceBundle.ApplicationDetailsService.GetJobSeekerCount(jobId);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
+
+        [HttpPost("accept-application")]
+        public async Task<IResult> AcceptApplication([FromBody] ApplicationStatusDetailRequest model)
+        {
+            await _serviceBundle.ApplicationDetailsService.AcceptApplication(model);
+            return Results.Ok(ResponseHelper.SuccessResponse(new()));
         }
     }
 }

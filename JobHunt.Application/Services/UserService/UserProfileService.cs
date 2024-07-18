@@ -33,42 +33,42 @@ namespace JobHunt.Application.Services.UserService
 
         public async Task<UserProfileModel> GetUserProfile()
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
             return await _unitOfWork.User.GetUserProfile(user!.UserId);
         }
 
         public async Task<UserSocialProfileResponse> GetSocialProfile()
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
-            return _mapper.Map<UserSocialProfileResponse>(await _unitOfWork.UserSocialProfile.GetFirstOrDefault(u => u.UserId == user!.UserId));
+            return _mapper.Map<UserSocialProfileResponse>(await _unitOfWork.UserSocialProfile.GetFirstOrDefaultAsync(u => u.UserId == user!.UserId));
         }
 
         public async Task<List<UserEducationResponse>> GetUserEducation()
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
             return _mapper.Map<List<UserEducationResponse>>(await _unitOfWork.UserEducation.WhereList(u => u.UserId == user!.UserId));
         }
 
         public async Task<List<UserProjectResponse>> GetUserProject()
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
             return _mapper.Map<List<UserProjectResponse>>(await _unitOfWork.Project.WhereList(u => u.UserId == user!.UserId));
         }
 
         public async Task<List<UserWorkExperience>> GetUserWorkExperiences()
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
             return _mapper.Map<List<UserWorkExperience>>(await _unitOfWork.WorkExperiment.WhereList(u => u.UserId == user!.UserId));
         }
 
         public async Task UpdateUserProfile(UserProfileRequest model)
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());   
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());   
             
             _mapper.Map<UserProfileRequest, User>(model, user!);
 
@@ -90,9 +90,9 @@ namespace JobHunt.Application.Services.UserService
                 throw new CustomException(String.Format(Messages.StartDateGreaterThenEndDate));
             }
 
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
-            var workExperience = await _unitOfWork.WorkExperiment.GetFirstOrDefault(u => u.Id == model.Id && u.UserId == user!.UserId);
+            var workExperience = await _unitOfWork.WorkExperiment.GetFirstOrDefaultAsync(u => u.Id == model.Id && u.UserId == user!.UserId);
 
             _mapper.Map<UpdateWorkExperience, WorkExperience>(model, workExperience!);
 
@@ -103,9 +103,9 @@ namespace JobHunt.Application.Services.UserService
 
         public async Task DeleteWorkExperience(int id)
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
-            var workExperience = await _unitOfWork.WorkExperiment.GetFirstOrDefault(u => u.Id == id && u.UserId == user!.UserId);
+            var workExperience = await _unitOfWork.WorkExperiment.GetFirstOrDefaultAsync(u => u.Id == id && u.UserId == user!.UserId);
 
             _unitOfWork.WorkExperiment.Remove(workExperience!);
             await _unitOfWork.SaveAsync();
@@ -122,7 +122,7 @@ namespace JobHunt.Application.Services.UserService
 
             _mapper.Map<AddWorkExperienceRequest, WorkExperience>(model, workExperience);
 
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
             workExperience.UserId = user!.UserId;
 
@@ -139,9 +139,9 @@ namespace JobHunt.Application.Services.UserService
                 throw new CustomException(String.Format(Messages.StartDateGreaterThenEndDate));
             }
 
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
-            var project = await _unitOfWork.Project.GetFirstOrDefault(u => u.Id == model.Id && u.UserId == user!.UserId);
+            var project = await _unitOfWork.Project.GetFirstOrDefaultAsync(u => u.Id == model.Id && u.UserId == user!.UserId);
 
             _mapper.Map<UpdateProjectRequest, Project>(model, project!);
 
@@ -151,9 +151,9 @@ namespace JobHunt.Application.Services.UserService
 
         public async Task DeleteProject(int id)
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
-            var project = await _unitOfWork.Project.GetFirstOrDefault(u => u.Id == id && u.UserId == user!.UserId);
+            var project = await _unitOfWork.Project.GetFirstOrDefaultAsync(u => u.Id == id && u.UserId == user!.UserId);
 
             _unitOfWork.Project.Remove(project!);
             await _unitOfWork.SaveAsync();
@@ -166,7 +166,7 @@ namespace JobHunt.Application.Services.UserService
                 throw new CustomException(String.Format(Messages.StartDateGreaterThenEndDate));
             }
 
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
             Project project = _mapper.Map<AddProjectRequest, Project>(model);
 
@@ -184,9 +184,9 @@ namespace JobHunt.Application.Services.UserService
                 throw new CustomException(String.Format(Messages.StartDateGreaterThenEndDate));
             }
 
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
-            var userEducation = await _unitOfWork.UserEducation.GetFirstOrDefault(u => u.Id == model.Id && u.UserId == user!.UserId);
+            var userEducation = await _unitOfWork.UserEducation.GetFirstOrDefaultAsync(u => u.Id == model.Id && u.UserId == user!.UserId);
 
             if ((bool)await _unitOfWork.UserEducation.GetAnyAsync(u => u.DegreeId == model.DegreeId && u.Id != model.Id && u.UserId == user!.UserId))
             {
@@ -201,9 +201,9 @@ namespace JobHunt.Application.Services.UserService
 
         public async Task DeleteEducation(int id)
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
-            var userEducation = await _unitOfWork.UserEducation.GetFirstOrDefault(u => u.DegreeId == id && u.UserId == user!.UserId);
+            var userEducation = await _unitOfWork.UserEducation.GetFirstOrDefaultAsync(u => u.DegreeId == id && u.UserId == user!.UserId);
 
             _unitOfWork.UserEducation.Remove(userEducation!);
             await _unitOfWork.SaveAsync();
@@ -216,7 +216,7 @@ namespace JobHunt.Application.Services.UserService
                 throw new CustomException(String.Format(Messages.StartDateGreaterThenEndDate));
             }
 
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
             var userEducationList = await _unitOfWork.UserEducation.WhereList(u => u.UserId == user!.UserId);
 
@@ -241,7 +241,7 @@ namespace JobHunt.Application.Services.UserService
 
         public async Task UpdateSocialProfile(UserSocialProfileRequest model)
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
             var socialProfile = await _unitOfWork.UserSocialProfile.GetFirstOrDefaultNullable(u => u.UserId == user!.UserId);
 

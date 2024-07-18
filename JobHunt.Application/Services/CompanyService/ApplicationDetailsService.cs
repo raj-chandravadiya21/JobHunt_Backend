@@ -28,9 +28,9 @@ namespace JobHunt.Application.Services.CompanyService
 
             var aspNetUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspNetUserId);
+            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspNetUserId);
 
-            Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspNetUserId);
+            Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspNetUserId);
 
             List<JobSeekerDetailsResponse> JobSeekerResponse = await _unitOfWork.JobApplication.GetApplicantDetails(company.CompanyId, model);
 
@@ -63,9 +63,9 @@ namespace JobHunt.Application.Services.CompanyService
 
             var aspNetUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspNetUserId);
+            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspNetUserId);
 
-            Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspNetUserId);
+            Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspNetUserId);
 
             JobSeekerCountWithStatus model = new()
             {
@@ -78,6 +78,36 @@ namespace JobHunt.Application.Services.CompanyService
             };
 
             return model;
+        }
+
+        public async Task AcceptApplication(ApplicationStatusDetailRequest model)
+        {
+            var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
+
+            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
+            if (!isValidToken)
+            {
+                throw new CustomException("Session is Expired.");
+            }
+
+            JobApplication? application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(x => x.Id == model.ApplicationId);
+
+            application.StatusId = (int)ApplicationStatuses.UnderReview;
+            application.ModifiedDate = DateTime.Now;
+
+            _unitOfWork.JobApplication.UpdateAsync(application);
+            await _unitOfWork.SaveAsync();
+
+            ApplicationStatusLog log = new ApplicationStatusLog()
+            {
+                ApplicationId = model.ApplicationId,
+                StatusId = (int)ApplicationStatuses.UnderReview,
+                Notes = model.Notes,
+                CreatedDate = DateTime.Now,
+            };
+
+             await _unitOfWork.ApplicationStatusLog.CreateAsync(log);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

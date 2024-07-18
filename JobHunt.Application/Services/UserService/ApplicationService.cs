@@ -39,7 +39,7 @@ namespace JobHunt.Application.Services.UserService
 
         public async Task ApplyForJob(ApplyJobRequest model)
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
             if ((bool) await _unitOfWork.JobApplication.GetAnyAsync(u => u.UserId == user!.UserId && u.JobId == model.JobId))
             {
@@ -90,7 +90,7 @@ namespace JobHunt.Application.Services.UserService
 
         public async Task GenerateResume(int userId, int jobApplicationId, string currentTime)
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.UserId == userId);
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.UserId == userId);
             var listOfExperience = await _unitOfWork.WorkExperiment.WhereList(u => u.UserId == user!.UserId);
             var listOfEduaction = await _unitOfWork.UserEducation.GetUserEducationInformation(user!.UserId);
             var listOfProject = await _unitOfWork.Project.WhereList(u => u.UserId == user!.UserId);
@@ -363,7 +363,7 @@ namespace JobHunt.Application.Services.UserService
 
         public async Task<PaginatedResponse> UserApplication(UserApplicationsRequest model)
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
             List<UserApplicationModel> applicationList = await _unitOfWork.JobApplication.GetUserApplication(user!.UserId, model);
 

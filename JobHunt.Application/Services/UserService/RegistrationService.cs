@@ -33,9 +33,9 @@ namespace JobHunt.Application.Services.UserService
 
             var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
+            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
 
-            User? user = await _unitOfWork.User.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
+            User? user = await _unitOfWork.User.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
 
             using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -153,9 +153,9 @@ namespace JobHunt.Application.Services.UserService
 
             var aspNetUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspNetUserId);
+            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspNetUserId);
 
-            User? user = await _unitOfWork.User.GetFirstOrDefault(x => x.AspnetuserId == aspnetuser!.AspnetuserId);
+            User? user = await _unitOfWork.User.GetFirstOrDefaultAsync(x => x.AspnetuserId == aspnetuser!.AspnetuserId);
 
             UserDetailsModel model = new UserDetailsModel();
 

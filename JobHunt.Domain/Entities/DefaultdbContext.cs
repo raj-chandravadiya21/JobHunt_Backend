@@ -158,7 +158,7 @@ public partial class DefaultdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("application_status_logs_pkey");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
             entity.HasOne(d => d.Application).WithMany(p => p.ApplicationStatusLogs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -199,7 +199,7 @@ public partial class DefaultdbContext : DbContext
 
         modelBuilder.Entity<EmailLog>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("email_log			_pkey");
+            entity.HasKey(e => e.Id).HasName("email_log_pkey");
 
             entity.Property(e => e.Id).UseIdentityAlwaysColumn();
         });

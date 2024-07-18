@@ -14,5 +14,7 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
         Task<PaginatedResponse> GetApplicantDetail(JobSeekerDetailRequest model);
 
         Task<JobSeekerCountWithStatus> GetJobSeekerCount(int jobId);
+
+        Task AcceptApplication(ApplicationStatusDetailRequest model);
     }
 }

@@ -132,17 +132,17 @@ namespace JobHunt.Application.Services
         #region Login
         public async Task<LoginResponse> Login(LoginRequest model, int role)
         {
-            var aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == role);
+            var aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefaultAsync(u => u.Email == model.Email && u.RoleId == role);
 
             object? userOrCompany = null;
 
             if (role == (int)Role.User)
             {
-                userOrCompany = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId == aspnetuser!.AspnetuserId);
+                userOrCompany = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId == aspnetuser!.AspnetuserId);
             }
             else
             {
-                userOrCompany = await _unitOfWork.Company.GetFirstOrDefault(u => u.AspnetuserId == aspnetuser!.AspnetuserId);
+                userOrCompany = await _unitOfWork.Company.GetFirstOrDefaultAsync(u => u.AspnetuserId == aspnetuser!.AspnetuserId);
             }
 
             if (BCrypt.Net.BCrypt.Verify(model.Password, aspnetuser!.Password))
@@ -231,7 +231,7 @@ namespace JobHunt.Application.Services
         #region ForgotPassword
         public async Task ForgotPasswordUser(ForgotPasswordRequest model)
         {
-            Aspnetuser? user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.Email == model.Email && u.RoleId == model.Role);
+            Aspnetuser? user = await _unitOfWork.AspNetUser.GetFirstOrDefaultAsync(u => u.Email == model.Email && u.RoleId == model.Role);
 
             var aspNetUserId = EncryptionHelper.Encrypt(user!.AspnetuserId.ToString());
 
@@ -274,7 +274,7 @@ namespace JobHunt.Application.Services
 
             var userId = EncryptionHelper.Decrypt(encryorionUserId!);
 
-            var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.AspnetuserId.ToString() == userId);
+            var user = await _unitOfWork.AspNetUser.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == userId);
 
             if (userPassword != user!.Password)
             {
