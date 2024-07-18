@@ -16,5 +16,18 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
         Task<JobSeekerCountWithStatus> GetJobSeekerCount(int jobId);
 
         Task AcceptApplication(ApplicationStatusDetailRequest model);
+
+        Task SelectApplication(ApplicationStatusDetailRequest model);
+
+        Task RejectApplication(ApplicationStatusDetailRequest model);
+
+        Task InterviewedApplication(ApplicationStatusDetailRequest model);
+
+        Task ScheduleInterview(InterviewDetailsRequest model);
+
+        Task<InterviewDetailsReponse> GetInterviewDetails(int applicationId);
+
+        Task UpdateInterviewDetails(InterviewDetailsRequest model);
+
     }
 }

@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Accepted" xml:space="preserve">
+    <value>Accepted Successfully</value>
+  </data>
   <data name="AddSuccessfully" xml:space="preserve">
     <value>{0} Added Successfully</value>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="Candidate" xml:space="preserve">
+    <value>Candidate</value>
   </data>
   <data name="Company" xml:space="preserve">
     <value>Company</value>
@@ -146,6 +155,9 @@
   </data>
   <data name="EnterValidCredentials" xml:space="preserve">
     <value>Enter Valid Credentials</value>
+  </data>
+  <data name="Interview" xml:space="preserve">
+    <value>Interview</value>
   </data>
   <data name="Job" xml:space="preserve">
     <value>Job</value>
@@ -177,8 +189,14 @@
   <data name="Register" xml:space="preserve">
     <value>Register</value>
   </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejected Successfully</value>
+  </data>
   <data name="ResetPasswordLink" xml:space="preserve">
     <value>Reset Password Link</value>
+  </data>
+  <data name="Selected" xml:space="preserve">
+    <value>Selected Successfully</value>
   </data>
   <data name="SentSuccessfully" xml:space="preserve">
     <value>{0} Sent Successfully</value>

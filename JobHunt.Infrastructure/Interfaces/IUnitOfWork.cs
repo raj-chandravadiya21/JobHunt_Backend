@@ -29,6 +29,8 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public IRepository<ApplicationStatusLog> ApplicationStatusLog { get; }
 
+        public IRepository<InterviewDetail> InterviewDetail { get; }
+
         Task SaveAsync();
 
         public IUserRepository User { get; }

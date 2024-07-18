@@ -61,11 +61,38 @@ namespace JobHunt.Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accepted Successfully.
+        /// </summary>
+        public static string Accepted {
+            get {
+                return ResourceManager.GetString("Accepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} Added Successfully.
         /// </summary>
         public static string AddSuccessfully {
             get {
                 return ResourceManager.GetString("AddSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application.
+        /// </summary>
+        public static string Application {
+            get {
+                return ResourceManager.GetString("Application", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Candidate.
+        /// </summary>
+        public static string Candidate {
+            get {
+                return ResourceManager.GetString("Candidate", resourceCulture);
             }
         }
         
@@ -147,6 +174,15 @@ namespace JobHunt.Domain.Resource {
         public static string EnterValidCredentials {
             get {
                 return ResourceManager.GetString("EnterValidCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview.
+        /// </summary>
+        public static string Interview {
+            get {
+                return ResourceManager.GetString("Interview", resourceCulture);
             }
         }
         
@@ -241,11 +277,29 @@ namespace JobHunt.Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rejected Successfully.
+        /// </summary>
+        public static string Rejected {
+            get {
+                return ResourceManager.GetString("Rejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset Password Link.
         /// </summary>
         public static string ResetPasswordLink {
             get {
                 return ResourceManager.GetString("ResetPasswordLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected Successfully.
+        /// </summary>
+        public static string Selected {
+            get {
+                return ResourceManager.GetString("Selected", resourceCulture);
             }
         }
         
