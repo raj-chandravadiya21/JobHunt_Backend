@@ -32,7 +32,7 @@ namespace JobHunt.Application.Services.CompanyService
 
             var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
+            Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
 
             Job job = new()
             {
@@ -104,7 +104,7 @@ namespace JobHunt.Application.Services.CompanyService
 
             var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
+            Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
 
             List<GetJobsResponse> jobReponse = await _unitOfWork.Job.GetJobs(company.CompanyId, model);
 

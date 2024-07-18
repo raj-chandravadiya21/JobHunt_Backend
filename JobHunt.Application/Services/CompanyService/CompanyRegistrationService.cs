@@ -30,7 +30,7 @@ namespace JobHunt.Application.Services.CompanyService
 
             var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
+            Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
 
             company.MobileNumber = model.PhoneNumber;
             company.Website = model.WebsiteUrl;
@@ -43,7 +43,7 @@ namespace JobHunt.Application.Services.CompanyService
             _unitOfWork.Company.UpdateAsync(company);
             await _unitOfWork.SaveAsync();
 
-            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspnetId);
+            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
 
             aspnetuser.IsRegistered = true;
 
@@ -63,9 +63,9 @@ namespace JobHunt.Application.Services.CompanyService
 
             var aspNetUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspNetUserId);
+            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspNetUserId);
 
-            Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId == aspnetuser!.AspnetuserId);
+            Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId == aspnetuser!.AspnetuserId);
 
             CompanyDetailsModel model = new();
 
@@ -95,9 +95,9 @@ namespace JobHunt.Application.Services.CompanyService
 
             var aspNetUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefault(x => x.AspnetuserId.ToString() == aspNetUserId);
+            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspNetUserId);
 
-            Company? company = await _unitOfWork.Company.GetFirstOrDefault(x => x.AspnetuserId == aspnetuser!.AspnetuserId);
+            Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId == aspnetuser!.AspnetuserId);
 
             CompanyDetailsResponse model = new()
             {

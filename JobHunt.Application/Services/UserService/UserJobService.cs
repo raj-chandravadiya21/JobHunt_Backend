@@ -33,7 +33,7 @@ namespace JobHunt.Application.Services.UserService
 
         public async Task<PaginatedResponse> FilterJobList(JobListRequest model)
         {
-            var user = await _unitOfWork.User.GetFirstOrDefault(u => u.AspnetuserId.ToString() == GetUserId());
+            var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
             List<JobListModel> jobList = await _unitOfWork.Job.GetPaginationAndFilterJob(user!.UserId, model);
 

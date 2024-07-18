@@ -30,6 +30,7 @@ namespace JobHunt.Infrastructure.Repositories
             JobPerks = new Repository<JobPerk>(_context);
             Company = new CompanyRepository(_context);
             JobApplication = new JobApplicationRepository(_context);
+            ApplicationStatusLog = new Repository<ApplicationStatusLog>(_context);
         }
         public IRepository<Aspnetuser> AspNetUser { get; private set; }
 
@@ -52,6 +53,8 @@ namespace JobHunt.Infrastructure.Repositories
         public IRepository<JobResponsibility> JobResponsibility { get; private set; }
 
         public IRepository<JobPerk> JobPerks { get; private set; }
+
+        public IRepository<ApplicationStatusLog> ApplicationStatusLog { get; private set; }
 
         public async Task SaveAsync()
         {

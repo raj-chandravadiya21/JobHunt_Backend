@@ -16,7 +16,7 @@ namespace JobHunt.Infrastructure.Repositories
             _context = context;
             _dbSet = _context.Set<T>();
         }
-        public async Task<T?> GetFirstOrDefault(Expression<Func<T, bool>> predicate)
+        public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
         {
             var data = await _dbSet.FirstOrDefaultAsync(predicate);
             var typeName = typeof(T).Name;
@@ -29,6 +29,12 @@ namespace JobHunt.Infrastructure.Repositories
         public async Task<T?> GetFirstOrDefaultNullable(Expression<Func<T, bool>> predicate)
         {
             return await _dbSet.FirstOrDefaultAsync(predicate);
+        }
+
+        public Task<T?> GetFirstOrDefault(Expression<Func<T, bool>> predicate)
+        {
+            T? data = _dbSet.FirstOrDefault(predicate);
+            return Task.FromResult(data);
         }
 
         public async Task<T?> GetLastOrDefaultOrderedBy<TProperty>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProperty>> orderByExpression)
