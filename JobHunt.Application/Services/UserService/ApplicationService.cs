@@ -60,6 +60,19 @@ namespace JobHunt.Application.Services.UserService
             await _unitOfWork.JobApplication.CreateAsync(jobApplication);
             await _unitOfWork.SaveAsync();
 
+            JobApplication? application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(x => x.UserId == user.UserId && x.JobId == model.JobId);
+
+            ApplicationStatusLog log = new()
+            {
+                ApplicationId = application.Id,
+                StatusId = (int)ApplicationStatuses.Applied,
+                Notes = model.Description,
+                CreatedDate = current_timestamp,
+            };
+
+            await _unitOfWork.ApplicationStatusLog.CreateAsync(log);
+            await _unitOfWork.SaveAsync();
+
             var timeStamp = current_timestamp.ToString("ddMMyy_hhmmss");
 
             if (!model.IsUploadFromProfile && model.Resume != null && model.Resume.Length > 0)
