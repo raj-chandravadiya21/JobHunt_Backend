@@ -93,6 +93,18 @@ namespace JobHunt.Infrastructure.Repositories
         {
             return await _context.HighestPaidJobsResponses.FromSqlRaw("SELECT * FROM user_highest_paid_jobs()").ToListAsync();
         }
+
+        public async Task<List<HighestPaidJobsResponse>> UserSkilllsJobs(int userId)
+        {
+            var parameters = new NpgsqlParameter[]
+            {
+                new("@userId", NpgsqlDbType.Integer) { Value = userId }
+            };
+
+            string sql = "SELECT * FROM user_skills_jobs(@userId)";
+
+            return await _context.HighestPaidJobsResponses.FromSqlRaw(sql, parameters).ToListAsync();
+        }
     }
 }
 

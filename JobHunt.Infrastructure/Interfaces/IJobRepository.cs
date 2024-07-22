@@ -20,6 +20,8 @@ namespace JobHunt.Infrastructure.Interfaces
         Task<long> GetTotalCountOfFilter(int userId, JobListRequest model);
 
         Task<List<HighestPaidJobsResponse>> HighestPaidJobs();
+
+        Task<List<HighestPaidJobsResponse>> UserSkilllsJobs(int userId);
     }
 }
     

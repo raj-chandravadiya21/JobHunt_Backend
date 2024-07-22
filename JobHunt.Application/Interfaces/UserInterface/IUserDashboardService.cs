@@ -10,5 +10,7 @@ namespace JobHunt.Application.Interfaces.UserInterface
     public interface IUserDashboardService
     {
         Task<List<HighestPaidJobsResponse>> HighestPaidJobs();
+
+        Task<List<HighestPaidJobsResponse>> UserSkilllsJobs();
     }
 }

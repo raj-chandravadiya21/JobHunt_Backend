@@ -33,7 +33,7 @@ namespace JobHunt.Application.Services
             ApplicationService = new ApplicationService(_unitOfWork, _contextAccessor, _mapper);
             UserJobService = new UserJobService(_contextAccessor, _unitOfWork, _mapper);
             ApplicationDetailsService = new ApplicationDetailsService(_contextAccessor, _unitOfWork, _mapper);
-            UserDashboardService = new UserDashboardService(_unitOfWork);
+            UserDashboardService = new UserDashboardService(_unitOfWork, contextAccessor);
         }
         public IAuthService AuthService { get; private set; }
 
