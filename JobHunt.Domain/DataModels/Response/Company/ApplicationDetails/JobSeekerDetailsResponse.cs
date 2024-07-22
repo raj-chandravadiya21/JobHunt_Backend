@@ -10,6 +10,8 @@ namespace JobHunt.Domain.DataModels.Response.Company.ApplicationDetails
     {
         public int UserId { get; set; }
 
+        public int ApplicationId { get; set; }
+
         public string FirstName { get; set; } = string.Empty;
 
         public string? LastName { get; set; } = string.Empty;
@@ -22,9 +24,9 @@ namespace JobHunt.Domain.DataModels.Response.Company.ApplicationDetails
 
         public DateOnly? InterviewDate { get; set; }
         
-        public DateTime? InterviewStartTime { get; set; }
+        public TimeOnly? InterviewStartTime { get; set; }
 
-        public DateTime? InterviewEndTime { get; set; }
+        public TimeOnly? InterviewEndTime { get; set; }
 
         public string? Location { get; set; } = string.Empty;
 
