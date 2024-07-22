@@ -9,6 +9,8 @@ using JobHunt.Application.HostServices;
 using JobHunt.Application.Interfaces.IHostHelper;
 using JobHunt.Application.Services.HostHelper;
 using Serilog;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 var builder = WebApplication.CreateBuilder(args);
 

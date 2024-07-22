@@ -156,6 +156,9 @@
   <data name="EnterValidCredentials" xml:space="preserve">
     <value>Enter Valid Credentials</value>
   </data>
+  <data name="EnterValidDate" xml:space="preserve">
+    <value>Enter Valid Date </value>
+  </data>
   <data name="Interview" xml:space="preserve">
     <value>Interview</value>
   </data>

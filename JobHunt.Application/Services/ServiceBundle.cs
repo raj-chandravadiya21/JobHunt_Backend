@@ -7,6 +7,8 @@ using JobHunt.Application.Services.UserService;
 using JobHunt.Domain.DataModels.Response;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
 
