@@ -170,8 +170,6 @@ namespace JobHunt.Application.Services.CompanyService
 
         public async Task ScheduleInterview(InterviewDetailsRequest model)
         {
-            //InterviewDetail interview = _unitOfWork.InterviewDetail.GetWhere 
-
             InterviewDetail interviewDetail = _mapper.Map<InterviewDetail>(model);
 
             interviewDetail.CreatedDate = DateTime.Now;
@@ -183,6 +181,13 @@ namespace JobHunt.Application.Services.CompanyService
                 Notes = "Shedule an Interview",
                 CreatedDate= DateTime.Now
             };
+
+            JobApplication? application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(x => x.Id == model.ApplicationId);
+
+            application.StatusId = (int)ApplicationStatuses.ScheduleInterview;
+            application.ModifiedDate = DateTime.Now;
+
+            _unitOfWork.JobApplication.UpdateAsync(application);
 
             await _unitOfWork.InterviewDetail.CreateAsync(interviewDetail);
             await _unitOfWork.ApplicationStatusLog.CreateAsync(log);

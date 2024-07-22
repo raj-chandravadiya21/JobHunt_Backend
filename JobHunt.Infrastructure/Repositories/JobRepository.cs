@@ -71,24 +71,6 @@ namespace JobHunt.Infrastructure.Repositories
             return await _context.GetJobList.FromSqlRaw(sql, parameters).ToListAsync();
         }
 
-        public async Task<long> GetTotalCountOfFilter(int userId, JobListRequest model)
-        {
-            var jobSkillsArray = model.Skills != null ? model.Skills.ToArray() : (object)DBNull.Value;
-
-            var parameter = new NpgsqlParameter[]
-            {
-                new("@ctc_start", NpgsqlDbType.Integer) { Value = model.CtcStart},
-                new("@ctc_end", NpgsqlDbType.Integer) { Value = model.CtcEnd},
-                new("@user_id", NpgsqlDbType.Integer) { Value = userId},
-                new("@skills", NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = jobSkillsArray },
-                new("@job_name", NpgsqlDbType.Varchar) { Value = model.JobName ?? (object)DBNull.Value }
-            };
-
-            string sql = "SELECT * FROM public.get_pagination_filtered_jobs_count(@ctc_start, @ctc_end, @user_id, @skills, @job_name)";
-
-            return await _context.Database.ExecuteSqlRawAsync(sql, parameter);
-        }
-
         public async Task<List<HighestPaidJobsResponse>> HighestPaidJobs()
         {
             return await _context.HighestPaidJobsResponses.FromSqlRaw("SELECT * FROM user_highest_paid_jobs()").ToListAsync();

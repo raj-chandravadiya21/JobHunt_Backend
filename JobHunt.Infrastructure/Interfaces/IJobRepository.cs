@@ -17,8 +17,6 @@ namespace JobHunt.Infrastructure.Interfaces
 
         Task<List<JobListModel>> GetPaginationAndFilterJob(int userId, JobListRequest model);
 
-        Task<long> GetTotalCountOfFilter(int userId, JobListRequest model);
-
         Task<List<HighestPaidJobsResponse>> HighestPaidJobs();
 
         Task<List<HighestPaidJobsResponse>> UserSkilllsJobs(int userId);

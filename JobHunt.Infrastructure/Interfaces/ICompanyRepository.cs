@@ -1,4 +1,4 @@
-﻿using JobHunt.Domain.DataModels.Response.Company;
+﻿using JobHunt.Domain.DataModels.Response.Common;
 using JobHunt.Domain.DataModels.Response.User;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Interfaces;
