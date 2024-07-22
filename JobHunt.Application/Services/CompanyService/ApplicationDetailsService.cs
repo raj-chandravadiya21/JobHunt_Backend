@@ -176,7 +176,7 @@ namespace JobHunt.Application.Services.CompanyService
                 throw new CustomException(Messages.EnterValidDate);
             }
 
-            if(model.StartTime <= model.EndTime)
+            if(model.StartTime >= model.EndTime)
             {
                 throw new CustomException(Messages.StartDateGreaterThenEndDate);
             }
