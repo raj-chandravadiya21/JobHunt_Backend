@@ -170,11 +170,22 @@ namespace JobHunt.Application.Services.CompanyService
 
         public async Task ScheduleInterview(InterviewDetailsRequest model)
         {
+            //InterviewDetail interview = _unitOfWork.InterviewDetail.GetWhere 
+
             InterviewDetail interviewDetail = _mapper.Map<InterviewDetail>(model);
 
             interviewDetail.CreatedDate = DateTime.Now;
 
+            ApplicationStatusLog log = new()
+            {
+                ApplicationId = model.ApplicationId,
+                StatusId = (int)ApplicationStatuses.ScheduleInterview,
+                Notes = "Shedule an Interview",
+                CreatedDate= DateTime.Now
+            };
+
             await _unitOfWork.InterviewDetail.CreateAsync(interviewDetail);
+            await _unitOfWork.ApplicationStatusLog.CreateAsync(log);
             await _unitOfWork.SaveAsync();
         }
 
