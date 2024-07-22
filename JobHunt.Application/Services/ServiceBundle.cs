@@ -33,6 +33,7 @@ namespace JobHunt.Application.Services
             ApplicationService = new ApplicationService(_unitOfWork, _contextAccessor, _mapper);
             UserJobService = new UserJobService(_contextAccessor, _unitOfWork, _mapper);
             ApplicationDetailsService = new ApplicationDetailsService(_contextAccessor, _unitOfWork, _mapper);
+            UserDashboardService = new UserDashboardService(_unitOfWork);
         }
         public IAuthService AuthService { get; private set; }
 
@@ -49,5 +50,7 @@ namespace JobHunt.Application.Services
         public IUserJobService UserJobService { get; private set; }
 
         public IApplicationDetailsService ApplicationDetailsService { get; private set; }
+
+        public IUserDashboardService UserDashboardService { get; private set; }
     }
 }

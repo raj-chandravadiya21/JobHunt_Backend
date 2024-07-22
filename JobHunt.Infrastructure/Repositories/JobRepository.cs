@@ -1,6 +1,7 @@
 ﻿using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
 using JobHunt.Domain.DataModels.Request.UserRequest.JobApplication;
 using JobHunt.Domain.DataModels.Response.Company;
+using JobHunt.Domain.DataModels.Response.User.Dashboard;
 using JobHunt.Domain.DataModels.Response.User.JobApplication;
 using JobHunt.Domain.Entities;
 using JobHunt.Infrastructure.Interfaces;
@@ -86,6 +87,11 @@ namespace JobHunt.Infrastructure.Repositories
             string sql = "SELECT * FROM public.get_pagination_filtered_jobs_count(@ctc_start, @ctc_end, @user_id, @skills, @job_name)";
 
             return await _context.Database.ExecuteSqlRawAsync(sql, parameter);
+        }
+
+        public async Task<List<HighestPaidJobsResponse>> HighestPaidJobs()
+        {
+            return await _context.HighestPaidJobsResponses.FromSqlRaw("SELECT * FROM user_highest_paid_jobs()").ToListAsync();
         }
     }
 }

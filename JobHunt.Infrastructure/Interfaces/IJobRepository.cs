@@ -1,6 +1,7 @@
 ﻿using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
 using JobHunt.Domain.DataModels.Request.UserRequest.JobApplication;
 using JobHunt.Domain.DataModels.Response.Company;
+using JobHunt.Domain.DataModels.Response.User.Dashboard;
 using JobHunt.Domain.DataModels.Response.User.JobApplication;
 using JobHunt.Domain.Entities;
 using JobHunt.Domain.Interfaces;
@@ -17,6 +18,8 @@ namespace JobHunt.Infrastructure.Interfaces
         Task<List<JobListModel>> GetPaginationAndFilterJob(int userId, JobListRequest model);
 
         Task<long> GetTotalCountOfFilter(int userId, JobListRequest model);
+
+        Task<List<HighestPaidJobsResponse>> HighestPaidJobs();
     }
 }
     
