@@ -9,6 +9,7 @@ namespace JobHunt.Controllers.Company
 {
     [Route("api/company")]
     [ApiController]
+    [CustomAuthorize("Company")]
     public class JobPostingController : ControllerBase
     {
         private readonly IServiceBundle _serviceBundle;
@@ -18,7 +19,6 @@ namespace JobHunt.Controllers.Company
             _serviceBundle = serviceBundle;
         }
 
-        [CustomAuthorize("Company")]
         [HttpPost("create-job")]
         public async Task<IResult> CreateJob([FromBody] CreateJobRequest model)
         {
@@ -26,15 +26,6 @@ namespace JobHunt.Controllers.Company
             return Results.Ok(ResponseHelper.SuccessResponse(new(), string.Format(Messages.AddSuccessfully, Messages.Job)));
         }
 
-        [CustomAuthorize("Company User")]
-        [HttpGet("view-job/{jobId}")]
-        public async Task<IResult> ViewJobDetails(int jobId)
-        {
-            JobDetails data = await _serviceBundle.JobPostingService.GetJobDetails(jobId);
-            return Results.Ok(ResponseHelper.SuccessResponse(data));
-        }
-
-        [CustomAuthorize("Company")]
         [HttpGet("get-job-details/{jobId}")]
         public async Task<IResult> GetJobDetails(int jobId)
         {
@@ -42,7 +33,6 @@ namespace JobHunt.Controllers.Company
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
-        [CustomAuthorize("Company")]    
         [HttpPost("get-jobs")]
         public async Task<IResult> GetJobs([FromBody] FilterJobRequest model)
         {

@@ -99,5 +99,10 @@ namespace JobHunt.Infrastructure.Repositories
         {
             return await _dbSet.Where(predicate).CountAsync();
         }
+
+        public async Task<int> CountAsync()
+        {
+            return await _dbSet.CountAsync();
+        }
     }
 }

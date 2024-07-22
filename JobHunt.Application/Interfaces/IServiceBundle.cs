@@ -1,4 +1,5 @@
-﻿using JobHunt.Application.Interfaces.CompanyInterface;
+﻿using JobHunt.Application.Interfaces.CommonInterface;
+using JobHunt.Application.Interfaces.CompanyInterface;
 using JobHunt.Application.Interfaces.UserInterface;
 
 namespace JobHunt.Application.Interfaces
@@ -20,5 +21,9 @@ namespace JobHunt.Application.Interfaces
         public IUserJobService UserJobService { get; }
 
         public IApplicationDetailsService ApplicationDetailsService { get; }
+
+        public IUserDashboardService UserDashboardService { get; }
+
+        public ICommonService CommonService { get; }
     }
 }

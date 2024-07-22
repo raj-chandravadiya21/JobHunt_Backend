@@ -1,6 +1,6 @@
-﻿namespace JobHunt.Domain.DataModels.Response
+﻿namespace JobHunt.Domain.DataModels.Response.Common
 {
-    public class SkillResponse
+    public class LanguageResponse
     {
         public int Id { get; set; }
 

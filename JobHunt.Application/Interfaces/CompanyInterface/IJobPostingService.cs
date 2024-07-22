@@ -8,8 +8,6 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
     {
         Task CreateJob(CreateJobRequest model);
 
-        Task<JobDetails> GetJobDetails(int jobId);
-
         Task<EditJobDetailsResponse> GetEditJobDetails(int jobId);
 
         Task<PaginatedResponse> GetJobs(FilterJobRequest model);

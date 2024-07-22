@@ -1,6 +1,7 @@
 ﻿using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
 using JobHunt.Domain.DataModels.Request.UserRequest.JobApplication;
 using JobHunt.Domain.DataModels.Response.Company;
+using JobHunt.Domain.DataModels.Response.User.Dashboard;
 using JobHunt.Domain.DataModels.Response.User.JobApplication;
 using JobHunt.Domain.Entities;
 using JobHunt.Infrastructure.Interfaces;
@@ -70,22 +71,21 @@ namespace JobHunt.Infrastructure.Repositories
             return await _context.GetJobList.FromSqlRaw(sql, parameters).ToListAsync();
         }
 
-        public async Task<long> GetTotalCountOfFilter(int userId, JobListRequest model)
+        public async Task<List<HighestPaidJobsResponse>> HighestPaidJobs()
         {
-            var jobSkillsArray = model.Skills != null ? model.Skills.ToArray() : (object)DBNull.Value;
+            return await _context.HighestPaidJobsResponses.FromSqlRaw("SELECT * FROM user_highest_paid_jobs()").ToListAsync();
+        }
 
-            var parameter = new NpgsqlParameter[]
+        public async Task<List<HighestPaidJobsResponse>> UserSkilllsJobs(int userId)
+        {
+            var parameters = new NpgsqlParameter[]
             {
-                new("@ctc_start", NpgsqlDbType.Integer) { Value = model.CtcStart},
-                new("@ctc_end", NpgsqlDbType.Integer) { Value = model.CtcEnd},
-                new("@user_id", NpgsqlDbType.Integer) { Value = userId},
-                new("@skills", NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = jobSkillsArray },
-                new("@job_name", NpgsqlDbType.Varchar) { Value = model.JobName ?? (object)DBNull.Value }
+                new("@userId", NpgsqlDbType.Integer) { Value = userId }
             };
 
-            string sql = "SELECT * FROM public.get_pagination_filtered_jobs_count(@ctc_start, @ctc_end, @user_id, @skills, @job_name)";
+            string sql = "SELECT * FROM user_skills_jobs(@userId)";
 
-            return await _context.Database.ExecuteSqlRawAsync(sql, parameter);
+            return await _context.HighestPaidJobsResponses.FromSqlRaw(sql, parameters).ToListAsync();
         }
     }
 }

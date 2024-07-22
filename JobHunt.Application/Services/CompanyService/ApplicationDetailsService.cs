@@ -171,7 +171,6 @@ namespace JobHunt.Application.Services.CompanyService
 
         public async Task ScheduleInterview(InterviewDetailsRequest model)
         {
-
             if(model.InterviewDate < DateOnly.FromDateTime(DateTime.Now))
             {
                 throw new CustomException(Messages.EnterValidDate);
@@ -193,6 +192,13 @@ namespace JobHunt.Application.Services.CompanyService
                 Notes = "Shedule an Interview",
                 CreatedDate= DateTime.Now
             };
+
+            JobApplication? application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(x => x.Id == model.ApplicationId);
+
+            application.StatusId = (int)ApplicationStatuses.ScheduleInterview;
+            application.ModifiedDate = DateTime.Now;
+
+            _unitOfWork.JobApplication.UpdateAsync(application);
 
             await _unitOfWork.InterviewDetail.CreateAsync(interviewDetail);
             await _unitOfWork.ApplicationStatusLog.CreateAsync(log);

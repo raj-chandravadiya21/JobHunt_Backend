@@ -86,9 +86,6 @@ namespace JobHunt.Application.Services.CompanyService
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<JobDetails> GetJobDetails(int jobId)
-            => await _unitOfWork.Company.JobDetails(jobId);
-
         public async Task<EditJobDetailsResponse> GetEditJobDetails(int jobId)
             => await _unitOfWork.Job.GetJobDetails(jobId);
 

@@ -1,7 +1,11 @@
-﻿using JobHunt.Domain.Entities;
+﻿using JobHunt.Domain.DataModels.Response.Common;
+using JobHunt.Domain.Entities;
 using JobHunt.Domain.Interfaces;
 using JobHunt.Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
+using NpgsqlTypes;
 
 namespace JobHunt.Infrastructure.Repositories
 {
@@ -63,7 +67,7 @@ namespace JobHunt.Infrastructure.Repositories
         {
             await _context.SaveChangesAsync();
         }
-
+            
         public IUserRepository User { get; private set; }
 
         public ICompanyRepository Company { get; private set; }

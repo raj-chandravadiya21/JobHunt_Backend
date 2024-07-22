@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using JobHunt.Application.Interfaces;
+using JobHunt.Application.Interfaces.CommonInterface;
+using JobHunt.Application.Services.CommonServices;
 using JobHunt.Application.Interfaces.CompanyInterface;
 using JobHunt.Application.Interfaces.UserInterface;
 using JobHunt.Application.Services.CompanyService;
 using JobHunt.Application.Services.UserService;
-using JobHunt.Domain.DataModels.Response;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,8 @@ namespace JobHunt.Application.Services
             ApplicationService = new ApplicationService(_unitOfWork, _contextAccessor, _mapper);
             UserJobService = new UserJobService(_contextAccessor, _unitOfWork, _mapper);
             ApplicationDetailsService = new ApplicationDetailsService(_contextAccessor, _unitOfWork, _mapper);
+            UserDashboardService = new UserDashboardService(_unitOfWork, contextAccessor);
+            CommonService = new CommonService(_unitOfWork, _mapper);
         }
         public IAuthService AuthService { get; private set; }
 
@@ -51,5 +54,9 @@ namespace JobHunt.Application.Services
         public IUserJobService UserJobService { get; private set; }
 
         public IApplicationDetailsService ApplicationDetailsService { get; private set; }
+
+        public IUserDashboardService UserDashboardService { get; private set; }
+
+        public ICommonService CommonService { get; private set; }
     }
 }

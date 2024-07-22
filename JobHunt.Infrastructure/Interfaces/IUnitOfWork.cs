@@ -1,4 +1,6 @@
-﻿using JobHunt.Domain.Entities;
+﻿using JobHunt.Domain.DataModels.Response.Common;
+using JobHunt.Domain.DataModels.Response.User;
+using JobHunt.Domain.Entities;
 using JobHunt.Domain.Interfaces;
 
 namespace JobHunt.Infrastructure.Interfaces
