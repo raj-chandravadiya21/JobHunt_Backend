@@ -11,6 +11,7 @@ using JobHunt.Domain.DataModels.Request.CompanyRequest.ApplicationDetails;
 using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.Enum;
+using JobHunt.Domain.Resource;
 
 namespace JobHunt.Application.Services.CompanyService
 {
@@ -170,6 +171,16 @@ namespace JobHunt.Application.Services.CompanyService
 
         public async Task ScheduleInterview(InterviewDetailsRequest model)
         {
+            if(model.InterviewDate < DateOnly.FromDateTime(DateTime.Now))
+            {
+                throw new CustomException(Messages.EnterValidDate);
+            }
+
+            if(model.StartTime <= model.EndTime)
+            {
+                throw new CustomException(Messages.StartDateGreaterThenEndDate);
+            }
+
             InterviewDetail interviewDetail = _mapper.Map<InterviewDetail>(model);
 
             interviewDetail.CreatedDate = DateTime.Now;

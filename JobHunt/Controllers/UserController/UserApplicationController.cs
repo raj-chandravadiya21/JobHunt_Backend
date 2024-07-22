@@ -26,5 +26,20 @@ namespace JobHunt.Controllers.UserController
            var data =  await _serviceBundle.ApplicationService.UserApplication(model);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
+
+        [HttpGet("user-job-application/{jobApplicationId}")]
+        public async Task<IResult> UserJobApplication(int jobApplicationId)
+        {
+            var data = await _serviceBundle.ApplicationService.JobApplicationStatus(jobApplicationId);
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
+
+        [HttpGet("download-resume/{applicationId}")]
+        public async Task<IActionResult> DownloadResume(int applicationId)
+        {
+            var data = await _serviceBundle.ApplicationService.GetResume(applicationId);
+
+            return File(data.FileBytes!, data.ContentType!, data.FileName);
+        }
     }
 }

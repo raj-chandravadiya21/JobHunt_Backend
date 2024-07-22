@@ -38,6 +38,8 @@ namespace JobHunt.Domain.Helper
             CreateMap<GetJobListResponce, GetJobsResponse>().ReverseMap();
             CreateMap<JobSeekerDetailsResponse, JobSeekerDetailsModel>().ReverseMap();
             CreateMap<UserApplicationResponse, UserApplicationModel>().ReverseMap();
+            CreateMap<InterviewDetail, InterviewDetailsRequest>().ReverseMap();
+            CreateMap<ApplicationStatusModel, ApplicationStatusLog>().ReverseMap();
         }
     }
 }

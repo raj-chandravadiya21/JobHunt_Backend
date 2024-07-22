@@ -201,7 +201,7 @@ public partial class DefaultdbContext : DbContext
             entity.HasKey(e => e.CompanyId).HasName("company_pkey");
 
             entity.Property(e => e.CompanyId).UseIdentityAlwaysColumn();
-
+    
             entity.HasOne(d => d.Aspnetuser).WithMany(p => p.Companies)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("company_aspnetuser_id_fkey");
