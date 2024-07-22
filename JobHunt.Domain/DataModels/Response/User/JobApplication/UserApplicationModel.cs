@@ -2,6 +2,8 @@
 {
     public class UserApplicationModel
     {
+        public int ApplicationId { get; set; }
+
         public int JobId { get; set; }
 
         public string CompanyName { get; set; } = null!;
