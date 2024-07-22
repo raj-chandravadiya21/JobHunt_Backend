@@ -8,13 +8,12 @@ using JobHunt.Domain.Enum;
 using JobHunt.Domain.Helper;
 using JobHunt.Domain.Resource;
 using JobHunt.Infrastructure.Interfaces;
-using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Transactions;
 
 namespace JobHunt.Application.Services.UserService
 {
@@ -395,6 +394,52 @@ namespace JobHunt.Application.Services.UserService
             }
 
             return response;
+        }
+
+        public async Task<JobApplicationStatus> JobApplicationStatus(int jobApplicationId)
+        {
+            var jobApplication = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(u => u.Id == jobApplicationId);
+
+            List<ApplicationStatusModel> statusLog = _mapper.Map<List<ApplicationStatusModel>>(await _unitOfWork.ApplicationStatusLog.WhereList(u => u.ApplicationId == jobApplicationId));
+
+            JobApplicationStatus ApplicationStatusResponse = new()
+            {
+                JobApplicationId = jobApplicationId,
+                ApplicationStatusId = jobApplication!.StatusId,
+                ApplicationStatus = ((ApplicationStatuses)jobApplication!.StatusId).ToString(),
+                Description = jobApplication.Description,
+                StatusLog = statusLog,
+            };
+
+            if(jobApplication.StatusId >= (int)ApplicationStatuses.ScheduleInterview && jobApplication.StatusId != (int)ApplicationStatuses.Rejected)
+            {
+                var interview = await _unitOfWork.InterviewDetail.GetFirstOrDefaultAsync(u => u.ApplicationId == jobApplicationId);
+
+                ApplicationStatusResponse.InterviewDate = interview!.InterviewDate;
+                ApplicationStatusResponse.StartTime = interview!.StartTime;
+                ApplicationStatusResponse.EndTime = interview!.EndTime;
+            }
+
+            return ApplicationStatusResponse;
+        }
+
+        public async Task<ResumeResponse> GetResume(int applicationId)
+        {
+            var application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(u => u.Id == applicationId);
+
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var parentDirectory = Directory.GetParent(currentDirectory)?.FullName;
+            var filePath = Path.Combine(parentDirectory!, "JobHunt.Domain", "Resumes", application!.Resume!);
+
+            var fileBytes = await File.ReadAllBytesAsync(filePath);
+            var fileName = Path.GetFileName(filePath);
+
+            return new ResumeResponse
+            {
+                FileBytes = fileBytes,
+                ContentType = "application/octet-stream",
+                FileName = fileName,
+            };
         }
     }
 }

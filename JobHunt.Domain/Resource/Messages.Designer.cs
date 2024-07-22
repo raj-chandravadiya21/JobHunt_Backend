@@ -178,6 +178,15 @@ namespace JobHunt.Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter Valid Date .
+        /// </summary>
+        public static string EnterValidDate {
+            get {
+                return ResourceManager.GetString("EnterValidDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview.
         /// </summary>
         public static string Interview {
