@@ -71,7 +71,7 @@ namespace JobHunt.Controllers.Company
             return Results.Ok(ResponseHelper.SuccessResponse(new()));
         }
 
-        [HttpPost("get-interview-details")]
+        [HttpGet("get-interview-details/{applicationId}")]
         public async Task<IResult> GetInterviewDetails(int applicationId)
         {
             var data = await _serviceBundle.ApplicationDetailsService.GetInterviewDetails(applicationId);

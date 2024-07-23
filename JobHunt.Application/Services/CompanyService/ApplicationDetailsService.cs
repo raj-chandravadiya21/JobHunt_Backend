@@ -113,13 +113,13 @@ namespace JobHunt.Application.Services.CompanyService
             _unitOfWork.JobApplication.UpdateAsync(application);
             await _unitOfWork.SaveAsync();
 
-            ApplicationStatusLog log = new ApplicationStatusLog()
-            {
-                ApplicationId = model.ApplicationId,
-                StatusId = (int)ApplicationStatuses.Selected,
-                Notes = model.Notes,
-                CreatedDate = DateTime.Now,
-            };
+            ApplicationStatusLog log = new ApplicationStatusLog();
+            
+            log.ApplicationId = model.ApplicationId;
+            log.StatusId = (int)ApplicationStatuses.Selected;
+            log.CreatedDate = DateTime.Now;
+            log.Notes = model.Notes == null ? "-" : model.Notes;
+            
 
             await _unitOfWork.ApplicationStatusLog.CreateAsync(log);
             await _unitOfWork.SaveAsync();
@@ -135,13 +135,12 @@ namespace JobHunt.Application.Services.CompanyService
             _unitOfWork.JobApplication.UpdateAsync(application);
             await _unitOfWork.SaveAsync();
 
-            ApplicationStatusLog log = new ApplicationStatusLog()
-            {
-                ApplicationId = model.ApplicationId,
-                StatusId = (int)ApplicationStatuses.Rejected,
-                Notes = model.Notes,
-                CreatedDate = DateTime.Now,
-            };
+            ApplicationStatusLog log = new ApplicationStatusLog();
+            
+            log.ApplicationId = model.ApplicationId;
+            log.StatusId = (int)ApplicationStatuses.Rejected;
+            log.CreatedDate = DateTime.Now;
+            log.Notes = model.Notes == null ? "-" : model.Notes;
 
             await _unitOfWork.ApplicationStatusLog.CreateAsync(log);
             await _unitOfWork.SaveAsync();
@@ -157,13 +156,12 @@ namespace JobHunt.Application.Services.CompanyService
             _unitOfWork.JobApplication.UpdateAsync(application);
             await _unitOfWork.SaveAsync();
 
-            ApplicationStatusLog log = new ApplicationStatusLog()
-            {
-                ApplicationId = model.ApplicationId,
-                StatusId = (int)ApplicationStatuses.Interviewed,
-                Notes = model.Notes,
-                CreatedDate = DateTime.Now,
-            };
+            ApplicationStatusLog log = new ApplicationStatusLog();
+                
+            log.ApplicationId = model.ApplicationId;
+            log.StatusId = (int)ApplicationStatuses.Interviewed;
+            log.CreatedDate = DateTime.Now;
+            log.Notes = model.Notes == null ? "-" : model.Notes;
 
             await _unitOfWork.ApplicationStatusLog.CreateAsync(log);
             await _unitOfWork.SaveAsync();
@@ -185,13 +183,12 @@ namespace JobHunt.Application.Services.CompanyService
 
             interviewDetail.CreatedDate = DateTime.Now;
 
-            ApplicationStatusLog log = new()
-            {
-                ApplicationId = model.ApplicationId,
-                StatusId = (int)ApplicationStatuses.ScheduleInterview,
-                Notes = "Shedule an Interview",
-                CreatedDate= DateTime.Now
-            };
+            ApplicationStatusLog log = new();
+
+            log.ApplicationId = model.ApplicationId;
+            log.StatusId = (int)ApplicationStatuses.ScheduleInterview;
+            log.CreatedDate= DateTime.Now;
+            log.Notes = "Shedule an Interview";
 
             JobApplication? application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(x => x.Id == model.ApplicationId);
 
