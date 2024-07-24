@@ -41,6 +41,8 @@ namespace JobHunt.Domain.Helper
             CreateMap<UserApplicationResponse, UserApplicationModel>().ReverseMap();
             CreateMap<InterviewDetail, InterviewDetailsRequest>().ReverseMap();
             CreateMap<ApplicationStatusModel, ApplicationStatusLog>().ReverseMap();
+            CreateMap<ExpiredJobListResponse, Job>().ReverseMap();
+
         }
     }
 }

@@ -39,5 +39,12 @@ namespace JobHunt.Controllers.Company
             var data = await _serviceBundle.JobPostingService.GetJobs(model);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
+
+        [HttpGet("get-expired-jobs")]
+        public async Task<IResult> GetExpiredJobs()
+        {
+            var data = await _serviceBundle.JobPostingService.GetExpiredJobList();
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
     }
 }
