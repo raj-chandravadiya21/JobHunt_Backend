@@ -56,6 +56,9 @@ public partial class Job
     [StringLength(5000)]
     public string Requirements { get; set; } = null!;
 
+    [Column("is_deleted")]
+    public bool? IsDeleted { get; set; }
+
     [ForeignKey("CompanyId")]
     [InverseProperty("Jobs")]
     public virtual Company Company { get; set; } = null!;
