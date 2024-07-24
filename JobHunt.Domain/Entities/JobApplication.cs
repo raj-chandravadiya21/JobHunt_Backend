@@ -39,6 +39,9 @@ public partial class JobApplication
     [InverseProperty("Application")]
     public virtual ICollection<ApplicationStatusLog> ApplicationStatusLogs { get; set; } = new List<ApplicationStatusLog>();
 
+    [InverseProperty("JobApplication")]
+    public virtual ICollection<Conversation> Conversations { get; set; } = new List<Conversation>();
+
     [InverseProperty("Application")]
     public virtual ICollection<InterviewDetail> InterviewDetails { get; set; } = new List<InterviewDetail>();
 

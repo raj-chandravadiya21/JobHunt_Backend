@@ -36,6 +36,8 @@ namespace JobHunt.Infrastructure.Repositories
             JobApplication = new JobApplicationRepository(_context);
             ApplicationStatusLog = new Repository<ApplicationStatusLog>(_context);
             InterviewDetail = new Repository<InterviewDetail>(_context);
+            Message = new MessageRepository(_context);
+            Conversation = new Repository<Conversation>(_context);
         }
         public IRepository<Aspnetuser> AspNetUser { get; private set; }
 
@@ -63,6 +65,8 @@ namespace JobHunt.Infrastructure.Repositories
 
         public IRepository<InterviewDetail> InterviewDetail { get; private set; }
 
+        public IRepository<Conversation> Conversation { get; private set; }
+
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
@@ -81,5 +85,7 @@ namespace JobHunt.Infrastructure.Repositories
         public IJobApplicationRepository JobApplication { get; private set; }
         
         public IUserEducationRepository UserEducation { get; private set; } 
+
+        public IMessageRepository Message { get; private set; }
     }
 }

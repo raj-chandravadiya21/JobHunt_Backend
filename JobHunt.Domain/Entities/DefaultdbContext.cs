@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using JobHunt.Domain.DataModels.Response.Common;
 using JobHunt.Domain.DataModels.Response.Company.ApplicationDetails;
 using JobHunt.Domain.DataModels.Response.Company;
+using JobHunt.Domain.DataModels.Response.User.Dashboard;
 using JobHunt.Domain.DataModels.Response.User.JobApplication;
 using JobHunt.Domain.DataModels.Response.User;
 using Microsoft.EntityFrameworkCore;
-using JobHunt.Domain.DataModels.Response.User.Dashboard;
-using JobHunt.Domain.DataModels.Response.Common;
+using JobHunt.Domain.DataModels.Response.Chat;
 
 namespace JobHunt.Domain.Entities;
 
@@ -31,6 +32,8 @@ public partial class DefaultdbContext : DbContext
 
     public virtual DbSet<Company> Companies { get; set; }
 
+    public virtual DbSet<Conversation> Conversations { get; set; }
+
     public virtual DbSet<DegreeType> DegreeTypes { get; set; }
 
     public virtual DbSet<EmailLog> EmailLogs { get; set; }
@@ -48,6 +51,8 @@ public partial class DefaultdbContext : DbContext
     public virtual DbSet<JobSkill> JobSkills { get; set; }
 
     public virtual DbSet<Language> Languages { get; set; }
+
+    public virtual DbSet<Message> Messages { get; set; }
 
     public virtual DbSet<OtpRecord> OtpRecords { get; set; }
 
@@ -93,12 +98,23 @@ public partial class DefaultdbContext : DbContext
 
     public virtual DbSet<JobHuntStatistics> JobHuntStatistics { get; set; }
 
+    public virtual DbSet<ChatModel> ChatModel { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseNpgsql("Host=test-pateldemo979-2f5a.f.aivencloud.com;Port=24996;Database=defaultdb;Username=avnadmin;Password=AVNS_f8q4IBOurtCLjsuwOsq");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ChatModel>(entity =>
+        {
+            entity.HasNoKey();
+        });
+
+        modelBuilder.Entity<MessageModel>(entity =>
+        {
+            entity.HasNoKey();
+        });
 
         modelBuilder.Entity<JobHuntStatistics>(entity =>
         {
@@ -201,10 +217,29 @@ public partial class DefaultdbContext : DbContext
             entity.HasKey(e => e.CompanyId).HasName("company_pkey");
 
             entity.Property(e => e.CompanyId).UseIdentityAlwaysColumn();
-    
+
             entity.HasOne(d => d.Aspnetuser).WithMany(p => p.Companies)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("company_aspnetuser_id_fkey");
+        });
+
+        modelBuilder.Entity<Conversation>(entity =>
+        {
+            entity.HasKey(e => e.ConversationId).HasName("conversation_pkey");
+
+            entity.Property(e => e.ConversationId).UseIdentityAlwaysColumn();
+
+            entity.HasOne(d => d.Company).WithMany(p => p.ConversationCompanies)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("conversation_company_id_fkey");
+
+            entity.HasOne(d => d.JobApplication).WithMany(p => p.Conversations)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("conversation_job_application_id_fkey");
+
+            entity.HasOne(d => d.User).WithMany(p => p.ConversationUsers)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("conversation_user_id_fkey");
         });
 
         modelBuilder.Entity<DegreeType>(entity =>
@@ -304,6 +339,21 @@ public partial class DefaultdbContext : DbContext
             entity.HasKey(e => e.Id).HasName("language_pkey");
 
             entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+        });
+
+        modelBuilder.Entity<Message>(entity =>
+        {
+            entity.HasKey(e => e.MessageId).HasName("Message_pkey");
+
+            entity.Property(e => e.MessageId).UseIdentityAlwaysColumn();
+
+            entity.HasOne(d => d.Conversation).WithMany(p => p.Messages)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Message_conversation_id_fkey");
+
+            entity.HasOne(d => d.Sender).WithMany(p => p.Messages)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Message_sender_id_fkey");
         });
 
         modelBuilder.Entity<OtpRecord>(entity =>

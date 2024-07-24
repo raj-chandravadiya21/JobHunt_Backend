@@ -46,6 +46,15 @@ public partial class Aspnetuser
     [InverseProperty("Aspnetuser")]
     public virtual ICollection<Company> Companies { get; set; } = new List<Company>();
 
+    [InverseProperty("Company")]
+    public virtual ICollection<Conversation> ConversationCompanies { get; set; } = new List<Conversation>();
+
+    [InverseProperty("User")]
+    public virtual ICollection<Conversation> ConversationUsers { get; set; } = new List<Conversation>();
+
+    [InverseProperty("Sender")]
+    public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+
     [ForeignKey("RoleId")]
     [InverseProperty("Aspnetusers")]
     public virtual Roleset? Role { get; set; }
