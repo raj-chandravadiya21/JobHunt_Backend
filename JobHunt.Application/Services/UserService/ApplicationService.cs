@@ -98,6 +98,23 @@ namespace JobHunt.Application.Services.UserService
                 _unitOfWork.JobApplication.UpdateAsync(jobApplication);
                 await _unitOfWork.SaveAsync();
             }
+
+            var aspnetUserId = GetUserId();
+
+            var job = await _unitOfWork.Job.GetFirstOrDefaultAsync(u => u.Id == model.JobId);
+
+            var company = await _unitOfWork.Company.GetFirstOrDefaultAsync(u => u.CompanyId == job.CompanyId);
+
+            Conversation conversation = new()
+            {
+                UserId = int.Parse(aspnetUserId),
+                CompanyId = company.AspnetuserId,
+                CreatedDate = DateTime.Now,
+                JobApplicationId = jobApplication.Id
+            };
+
+            await _unitOfWork.Conversation.CreateAsync(conversation);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task GenerateResume(int userId, int jobApplicationId, string currentTime)

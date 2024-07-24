@@ -8,10 +8,8 @@ using JobHunt.Application.Services.CompanyService;
 using JobHunt.Application.Services.UserService;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.Extensions.Configuration;
-using System.ComponentModel.DataAnnotations;
+using JobHunt.Application.Interfaces.ChatInterface;
+using JobHunt.Application.Services.ChatService;
 
 namespace JobHunt.Application.Services
 {
@@ -36,8 +34,9 @@ namespace JobHunt.Application.Services
             ApplicationService = new ApplicationService(_unitOfWork, _contextAccessor, _mapper);
             UserJobService = new UserJobService(_contextAccessor, _unitOfWork, _mapper);
             ApplicationDetailsService = new ApplicationDetailsService(_contextAccessor, _unitOfWork, _mapper);
-            UserDashboardService = new UserDashboardService(_unitOfWork, contextAccessor);
+            UserDashboardService = new UserDashboardService(_unitOfWork, _contextAccessor);
             CommonService = new CommonService(_unitOfWork, _mapper);
+            ChatService = new ChatServices(_unitOfWork);
         }
         public IAuthService AuthService { get; private set; }
 
@@ -58,5 +57,7 @@ namespace JobHunt.Application.Services
         public IUserDashboardService UserDashboardService { get; private set; }
 
         public ICommonService CommonService { get; private set; }
+
+        public IChatService ChatService { get; private set; }
     }
 }

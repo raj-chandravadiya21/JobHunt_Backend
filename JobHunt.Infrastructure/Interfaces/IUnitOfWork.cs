@@ -33,6 +33,8 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public IRepository<InterviewDetail> InterviewDetail { get; }
 
+        public IRepository<Conversation> Conversation { get; }
+
         Task SaveAsync();
 
         public IUserRepository User { get; }
@@ -48,5 +50,7 @@ namespace JobHunt.Infrastructure.Interfaces
         public IJobApplicationRepository JobApplication { get; }
 
         public IUserEducationRepository UserEducation { get; }
+
+        public IMessageRepository Message { get; }
     }
 }

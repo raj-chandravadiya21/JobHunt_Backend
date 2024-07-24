@@ -1,4 +1,5 @@
-﻿using JobHunt.Application.Interfaces.CommonInterface;
+﻿using JobHunt.Application.Interfaces.ChatInterface;
+using JobHunt.Application.Interfaces.CommonInterface;
 using JobHunt.Application.Interfaces.CompanyInterface;
 using JobHunt.Application.Interfaces.UserInterface;
 
@@ -25,5 +26,7 @@ namespace JobHunt.Application.Interfaces
         public IUserDashboardService UserDashboardService { get; }
 
         public ICommonService CommonService { get; }
+
+        public IChatService ChatService { get; }
     }
 }
