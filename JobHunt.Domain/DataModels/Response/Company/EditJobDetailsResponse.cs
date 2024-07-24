@@ -4,11 +4,11 @@
     {
         public int JobId { get; set; }
 
-        public string JobName { get; set; } = null!;
+        public string Name { get; set; } = null!;
 
         public string Location { get; set; } = null!;
 
-        public DateOnly StartDate { get; set; } 
+        public DateOnly JobStartDate { get; set; } 
 
         public int CtcStart {  get; set; }
 
@@ -16,19 +16,19 @@
 
         public Double Experience { get; set; }
 
-        public DateOnly LastDateToApply { get; set; }   
+        public DateOnly LastDate { get; set; }   
 
         public int NoOfOpening {  get; set; }
 
-        public string JobDescription { get; set; } = null!;
+        public string Description { get; set; } = null!;
 
-        public string JobRequirements { get; set; } = null!;
+        public string Requirement { get; set; } = null!;
 
-        public List<string> JobPerks { get; set; } = null!;
+        public List<string> Perks { get; set; } = null!;
 
-        public List<string> JobResponsibility { get; set; } = null!;
+        public List<string> Responsibility { get; set; } = null!;
 
-        public List<int> JobSkill { get; set; } = null!;
+        public List<int> Skills { get; set; } = null!;
 
     }
 }

@@ -149,12 +149,13 @@ namespace JobHunt.Application.Services.UserService
 
             UserDetailsModel model = new UserDetailsModel();
 
+            model.FirstName = user!.FirstName;
+            model.LastName = user.LastName;
+            model.EmailId = user.Email;
+
             if (aspnetuser.IsRegistered)
             {
-                    model.FirstName = user!.FirstName;
-                    model.LastName = user.LastName;
-                    model.EmailId = user.Email;
-                    model.IsRegistered = true;
+                model.IsRegistered = true;
             }
             else
             {

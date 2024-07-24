@@ -15,5 +15,7 @@ namespace JobHunt.Domain.DataModels.Response.Company.ApplicationDetails
         public TimeOnly? StartTime { get; set; }
 
         public TimeOnly? EndTime { get; set; }
+
+        public string Notes { get; set; } = "-";
     }
 }

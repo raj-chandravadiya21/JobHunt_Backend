@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting
 
         public DateOnly LastDate { get; set; }
 
+        [RegularExpression(@"^[1-9]\d*$", ErrorMessage = "Openings must be greater than 0")]
         public int NoOfOpening { get; set; }
 
         public string? Description { get; set; }

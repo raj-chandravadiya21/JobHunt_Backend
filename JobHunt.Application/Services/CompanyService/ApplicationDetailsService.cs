@@ -188,7 +188,7 @@ namespace JobHunt.Application.Services.CompanyService
             log.ApplicationId = model.ApplicationId;
             log.StatusId = (int)ApplicationStatuses.ScheduleInterview;
             log.CreatedDate= DateTime.Now;
-            log.Notes = "Shedule an Interview";
+            log.Notes = model.Notes == null ? "-" : model.Notes;
 
             JobApplication? application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(x => x.Id == model.ApplicationId);
 
@@ -205,13 +205,15 @@ namespace JobHunt.Application.Services.CompanyService
         public async Task<InterviewDetailsReponse> GetInterviewDetails(int applicationId)
         {
             InterviewDetail? interviewDetail = await _unitOfWork.InterviewDetail.GetFirstOrDefaultAsync(x => x.ApplicationId == applicationId);
+            ApplicationStatusLog? log = await _unitOfWork.ApplicationStatusLog.GetFirstOrDefault(x => x.ApplicationId == applicationId && x.StatusId == (int)ApplicationStatuses.ScheduleInterview);
 
             InterviewDetailsReponse interviewDetailsReponse = new()
             {
                 EndTime = interviewDetail.EndTime,
                 StartTime = interviewDetail.StartTime,
                 Location = interviewDetail.Location,
-                InterviewDate = interviewDetail.InterviewDate
+                InterviewDate = interviewDetail.InterviewDate,
+                Notes = log.Notes
             };
 
             return interviewDetailsReponse;
@@ -228,6 +230,13 @@ namespace JobHunt.Application.Services.CompanyService
             details.ModifiedDate = DateTime.Now;
 
             _unitOfWork.InterviewDetail.UpdateAsync(details);
+            await _unitOfWork.SaveAsync();
+
+            ApplicationStatusLog? log = await _unitOfWork.ApplicationStatusLog.GetFirstOrDefault(x => x.ApplicationId == model.ApplicationId && x.StatusId == (int)ApplicationStatuses.ScheduleInterview);
+
+            log.Notes = model.Notes;
+
+            _unitOfWork.ApplicationStatusLog.UpdateAsync(log);
             await _unitOfWork.SaveAsync();
         }
     }
