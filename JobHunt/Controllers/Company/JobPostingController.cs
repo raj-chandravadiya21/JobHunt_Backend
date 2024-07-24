@@ -33,6 +33,13 @@ namespace JobHunt.Controllers.Company
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
+        [HttpPost("update-job-details")]
+        public async Task<IResult> UpdateJobDetails([FromBody] UpdateJobRequest model)
+        {
+            await _serviceBundle.JobPostingService.UpdateJobDetails(model);
+            return Results.Ok(ResponseHelper.SuccessResponse(new(), string.Format(Messages.UpdateSuccessfully, Messages.Job)));
+        }
+
         [HttpPost("get-jobs")]
         public async Task<IResult> GetJobs([FromBody] FilterJobRequest model)
         {

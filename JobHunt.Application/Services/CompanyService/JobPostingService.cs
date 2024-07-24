@@ -89,6 +89,93 @@ namespace JobHunt.Application.Services.CompanyService
         public async Task<EditJobDetailsResponse> GetEditJobDetails(int jobId)
             => await _unitOfWork.Job.GetJobDetails(jobId);
 
+        public async Task UpdateJobDetails(UpdateJobRequest model)
+        {
+            var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
+
+            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
+            if (!isValidToken)
+            {
+                throw new CustomException("User is not valid");
+            }
+
+            var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
+
+            Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
+
+            List<JobSkill> oldSkillsList = await _unitOfWork.JobSkill.WhereList(x => x.JobId == model.JobId);
+
+            List<JobResponsibility> JobResponsibilities = await _unitOfWork.JobResponsibility.WhereList(x=>x.JobId == model.JobId);
+
+            List<JobPerk> JobPerks = await _unitOfWork.JobPerks.WhereList(x => x.JobId == model.JobId);
+
+            for (int i = 0; i < oldSkillsList.Count; i++)
+            {                
+                _unitOfWork.JobSkill.Remove(oldSkillsList[i]);
+            }
+
+            for (int i = 0; i < JobResponsibilities.Count; i++)
+            {
+                _unitOfWork.JobResponsibility.Remove(JobResponsibilities[i]);
+            }
+
+            for (int i = 0; i < JobPerks.Count; i++)
+            {
+                _unitOfWork.JobPerks.Remove(JobPerks[i]);
+            }
+            await _unitOfWork.SaveAsync();
+
+            Job? job = await _unitOfWork.Job.GetFirstOrDefault(x => x.Id == model.JobId);
+
+            job.CompanyId = company.CompanyId;
+            job.JobName = model.Name;
+            job.Location = model.Location;
+            job.StartDate = model.JobStartDate;
+            job.CtcStart = model.CTCStart;
+            job.CtcEnd = model.CTCEnd;
+            job.ExperienceInYears = (int)model.Experience;
+            job.LastDateToApply = model.LastDate;
+            job.NoOfOpenings = model.NoOfOpening;
+            job.JobDescription = model.Description;
+            job.Requirements = model.Requirement;
+            job.CreatedDate = DateTime.Now;
+
+            _unitOfWork.Job.UpdateAsync(job);
+            await _unitOfWork.SaveAsync();
+
+            for (int i = 0; i < model.Skills.Count; i++)
+            {
+                JobSkill jobSkill = new()
+                {
+                    JobId = job.Id,
+                    SkillId = model.Skills[i]
+                };
+                await _unitOfWork.JobSkill.CreateAsync(jobSkill);
+            }
+
+            for (int i = 0; i < model.Responsibility.Count; i++)
+            {
+                JobResponsibility jobResponsibility = new()
+                {
+                    JobId = job.Id,
+                    Responsibility = model.Responsibility[i]
+                };
+                await _unitOfWork.JobResponsibility.CreateAsync(jobResponsibility);
+            }
+
+            for (int i = 0; i < model.Perks.Count; i++)
+            {
+                JobPerk jobPerks = new()
+                {
+                    JobId = job.Id,
+                    Perks = model.Perks[i]
+                };
+                await _unitOfWork.JobPerks.CreateAsync(jobPerks);
+            }
+
+            await _unitOfWork.SaveAsync();
+        }
+
         public async Task<PaginatedResponse> GetJobs(FilterJobRequest model)
         {
             var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
