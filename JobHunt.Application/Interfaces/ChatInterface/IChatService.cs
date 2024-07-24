@@ -1,0 +1,9 @@
+﻿using JobHunt.Domain.DataModels.Response.Chat;
+
+namespace JobHunt.Application.Interfaces.ChatInterface
+{
+    public interface IChatService
+    {
+        Task<ChatResponse> GetMessage(int conversatioId);
+    }
+}
