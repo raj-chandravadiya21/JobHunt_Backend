@@ -13,5 +13,7 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
         Task<PaginatedResponse> GetJobs(FilterJobRequest model);
 
         Task<List<ExpiredJobListResponse>> GetExpiredJobList();
+
+        Task<List<ExpiredJobListResponse>> GetClosedJobList();
     }   
 }

@@ -19,5 +19,7 @@ namespace JobHunt.Domain.DataModels.Response.Company
         public int CtcEnd { get; set; }
 
         public DateOnly LastDateToApply { get; set; }
+
+        public DateOnly CloseDate { get; set; }
     }
 }

@@ -59,6 +59,9 @@ public partial class Job
     [Column("is_deleted")]
     public bool? IsDeleted { get; set; }
 
+    [Column("close_date")]
+    public DateOnly? CloseDate { get; set; }
+
     [ForeignKey("CompanyId")]
     [InverseProperty("Jobs")]
     public virtual Company Company { get; set; } = null!;

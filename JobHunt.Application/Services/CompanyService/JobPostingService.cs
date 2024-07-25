@@ -134,11 +134,30 @@ namespace JobHunt.Application.Services.CompanyService
 
             var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
-            var ghfhfh = DateOnly.FromDateTime(DateTime.Now);
-
             Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
 
             List<Job>? job = await _unitOfWork.Job.WhereList(x => x.CompanyId == company.CompanyId && x.LastDateToApply < DateOnly.FromDateTime(DateTime.Now));
+
+            List<ExpiredJobListResponse> data = _mapper.Map<List<ExpiredJobListResponse>>(job);
+
+            return data;
+        }
+        
+        public async Task<List<ExpiredJobListResponse>> GetClosedJobList()
+        {
+            var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
+
+            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
+            if (!isValidToken)
+            {
+                throw new CustomException("User is not valid");
+            }
+
+            var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
+
+            Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
+
+            List<Job>? job = await _unitOfWork.Job.WhereList(x => x.CompanyId == company.CompanyId && x.IsDeleted == true);
 
             List<ExpiredJobListResponse> data = _mapper.Map<List<ExpiredJobListResponse>>(job);
 
