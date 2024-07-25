@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JobHunt.Domain.DataModels.Response.Chat;
 using JobHunt.Domain.DataModels.Response.Common;
 using JobHunt.Domain.DataModels.Response.Company.ApplicationDetails;
 using JobHunt.Domain.DataModels.Response.Company;
@@ -7,7 +8,6 @@ using JobHunt.Domain.DataModels.Response.User.Dashboard;
 using JobHunt.Domain.DataModels.Response.User.JobApplication;
 using JobHunt.Domain.DataModels.Response.User;
 using Microsoft.EntityFrameworkCore;
-using JobHunt.Domain.DataModels.Response.Chat;
 
 namespace JobHunt.Domain.Entities;
 
@@ -111,11 +111,6 @@ public partial class DefaultdbContext : DbContext
             entity.HasNoKey();
         });
 
-        modelBuilder.Entity<MessageModel>(entity =>
-        {
-            entity.HasNoKey();
-        });
-
         modelBuilder.Entity<JobHuntStatistics>(entity =>
         {
             entity.HasNoKey();
@@ -164,6 +159,7 @@ public partial class DefaultdbContext : DbContext
         {
             entity.HasNoKey();
         });
+
         modelBuilder.Entity<JobSeekerDetailsResponse>(entity =>
         {
             entity.HasNoKey();
@@ -272,6 +268,7 @@ public partial class DefaultdbContext : DbContext
             entity.HasKey(e => e.Id).HasName("job_pkey");
 
             entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
 
             entity.HasOne(d => d.Company).WithMany(p => p.Jobs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
