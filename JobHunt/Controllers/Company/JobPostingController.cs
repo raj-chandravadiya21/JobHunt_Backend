@@ -61,11 +61,18 @@ namespace JobHunt.Controllers.Company
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
-        [HttpPost("close-jobs")]
+        [HttpPost("close-jobs/{jobId}")]
         public async Task<IResult> CloseJob(int jobId)
         {
             await _serviceBundle.JobPostingService.CloseJob(jobId);
             return Results.Ok(ResponseHelper.SuccessResponse(new(), string.Format(Messages.DeleteSuccessfully, Messages.Job)));
+        }
+
+        [HttpPost("update-expired-job/{jobId},{lastDate}")]
+        public async Task<IResult> UpdateExpiredJob(int jobId, DateOnly lastDate)
+        {
+            await _serviceBundle.JobPostingService.UpdateExpiredJob(jobId, lastDate);
+            return Results.Ok(ResponseHelper.SuccessResponse(new(), string.Format(Messages.UpdateSuccessfully, Messages.Job)));
         }
     }
 }

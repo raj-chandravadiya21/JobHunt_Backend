@@ -253,22 +253,22 @@ namespace JobHunt.Application.Services.CompanyService
 
         public async Task CloseJob(int jobId)
         {
-            var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
-
-            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
-            if (!isValidToken)
-            {
-                throw new CustomException("User is not valid");
-            }
-
-            var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
-
-            Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
-
             Job? job = await _unitOfWork.Job.GetFirstOrDefaultAsync(x => x.Id == jobId);
 
             job.IsDeleted = true;
             job.CloseDate = DateOnly.FromDateTime(DateTime.Now);
+            job.ModifyDate = DateTime.Now;
+
+            _unitOfWork.Job.UpdateAsync(job);
+            await _unitOfWork.SaveAsync();
+        }
+
+        public async Task UpdateExpiredJob(int jobId, DateOnly lastDate)
+        {
+            Job? job = await _unitOfWork.Job.GetFirstOrDefaultAsync(x => x.Id == jobId);
+
+            job.LastDateToApply = lastDate;
+            job.ModifyDate = DateTime.Now;
 
             _unitOfWork.Job.UpdateAsync(job);
             await _unitOfWork.SaveAsync();

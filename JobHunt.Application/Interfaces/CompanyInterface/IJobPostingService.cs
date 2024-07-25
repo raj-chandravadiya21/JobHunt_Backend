@@ -19,5 +19,7 @@ namespace JobHunt.Application.Interfaces.CompanyInterface
         Task<List<ExpiredJobListResponse>> GetClosedJobList();
 
         Task CloseJob(int jobId);
+
+        Task UpdateExpiredJob(int jobId, DateOnly lastDate);
     }   
 }
