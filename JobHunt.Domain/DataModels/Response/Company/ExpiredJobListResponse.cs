@@ -10,9 +10,9 @@ namespace JobHunt.Domain.DataModels.Response.Company
     {
         public int Id { get; set; }
 
-        public string JobName { get; set; }
+        public string JobName { get; set; } = string.Empty;
 
-        public string Location { get; set; }    
+        public string Location { get; set; } = string.Empty;
 
         public int CtcStart { get; set; }
 

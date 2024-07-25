@@ -55,10 +55,17 @@ namespace JobHunt.Controllers.Company
         }
 
         [HttpGet("get-closed-jobs")]
-        public async Task<IResult> GetlosedJobs()
+        public async Task<IResult> GetClosedJobs()
         {
             var data = await _serviceBundle.JobPostingService.GetClosedJobList();
             return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
+
+        [HttpPost("close-jobs")]
+        public async Task<IResult> CloseJob(int jobId)
+        {
+            await _serviceBundle.JobPostingService.CloseJob(jobId);
+            return Results.Ok(ResponseHelper.SuccessResponse(new(), string.Format(Messages.DeleteSuccessfully, Messages.Job)));
         }
     }
 }
