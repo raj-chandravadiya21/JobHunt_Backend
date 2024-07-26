@@ -2,7 +2,7 @@
 using JobHunt.Domain.Entities;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
+using Npgsql;   
 
 namespace JobHunt.Infrastructure.Repositories
 {

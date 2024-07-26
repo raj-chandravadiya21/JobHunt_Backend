@@ -11,6 +11,7 @@ using JobHunt.Application.Services.HostHelper;
 using Serilog;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using JobHunt.Application.ChatHub;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,6 +83,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //MAPPER CONNECTION
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 LogHelper.SetLogger(app.Logger);
@@ -98,7 +101,7 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseCors("AllowSpecificOrigin");
-
+app.MapHub<ChatHub>("/chathub");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

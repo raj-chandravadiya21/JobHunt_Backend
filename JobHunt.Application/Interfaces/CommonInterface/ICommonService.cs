@@ -1,4 +1,5 @@
 ﻿using JobHunt.Domain.DataModels.Response.Common;
+using JobHunt.Domain.DataModels.Response.User.JobApplication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,7 @@ namespace JobHunt.Application.Interfaces.CommonInterface
         Task<List<LanguageResponse>> GetAllLanguage();
 
         Task<JobHuntStatistics> Statistics();
+
+        Task<ResumeResponse> GetResume(int applicationId);
     }
 }

@@ -5,5 +5,7 @@ namespace JobHunt.Application.Interfaces.IHostHelper
     public interface IHostHelper 
     {
         Task SendDailyNotification();
+
+        Task SendEmailForUnseenMessages();
     }
 }

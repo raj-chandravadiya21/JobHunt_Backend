@@ -78,5 +78,20 @@ namespace JobHunt.Application.Services
             return htmlBody;
         }
 
+        public async Task SendUnseenMessageNotification(double messageCount, string name, string email)
+        {
+            var subject = "You've Got a New Message!";
+
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var parentDirectory = Directory.GetParent(currentDirectory)?.FullName;
+            var filePath = Path.Combine(parentDirectory!, "JobHunt.Domain", "EmailTemplate", "unseen_notification.html");
+
+            var htmlTemplate = ReadHtmlTemplateFromFile(filePath);
+
+            var htmlBody = htmlTemplate.Replace("{{message_count}}", messageCount.ToString()).Replace("{{name}}", name);
+
+            await SendEmailAsync(email, subject, htmlBody);
+        }
+
     }
 }

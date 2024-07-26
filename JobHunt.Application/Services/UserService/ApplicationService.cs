@@ -439,24 +439,5 @@ namespace JobHunt.Application.Services.UserService
 
             return ApplicationStatusResponse;
         }
-
-        public async Task<ResumeResponse> GetResume(int applicationId)
-        {
-            var application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(u => u.Id == applicationId);
-
-            var currentDirectory = Directory.GetCurrentDirectory();
-            var parentDirectory = Directory.GetParent(currentDirectory)?.FullName;
-            var filePath = Path.Combine(parentDirectory!, "JobHunt.Domain", "Resumes", application!.Resume!);
-
-            var fileBytes = await File.ReadAllBytesAsync(filePath);
-            var fileName = Path.GetFileName(filePath);
-
-            return new ResumeResponse
-            {
-                FileBytes = fileBytes,
-                ContentType = "application/octet-stream",
-                FileName = fileName,
-            };
-        }
     }
 }

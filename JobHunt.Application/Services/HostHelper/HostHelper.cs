@@ -1,8 +1,9 @@
 ﻿using JobHunt.Application.Interfaces;
 using JobHunt.Application.Interfaces.IHostHelper;
+using JobHunt.Domain.DataModels.Response.Chat;
+using JobHunt.Domain.Entities;
 using JobHunt.Domain.Enum;
 using JobHunt.Infrastructure.Interfaces;
-using JobHunt.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JobHunt.Application.Services.HostHelper
@@ -23,6 +24,36 @@ namespace JobHunt.Application.Services.HostHelper
             foreach (var email in emails)
             {
                 await _emailSender.DailyNotificationEmail(email);
+            }
+        }
+
+        public async Task SendEmailForUnseenMessages()
+        {
+            using var scope =  _serviceProvider.CreateScope();
+            var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+
+            List<UnseenChatModel> unseenMessage = await unitOfWork.Message.GetUnseenMessages();
+
+            if(unseenMessage == null)
+            {
+                return;
+            }
+
+            foreach(var message in unseenMessage)
+            {
+                string name = message.JobName == null ? message.SenderName : $"{message.SenderName} For {message.JobName}";
+
+                await _emailSender.SendUnseenMessageNotification(message.MessageCount, name, message.RecipientEmail);
+
+                var notifications = message.MessageIds!.Select(messageId => new MessageNotification
+                {
+                    MessageId = messageId,
+                    AspnetuserId = message.RecipientId,
+                    SentDate = DateTime.Now
+                }).ToList();
+
+                await unitOfWork.MessageNotification.AddRangeAsync(notifications);
+                await unitOfWork.SaveAsync();
             }
         }
     }
