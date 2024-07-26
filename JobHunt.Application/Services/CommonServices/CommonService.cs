@@ -10,6 +10,7 @@ using static System.Net.WebRequestMethods;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using JobHunt.Domain.Enum;
+using JobHunt.Domain.DataModels.Response.User.JobApplication;
 
 namespace JobHunt.Application.Services.CommonServices
 {
@@ -40,6 +41,25 @@ namespace JobHunt.Application.Services.CommonServices
             model.PlacedUsers = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Selected);
 
             return model;
+        }
+
+        public async Task<ResumeResponse> GetResume(int applicationId)
+        {
+            var application = await _unitOfWork.JobApplication.GetFirstOrDefaultAsync(u => u.Id == applicationId);
+
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var parentDirectory = Directory.GetParent(currentDirectory)?.FullName;
+            var filePath = Path.Combine(parentDirectory!, "JobHunt.Domain", "Resumes", application!.Resume!);
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            var fileName = Path.GetFileName(filePath);
+
+            return new ResumeResponse
+            {
+                FileBytes = fileBytes,
+                ContentType = "application/octet-stream",
+                FileName = fileName,
+            };
         }
     }
 }

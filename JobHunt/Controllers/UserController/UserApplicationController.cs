@@ -33,13 +33,5 @@ namespace JobHunt.Controllers.UserController
             var data = await _serviceBundle.ApplicationService.JobApplicationStatus(jobApplicationId);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
-
-        [HttpGet("download-resume/{applicationId}")]
-        public async Task<IActionResult> DownloadResume(int applicationId)
-        {
-            var data = await _serviceBundle.ApplicationService.GetResume(applicationId);
-
-            return File(data.FileBytes!, data.ContentType!, data.FileName);
-        }
     }
 }

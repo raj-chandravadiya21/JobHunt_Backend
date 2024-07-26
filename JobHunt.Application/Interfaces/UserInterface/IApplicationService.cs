@@ -11,7 +11,5 @@ namespace JobHunt.Application.Interfaces.UserInterface
         Task<PaginatedResponse> UserApplication(UserApplicationsRequest model);
 
         Task<JobApplicationStatus> JobApplicationStatus(int jobApplicationId);
-
-        Task<ResumeResponse> GetResume(int applicationId);
     }
 }

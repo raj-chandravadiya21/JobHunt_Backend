@@ -52,6 +52,9 @@ public partial class Aspnetuser
     [InverseProperty("User")]
     public virtual ICollection<Conversation> ConversationUsers { get; set; } = new List<Conversation>();
 
+    [InverseProperty("Aspnetuser")]
+    public virtual ICollection<MessageNotification> MessageNotifications { get; set; } = new List<MessageNotification>();
+
     [InverseProperty("Sender")]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
 

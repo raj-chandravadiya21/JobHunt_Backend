@@ -203,7 +203,7 @@ namespace JobHunt.Application.Services.UserService
         {
             var user = await _unitOfWork.User.GetFirstOrDefaultAsync(u => u.AspnetuserId.ToString() == GetUserId());
 
-            var userEducation = await _unitOfWork.UserEducation.GetFirstOrDefaultAsync(u => u.DegreeId == id && u.UserId == user!.UserId);
+            var userEducation = await _unitOfWork.UserEducation.GetFirstOrDefaultAsync(u => u.Id == id && u.UserId == user!.UserId);
 
             _unitOfWork.UserEducation.Remove(userEducation!);
             await _unitOfWork.SaveAsync();
@@ -224,7 +224,7 @@ namespace JobHunt.Application.Services.UserService
             {
                 if(data.DegreeId == model.DegreeId)
                 {
-                    throw new CustomException("You have Already Added this Job");
+                    throw new CustomException("You have Already Added this Education");
                 }
             }
 

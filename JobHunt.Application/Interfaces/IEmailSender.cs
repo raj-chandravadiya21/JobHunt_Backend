@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JobHunt.Application.Interfaces
+﻿namespace JobHunt.Application.Interfaces
 {
     public interface IEmailSender
     {
@@ -13,5 +7,7 @@ namespace JobHunt.Application.Interfaces
         Task SendResetPasswordLink(string token,string email);
 
         Task DailyNotificationEmail(string email);
+
+        Task SendUnseenMessageNotification(double messageCount, string name, string email);
     }
 }

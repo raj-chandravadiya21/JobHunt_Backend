@@ -24,9 +24,9 @@
 
         public string Requirement { get; set; } = null!;
 
-        public List<string> Perks { get; set; } = null!;
+        public List<string>? Perks { get; set; }
 
-        public List<string> Responsibility { get; set; } = null!;
+        public List<string>? Responsibility { get; set; }
 
         public List<int> Skills { get; set; } = null!;
 

@@ -32,6 +32,9 @@ public partial class Message
     [InverseProperty("Messages")]
     public virtual Conversation Conversation { get; set; } = null!;
 
+    [InverseProperty("Message")]
+    public virtual ICollection<MessageNotification> MessageNotifications { get; set; } = new List<MessageNotification>();
+
     [ForeignKey("SenderId")]
     [InverseProperty("Messages")]
     public virtual Aspnetuser Sender { get; set; } = null!;

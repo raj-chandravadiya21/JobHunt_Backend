@@ -45,5 +45,13 @@ namespace JobHunt.Controllers.CommonController
             var counts = await _serviceBundle.CommonService.Statistics();
             return Results.Ok(ResponseHelper.SuccessResponse(counts));
         }
+
+        [HttpGet("download-resume/{applicationId}")]
+        public async Task<IActionResult> DownloadResume(int applicationId)
+        {
+            var data = await _serviceBundle.CommonService.GetResume(applicationId);
+
+            return File(data.FileBytes!, data.ContentType!, data.FileName);
+        }
     }
 }

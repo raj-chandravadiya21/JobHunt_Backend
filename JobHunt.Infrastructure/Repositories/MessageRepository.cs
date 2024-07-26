@@ -3,7 +3,6 @@ using JobHunt.Domain.Entities;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using System.Text.Json;
 
 namespace JobHunt.Infrastructure.Repositories
 {
@@ -18,16 +17,10 @@ namespace JobHunt.Infrastructure.Repositories
                 new("@conversationId", conversationId)
             };
 
-            try
-            {
-                var result = await _context.ChatModel.FromSqlRaw("SELECT * FROM public.get_chat(@conversationId)", parameter).FirstAsync();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return new();
-            }
-            
+            return await _context.ChatModel.FromSqlRaw("SELECT * FROM public.get_chat(@conversationId)", parameter).FirstAsync();
         }
+
+        public async Task<List<UnseenChatModel>> GetUnseenMessages() =>
+             await _context.UnseenChatModel.FromSqlRaw("SELECT * FROM public.get_unseen_message()").ToListAsync();
     }
 }

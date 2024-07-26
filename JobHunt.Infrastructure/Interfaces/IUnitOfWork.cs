@@ -35,6 +35,8 @@ namespace JobHunt.Infrastructure.Interfaces
 
         public IRepository<Conversation> Conversation { get; }
 
+        public IRepository<MessageNotification> MessageNotification { get; }
+
         Task SaveAsync();
 
         public IUserRepository User { get; }

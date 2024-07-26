@@ -12,7 +12,7 @@ namespace JobHunt.Application.HostServices
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                //await _hostHelper.SendDailyNotification();
+                await _hostHelper.SendEmailForUnseenMessages();
 
                 await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
             }
