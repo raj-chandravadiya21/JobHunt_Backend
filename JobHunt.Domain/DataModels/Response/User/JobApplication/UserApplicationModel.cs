@@ -25,5 +25,7 @@
         public string ApplicationStatus { get; set; } = null!;
 
         public Double TotalCount { get; set; }
+
+        public int ConversationId { get; set; }
     }
 }

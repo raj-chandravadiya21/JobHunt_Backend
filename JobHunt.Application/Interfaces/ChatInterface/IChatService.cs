@@ -4,6 +4,6 @@ namespace JobHunt.Application.Interfaces.ChatInterface
 {
     public interface IChatService
     {
-        Task<ChatResponse> GetMessage(int conversatioId);
+        Task<List<ChatModel>> GetMessage(int conversatioId);
     }
 }
