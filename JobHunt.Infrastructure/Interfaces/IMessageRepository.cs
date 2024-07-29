@@ -6,7 +6,7 @@ namespace JobHunt.Infrastructure.Interfaces
 {
     public interface IMessageRepository : IRepository<Message>
     {
-        Task<ChatModel> GetChat(int conversationId);
+        Task<List<ChatModel>> GetChat(int conversationId);
 
         Task<List<UnseenChatModel>> GetUnseenMessages();
     }

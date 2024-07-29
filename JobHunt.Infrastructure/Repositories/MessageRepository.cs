@@ -10,14 +10,14 @@ namespace JobHunt.Infrastructure.Repositories
     {
         private readonly DefaultdbContext _context = context;
 
-        public async Task<ChatModel> GetChat(int conversationId)
+        public async Task<List<ChatModel>> GetChat(int conversationId)
         {
             var parameter = new NpgsqlParameter[]
             {
                 new("@conversationId", conversationId)
             };
 
-            return await _context.ChatModel.FromSqlRaw("SELECT * FROM public.get_chat(@conversationId)", parameter).FirstAsync();
+            return await _context.ChatModel.FromSqlRaw("SELECT * FROM public.get_chats(@conversationId)", parameter).ToListAsync();
         }
 
         public async Task<List<UnseenChatModel>> GetUnseenMessages() =>

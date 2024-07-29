@@ -23,5 +23,7 @@
         public Double NoOfApplicant { get; set; }
 
         public string ApplicationStatus { get; set; } = null!;
+
+        public int ConversationId { get; set; }
     }
 }
