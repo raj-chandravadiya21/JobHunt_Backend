@@ -4,6 +4,7 @@ using JobHunt.Domain.DataModels.Request.CompanyRequest.ApplicationDetails;
 using JobHunt.Domain.DataModels.Request.UserRequest.Application;
 using JobHunt.Domain.DataModels.Request.UserRequest.Profile;
 using JobHunt.Domain.DataModels.Response;
+using JobHunt.Domain.DataModels.Response.Chat;
 using JobHunt.Domain.DataModels.Response.Common;
 using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.DataModels.Response.Company.ApplicationDetails;
@@ -42,7 +43,7 @@ namespace JobHunt.Domain.Helper
             CreateMap<InterviewDetail, InterviewDetailsRequest>().ReverseMap();
             CreateMap<ApplicationStatusModel, ApplicationStatusLog>().ReverseMap();
             CreateMap<ExpiredJobListResponse, Job>().ReverseMap();
-
+            CreateMap<ChatResponse, ChatModel>().ForMember(dest => dest.Content, opt => opt.Ignore()).ReverseMap();
         }
     }
 }

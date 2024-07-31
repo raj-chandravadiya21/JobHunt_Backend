@@ -33,5 +33,7 @@ namespace JobHunt.Domain.DataModels.Response.Company.ApplicationDetails
         public List<string>? Notes { get; set; } = new List<string>();
 
         public int ConversationId { get; set; }
+
+        public string JobName { get; set; } = string.Empty;
     }
 }

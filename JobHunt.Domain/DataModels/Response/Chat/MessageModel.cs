@@ -2,14 +2,14 @@
 {
     public class MessageModel
     {
-        public int MessageId { get; set; }
+        public string ContentType { get; set; } = string.Empty;
 
-        public int SenderId { get; set; }
+        public string Content { get; set; } = string.Empty;
 
-        public string Content { get; set; } = null!;
+        public string ThumbnailUrl { get; set; } = string.Empty;
 
-        public DateTime CreatedDate { get; set; }
+        public string FileName { get; set; } = string.Empty;
 
-        public bool Seen { get; set; }
+        public long FileSize { get; set; } = 0;
     }
 }

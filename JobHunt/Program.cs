@@ -52,7 +52,13 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-
+var cloudinaryConfig = new CloudinaryDotNet.Account(
+           builder.Configuration["Cloudinary:CloudName"],
+           builder.Configuration["Cloudinary:ApiKey"],
+           builder.Configuration["Cloudinary:ApiSecret"]
+       );
+var cloudinary = new CloudinaryDotNet.Cloudinary(cloudinaryConfig);
+builder.Services.AddSingleton(cloudinary);
 
 builder.Services.AddCors(options =>
 {

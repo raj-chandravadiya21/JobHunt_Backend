@@ -15,6 +15,13 @@ namespace JobHunt.Controllers.Chat
         {
             var data = await _serviceBundle.ChatService.GetMessage(conversationId);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
-        } 
+        }
+
+        [HttpPost("upload")]
+        public async Task<IResult> Upload(IFormFile file, string thumbnail)
+        {
+            var data = await _serviceBundle.ChatService.Upload(file, thumbnail);
+            return Results.Ok(ResponseHelper.SuccessResponse(data));
+        }
     }
 }

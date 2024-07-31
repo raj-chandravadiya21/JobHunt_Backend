@@ -35,5 +35,7 @@ namespace JobHunt.Domain.DataModels.Response.Company.ApplicationDetails
         public int TotalCount { get; set; } = 0;
 
         public int ConversationId { get; set; }
+
+        public string JobName { get; set; } = string.Empty;
     }
 }

@@ -34,8 +34,8 @@ namespace JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting
 
         public List<int> Skills { get; set; } = new List<int>();
 
-        public List<string> Perks { get; set; } = new List<string>();
+        public List<string>? Perks { get; set; } = new List<string>();
 
-        public List<string> Responsibility { get; set; } = new List<string>();
+        public List<string>? Responsibility { get; set; } = new List<string>();
     }
 }
