@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using JobHunt.Domain.DataModels.Request;
+using System.Linq.Expressions;
 
 namespace JobHunt.Domain.Interfaces
 {
@@ -33,5 +34,8 @@ namespace JobHunt.Domain.Interfaces
         Task<int> ConditionalCount(Expression<Func<T, bool>> predicate);
 
         Task<int> CountAsync();
+
+        Task<List<T>> FilteredPaginatedList(Expression<Func<T, bool>> predicate, PaginationParameter model);
+
     }
 }

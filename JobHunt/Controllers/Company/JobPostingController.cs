@@ -1,4 +1,5 @@
 ﻿using JobHunt.Application.Interfaces;
+using JobHunt.Domain.DataModels.Request;
 using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
 using JobHunt.Domain.DataModels.Response.Company;
 using JobHunt.Domain.Helper;
@@ -47,17 +48,17 @@ namespace JobHunt.Controllers.Company
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
-        [HttpGet("get-expired-jobs")]
-        public async Task<IResult> GetExpiredJobs()
+        [HttpPost("get-expired-jobs")]
+        public async Task<IResult> GetExpiredJobs([FromBody] PaginationParameter model)
         {
-            var data = await _serviceBundle.JobPostingService.GetExpiredJobList();
+            var data = await _serviceBundle.JobPostingService.GetExpiredJobList(model);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
-        [HttpGet("get-closed-jobs")]
-        public async Task<IResult> GetClosedJobs()
+        [HttpPost("get-closed-jobs")]
+        public async Task<IResult> GetClosedJobs([FromBody] PaginationParameter model)
         {
-            var data = await _serviceBundle.JobPostingService.GetClosedJobList();
+            var data = await _serviceBundle.JobPostingService.GetClosedJobList(model);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
