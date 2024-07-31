@@ -15,6 +15,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace JobHunt.Application.Services.CompanyService
 {
@@ -34,56 +35,61 @@ namespace JobHunt.Application.Services.CompanyService
 
             Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
 
-            Job job = new()
+            using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                CompanyId = company.CompanyId,
-                JobName = model.Name,
-                Location = model.Location,
-                StartDate = model.JobStartDate,
-                CtcStart = model.CTCStart,
-                CtcEnd = model.CTCEnd,
-                ExperienceInYears = (int)model.Experience,
-                LastDateToApply = model.LastDate,
-                NoOfOpenings = model.NoOfOpening,
-                JobDescription = model.Description,
-                Requirements = model.Requirement,
-                CreatedDate = DateTime.Now
-            };
-
-            await _unitOfWork.Job.CreateAsync(job);
-            await _unitOfWork.SaveAsync();
-
-            for (int i = 0; i < model.Skills.Count; i++)
-            {
-                JobSkill jobSkill = new()
+                Job job = new()
                 {
-                    JobId = job.Id,
-                    SkillId = model.Skills[i]
+                    CompanyId = company.CompanyId,
+                    JobName = model.Name,
+                    Location = model.Location,
+                    StartDate = model.JobStartDate,
+                    CtcStart = model.CTCStart,
+                    CtcEnd = model.CTCEnd,
+                    ExperienceInYears = (int)model.Experience,
+                    LastDateToApply = model.LastDate,
+                    NoOfOpenings = model.NoOfOpening,
+                    JobDescription = model.Description,
+                    Requirements = model.Requirement,
+                    CreatedDate = DateTime.Now
                 };
-                await _unitOfWork.JobSkill.CreateAsync(jobSkill);
-            }
 
-            for (int i = 0; i < model.Responsibility.Count; i++)
-            {
-                JobResponsibility jobResponsibility = new()
+                await _unitOfWork.Job.CreateAsync(job);
+                await _unitOfWork.SaveAsync();
+
+                for (int i = 0; i < model.Skills.Count; i++)
                 {
-                    JobId = job.Id,
-                    Responsibility = model.Responsibility[i]
-                };
-                await _unitOfWork.JobResponsibility.CreateAsync(jobResponsibility);
-            }
+                    JobSkill jobSkill = new()
+                    {
+                        JobId = job.Id,
+                        SkillId = model.Skills[i]
+                    };
+                    await _unitOfWork.JobSkill.CreateAsync(jobSkill);
+                }
 
-            for (int i = 0; i < model.Perks.Count; i++)
-            {
-                JobPerk jobPerks = new()
+                for (int i = 0; i < model.Responsibility.Count; i++)
                 {
-                    JobId = job.Id,
-                    Perks = model.Perks[i]
-                };
-                await _unitOfWork.JobPerks.CreateAsync(jobPerks);
-            }
+                    JobResponsibility jobResponsibility = new()
+                    {
+                        JobId = job.Id,
+                        Responsibility = model.Responsibility[i]
+                    };
+                    await _unitOfWork.JobResponsibility.CreateAsync(jobResponsibility);
+                }
 
-            await _unitOfWork.SaveAsync();
+                for (int i = 0; i < model.Perks.Count; i++)
+                {
+                    JobPerk jobPerks = new()
+                    {
+                        JobId = job.Id,
+                        Perks = model.Perks[i]
+                    };
+                    await _unitOfWork.JobPerks.CreateAsync(jobPerks);
+                }
+
+                await _unitOfWork.SaveAsync();
+
+                transactionScope.Complete();
+            }
         }
 
         public async Task<EditJobDetailsResponse> GetEditJobDetails(int jobId)
@@ -105,75 +111,85 @@ namespace JobHunt.Application.Services.CompanyService
 
             List<JobSkill> oldSkillsList = await _unitOfWork.JobSkill.WhereList(x => x.JobId == model.JobId);
 
-            List<JobResponsibility> JobResponsibilities = await _unitOfWork.JobResponsibility.WhereList(x=>x.JobId == model.JobId);
+            List<JobResponsibility> JobResponsibilities = await _unitOfWork.JobResponsibility.WhereList(x => x.JobId == model.JobId);
 
             List<JobPerk> JobPerks = await _unitOfWork.JobPerks.WhereList(x => x.JobId == model.JobId);
 
-            for (int i = 0; i < oldSkillsList.Count; i++)
-            {                
-                _unitOfWork.JobSkill.Remove(oldSkillsList[i]);
-            }
-
-            for (int i = 0; i < JobResponsibilities.Count; i++)
+            using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                _unitOfWork.JobResponsibility.Remove(JobResponsibilities[i]);
-            }
-
-            for (int i = 0; i < JobPerks.Count; i++)
-            {
-                _unitOfWork.JobPerks.Remove(JobPerks[i]);
-            }
-            await _unitOfWork.SaveAsync();
-
-            Job? job = await _unitOfWork.Job.GetFirstOrDefault(x => x.Id == model.JobId);
-
-            job.CompanyId = company.CompanyId;
-            job.JobName = model.Name;
-            job.Location = model.Location;
-            job.StartDate = model.JobStartDate;
-            job.CtcStart = model.CTCStart;
-            job.CtcEnd = model.CTCEnd;
-            job.ExperienceInYears = (int)model.Experience;
-            job.LastDateToApply = model.LastDate;
-            job.NoOfOpenings = model.NoOfOpening;
-            job.JobDescription = model.Description;
-            job.Requirements = model.Requirement;
-            job.CreatedDate = DateTime.Now;
-
-            _unitOfWork.Job.UpdateAsync(job);
-            await _unitOfWork.SaveAsync();
-
-            for (int i = 0; i < model.Skills.Count; i++)
-            {
-                JobSkill jobSkill = new()
+                for (int i = 0; i < oldSkillsList.Count; i++)
                 {
-                    JobId = job.Id,
-                    SkillId = model.Skills[i]
-                };
-                await _unitOfWork.JobSkill.CreateAsync(jobSkill);
-            }
+                    _unitOfWork.JobSkill.Remove(oldSkillsList[i]);
+                }
 
-            for (int i = 0; i < model.Responsibility.Count; i++)
-            {
-                JobResponsibility jobResponsibility = new()
+                for (int i = 0; i < JobResponsibilities.Count; i++)
                 {
-                    JobId = job.Id,
-                    Responsibility = model.Responsibility[i]
-                };
-                await _unitOfWork.JobResponsibility.CreateAsync(jobResponsibility);
-            }
+                    _unitOfWork.JobResponsibility.Remove(JobResponsibilities[i]);
+                }
 
-            for (int i = 0; i < model.Perks.Count; i++)
-            {
-                JobPerk jobPerks = new()
+                for (int i = 0; i < JobPerks.Count; i++)
                 {
-                    JobId = job.Id,
-                    Perks = model.Perks[i]
-                };
-                await _unitOfWork.JobPerks.CreateAsync(jobPerks);
-            }
+                    _unitOfWork.JobPerks.Remove(JobPerks[i]);
+                }
+                await _unitOfWork.SaveAsync();
 
-            await _unitOfWork.SaveAsync();
+                Job? job = await _unitOfWork.Job.GetFirstOrDefault(x => x.Id == model.JobId);
+
+                job.CompanyId = company.CompanyId;
+                job.JobName = model.Name;
+                job.Location = model.Location;
+                job.StartDate = model.JobStartDate;
+                job.CtcStart = model.CTCStart;
+                job.CtcEnd = model.CTCEnd;
+                job.ExperienceInYears = (int)model.Experience;
+                job.LastDateToApply = model.LastDate;
+                job.NoOfOpenings = model.NoOfOpening;
+                job.JobDescription = model.Description;
+                job.Requirements = model.Requirement;
+                job.CreatedDate = DateTime.Now;
+
+                _unitOfWork.Job.UpdateAsync(job);
+                await _unitOfWork.SaveAsync();
+
+                for (int i = 0; i < model.Skills.Count; i++)
+                {
+                    JobSkill jobSkill = new()
+                    {
+                        JobId = job.Id,
+                        SkillId = model.Skills[i]
+                    };
+                    await _unitOfWork.JobSkill.CreateAsync(jobSkill);
+                }
+
+                if (model.Responsibility != null)
+                {
+                    for (int i = 0; i < model.Responsibility.Count; i++)
+                    {
+                        JobResponsibility jobResponsibility = new()
+                        {
+                            JobId = job.Id,
+                            Responsibility = model.Responsibility[i]
+                        };
+                        await _unitOfWork.JobResponsibility.CreateAsync(jobResponsibility);
+                    }
+                }
+
+                if (model.Perks != null)
+                {
+                    for (int i = 0; i < model.Perks.Count; i++)
+                    {
+                        JobPerk jobPerks = new()
+                        {
+                            JobId = job.Id,
+                            Perks = model.Perks[i]
+                        };
+                        await _unitOfWork.JobPerks.CreateAsync(jobPerks);
+                    }
+                }
+                await _unitOfWork.SaveAsync();
+
+                transactionScope.Complete();
+            }
         }
 
         public async Task<PaginatedResponse> GetJobs(FilterJobRequest model)
@@ -229,7 +245,7 @@ namespace JobHunt.Application.Services.CompanyService
 
             return data;
         }
-        
+
         public async Task<List<ExpiredJobListResponse>> GetClosedJobList()
         {
             var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);

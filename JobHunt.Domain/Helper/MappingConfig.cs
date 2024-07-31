@@ -11,6 +11,7 @@ using JobHunt.Domain.DataModels.Response.Company.ApplicationDetails;
 using JobHunt.Domain.DataModels.Response.User;
 using JobHunt.Domain.DataModels.Response.User.JobApplication;
 using JobHunt.Domain.Entities;
+using JobHunt.Domain.Enum;
 
 namespace JobHunt.Domain.Helper
 {
@@ -41,9 +42,13 @@ namespace JobHunt.Domain.Helper
             CreateMap<JobSeekerDetailsResponse, JobSeekerDetailsModel>().ReverseMap();
             CreateMap<UserApplicationResponse, UserApplicationModel>().ReverseMap();
             CreateMap<InterviewDetail, InterviewDetailsRequest>().ReverseMap();
-            CreateMap<ApplicationStatusModel, ApplicationStatusLog>().ReverseMap();
+            CreateMap<ApplicationStatusLog, ApplicationStatusModel>().ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => ((ApplicationStatuses)src.StatusId).ToString())).ReverseMap();
             CreateMap<ExpiredJobListResponse, Job>().ReverseMap();
             CreateMap<ChatResponse, ChatModel>().ForMember(dest => dest.Content, opt => opt.Ignore()).ReverseMap();
         }
     }
 }
+
+
+//CreateMap<ApplicationStatusLog, ApplicationStatusModel>()
+//            .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => ((ApplicationStatus)src.StatusId).ToString()));
