@@ -9,7 +9,6 @@ using JobHunt.Domain.Helper;
 using JobHunt.Domain.Resource;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using System.IdentityModel.Tokens.Jwt;
@@ -108,7 +107,7 @@ namespace JobHunt.Application.Services.UserService
             Conversation conversation = new()
             {
                 UserId = int.Parse(aspnetUserId),
-                CompanyId = company.AspnetuserId,
+                CompanyId = company!.AspnetuserId,
                 CreatedDate = DateTime.Now,
                 JobApplicationId = jobApplication.Id
             };
@@ -430,11 +429,11 @@ namespace JobHunt.Application.Services.UserService
 
             if(jobApplication.StatusId >= (int)ApplicationStatuses.ScheduleInterview && jobApplication.StatusId != (int)ApplicationStatuses.Rejected)
             {
-                var interview = await _unitOfWork.InterviewDetail.GetFirstOrDefaultAsync(u => u.ApplicationId == jobApplicationId);
+                var interview = await _unitOfWork.InterviewDetail.GetFirstOrDefaultNullable(u => u.ApplicationId == jobApplicationId);
 
-                ApplicationStatusResponse.InterviewDate = interview!.InterviewDate;
-                ApplicationStatusResponse.StartTime = interview!.StartTime;
-                ApplicationStatusResponse.EndTime = interview!.EndTime;
+                ApplicationStatusResponse.InterviewDate = interview?.InterviewDate;
+                ApplicationStatusResponse.StartTime = interview?.StartTime;
+                ApplicationStatusResponse.EndTime = interview?.EndTime;
             }
 
             return ApplicationStatusResponse;
