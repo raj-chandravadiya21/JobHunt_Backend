@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JobHunt.Application.Interfaces.CompanyInterface;
+using JobHunt.Domain.DataModels.Request;
 using JobHunt.Domain.DataModels.Request.CompanyRequest.JobPosting;
 using JobHunt.Domain.DataModels.Response;
 using JobHunt.Domain.DataModels.Response.Company;
@@ -8,6 +9,7 @@ using JobHunt.Domain.Entities;
 using JobHunt.Domain.Helper;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using PdfSharp;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -225,7 +227,7 @@ namespace JobHunt.Application.Services.CompanyService
             return response;
         }
 
-        public async Task<List<ExpiredJobListResponse>> GetExpiredJobList()
+        public async Task<List<ExpiredJobListResponse>> GetExpiredJobList(PaginationParameter model)
         {
             var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
 
@@ -239,14 +241,14 @@ namespace JobHunt.Application.Services.CompanyService
 
             Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
 
-            List<Job>? job = await _unitOfWork.Job.WhereList(x => x.CompanyId == company.CompanyId && x.LastDateToApply < DateOnly.FromDateTime(DateTime.Now));
+            List<Job>? job = await _unitOfWork.Job.FilteredPaginatedList(x => x.CompanyId == company.CompanyId && x.LastDateToApply < DateOnly.FromDateTime(DateTime.Now), model);
 
             List<ExpiredJobListResponse> data = _mapper.Map<List<ExpiredJobListResponse>>(job);
 
             return data;
         }
-
-        public async Task<List<ExpiredJobListResponse>> GetClosedJobList()
+        
+        public async Task<List<ExpiredJobListResponse>> GetClosedJobList(PaginationParameter model)
         {
             var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
 
@@ -259,11 +261,9 @@ namespace JobHunt.Application.Services.CompanyService
             var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
             Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
-
-            List<Job>? job = await _unitOfWork.Job.WhereList(x => x.CompanyId == company.CompanyId && x.IsDeleted == true);
+            List<Job>? job = await _unitOfWork.Job.FilteredPaginatedList(x => x.CompanyId == company.CompanyId && x.IsDeleted == true, model);
 
             List<ExpiredJobListResponse> data = _mapper.Map<List<ExpiredJobListResponse>>(job);
-
             return data;
         }
 

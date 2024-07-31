@@ -1,4 +1,5 @@
-﻿using JobHunt.Domain.Entities;
+﻿using JobHunt.Domain.DataModels.Request;
+using JobHunt.Domain.Entities;
 using JobHunt.Domain.Helper;
 using JobHunt.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -103,6 +104,11 @@ namespace JobHunt.Infrastructure.Repositories
         public async Task<int> CountAsync()
         {
             return await _dbSet.CountAsync();
+        }
+
+        public async Task<List<T>> FilteredPaginatedList(Expression<Func<T, bool>> predicate, PaginationParameter model)
+        {
+            return await _dbSet.Where(predicate).Skip((model.PageNumber - 1) * model.PageSize).Take(model.PageSize).ToListAsync();
         }
     }
 }
