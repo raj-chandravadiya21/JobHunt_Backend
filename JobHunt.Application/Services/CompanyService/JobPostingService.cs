@@ -241,9 +241,13 @@ namespace JobHunt.Application.Services.CompanyService
 
             Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
 
+            int totalCount = await _unitOfWork.Job.ConditionalCount(x => x.CompanyId == company.CompanyId && x.IsDeleted == true);
+
             List<Job>? job = await _unitOfWork.Job.FilteredPaginatedList(x => x.CompanyId == company.CompanyId && x.LastDateToApply < DateOnly.FromDateTime(DateTime.Now), model);
 
             List<ExpiredJobListResponse> data = _mapper.Map<List<ExpiredJobListResponse>>(job);
+
+            data.First().TotalPage = (int)Math.Ceiling((double)totalCount / model.PageSize);
 
             return data;
         }
@@ -261,9 +265,15 @@ namespace JobHunt.Application.Services.CompanyService
             var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
             Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
+
+            int totalCount = await _unitOfWork.Job.ConditionalCount(x => x.CompanyId == company.CompanyId && x.IsDeleted == true);
+
             List<Job>? job = await _unitOfWork.Job.FilteredPaginatedList(x => x.CompanyId == company.CompanyId && x.IsDeleted == true, model);
 
             List<ExpiredJobListResponse> data = _mapper.Map<List<ExpiredJobListResponse>>(job);
+
+            data.First().TotalPage = (int)Math.Ceiling((double)totalCount / model.PageSize);
+
             return data;
         }
 

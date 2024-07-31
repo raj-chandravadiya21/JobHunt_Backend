@@ -21,5 +21,7 @@ namespace JobHunt.Domain.DataModels.Response.Company
         public DateOnly LastDateToApply { get; set; }
 
         public DateOnly CloseDate { get; set; }
+
+        public int TotalPage { get; set;}
     }
 }
