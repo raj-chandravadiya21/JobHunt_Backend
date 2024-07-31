@@ -33,6 +33,10 @@ namespace JobHunt.Application.Services
         #region RegisterUser
         public async Task RegisterUser(RegisterUserRequest model)
         {
+            if ((bool)await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.User))
+            {
+                throw new AlreadyExistsException(string.Format(Messages.AlreadyAvailable, Messages.User));
+            }
             if (model.Password != model.ConfirmPassword)
             {
                 throw new CustomException(string.Format(Messages.PasswordConfirmPasswordNotMatch));
@@ -175,6 +179,10 @@ namespace JobHunt.Application.Services
         #region Register-company
         public async Task RegisterCompany(RegisterCompanyRequest model)
         {
+            if ((bool) await _unitOfWork.AspNetUser.GetAnyAsync(u => u.Email == model.Email && u.RoleId == (int)Role.Company))
+            {
+                throw new AlreadyExistsException(string.Format(Messages.AlreadyAvailable, Messages.Company));
+            }
             if (model.Password != model.ConfirmPassword)
             {
                 throw new CustomException(string.Format(Messages.PasswordConfirmPasswordNotMatch));

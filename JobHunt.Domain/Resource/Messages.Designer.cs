@@ -79,6 +79,15 @@ namespace JobHunt.Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} already available with same Email.
+        /// </summary>
+        public static string AlreadyAvailable {
+            get {
+                return ResourceManager.GetString("AlreadyAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application.
         /// </summary>
         public static string Application {

@@ -15,7 +15,6 @@ namespace JobHunt.Domain.DataModels.Request.UserRequest.Profile
 
         public DateOnly EndDate { get; set; }
 
-        [Required]
-        public string Description { get; set; } = null!;
+        public string? Description { get; set; } = null;
     }
 }

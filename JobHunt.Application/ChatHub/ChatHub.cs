@@ -2,6 +2,7 @@
 using JobHunt.Domain.Helper;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.SignalR;
+using System.Text.Json;
 
 namespace JobHunt.Application.ChatHub
 {
@@ -33,13 +34,22 @@ namespace JobHunt.Application.ChatHub
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SendMessage(string conversationId, string senderId, string content) 
+        public async Task SendMessage(string conversationId, string senderId, string content, string contentType, string? fileName = null, string? thumbnailUrl = null, long fileSize = 0) 
         {
+            var contentObject = new
+            {
+                contentType,
+                content,
+                thumbnailUrl,
+                fileName,
+                fileSize,
+            };
+
             Message message = new()
             {
                 ConversationId = int.Parse(conversationId),
                 SenderId = int.Parse(senderId),
-                Content = content,
+                Content = JsonSerializer.Serialize(contentObject),
                 CreatedDate = DateTime.Now,
                 Seen = false,
             };
@@ -47,12 +57,7 @@ namespace JobHunt.Application.ChatHub
             await _unitOfWork.Message.CreateAsync(message);
             await _unitOfWork.SaveAsync();
 
-            await Clients.Group(conversationId).SendAsync("ReceiveMessage", new
-            {
-                SenderId = senderId,
-                Content = content,
-                CreatedDate = DateTime.Now,
-            });
+            await Clients.Group(conversationId).SendAsync("ReceiveMessage", message);
         }
 
         public async Task MarkMessagesAsSeen(string conversationId, string userId)
@@ -69,6 +74,15 @@ namespace JobHunt.Application.ChatHub
         public async Task<IEnumerable<Message>> GetUnseenMessages(string conversationId, string userId)
         {
             return await _unitOfWork.Message.WhereList(m => m.ConversationId == int.Parse(conversationId) && m.SenderId != int.Parse(userId) && !m.Seen);
+        }
+        public async Task Typing(string conversationId, string senderId)
+        {
+            await Clients.Group(conversationId).SendAsync("Typing", senderId);
+        }
+
+        public async Task StopTyping(string conversationId, string senderId)
+        {
+            await Clients.Group(conversationId).SendAsync("StopTyping", senderId);
         }
     }
 }

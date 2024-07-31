@@ -29,5 +29,7 @@ namespace JobHunt.Domain.DataModels.Response.Company
         public List<int> JobSkills { get; set; } = new List<int>();
 
         public int TotalCount { get; set; }
+
+        public long NoOfApplicant { get; set; }
     }
 }
