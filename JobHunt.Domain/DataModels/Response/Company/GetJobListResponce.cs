@@ -27,5 +27,7 @@ namespace JobHunt.Domain.DataModels.Response.Company
         public double? Experience { get; set; }
 
         public List<int> JobSkills { get; set; } = new List<int>();
+
+        public long NoOfApplicant { get; set; }
     }
 }

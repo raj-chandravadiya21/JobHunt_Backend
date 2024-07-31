@@ -2,14 +2,14 @@
 {
     public class ChatResponse
     {
-        public int ConversationId { get; set; }
+        public int MessageId { get; set; }
 
-        public string JobName { get; set; } = null!;
+        public int SenderId { get; set; }
 
-        public string CompanyName { get; set; } = null!;
+        public DateTime CreatedDate { get; set; }
 
-        public string UserName { get; set; } = null!;
+        public bool Seen { get; set; }
 
-        public List<MessageModel>? Messages { get; set; }
+        public MessageModel? Contents { get; set; }
     }
 }

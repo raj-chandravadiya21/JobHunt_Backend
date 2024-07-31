@@ -10,6 +10,7 @@ using JobHunt.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using JobHunt.Application.Interfaces.ChatInterface;
 using JobHunt.Application.Services.ChatService;
+using CloudinaryDotNet;
 
 namespace JobHunt.Application.Services
 {
@@ -19,13 +20,15 @@ namespace JobHunt.Application.Services
         private readonly IMapper _mapper;
         private readonly IEmailSender _emailSender;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly Cloudinary _cloudinary;
 
-        public ServiceBundle(IUnitOfWork unitOfWork, IMapper mapper, IEmailSender emailSender, IHttpContextAccessor contextAccessor)
+        public ServiceBundle(IUnitOfWork unitOfWork, IMapper mapper, IEmailSender emailSender, IHttpContextAccessor contextAccessor, Cloudinary cloudinary)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _emailSender = emailSender;
             _contextAccessor = contextAccessor;
+            _cloudinary = cloudinary;
             AuthService = new AuthService(_unitOfWork, _emailSender);
             RegistrationService = new RegistrationService(_unitOfWork, _mapper, _contextAccessor);
             CompanyRegistrationService = new CompanyRegistrationService(_unitOfWork, _mapper, _contextAccessor);
@@ -36,7 +39,7 @@ namespace JobHunt.Application.Services
             ApplicationDetailsService = new ApplicationDetailsService(_contextAccessor, _unitOfWork, _mapper);
             UserDashboardService = new UserDashboardService(_unitOfWork, _contextAccessor);
             CommonService = new CommonService(_unitOfWork, _mapper);
-            ChatService = new ChatServices(_unitOfWork);
+            ChatService = new ChatServices(_unitOfWork, _mapper, _cloudinary);
         }
         public IAuthService AuthService { get; private set; }
 

@@ -19,14 +19,17 @@ public partial class Message
     [Column("sender_id")]
     public int SenderId { get; set; }
 
-    [Column("content", TypeName = "character varying")]
-    public string Content { get; set; } = null!;
-
     [Column("created_date", TypeName = "timestamp without time zone")]
     public DateTime CreatedDate { get; set; }
 
     [Column("seen")]
     public bool Seen { get; set; }
+
+    [Column("content", TypeName = "json")]
+    public string Content { get; set; } = null!;
+
+    [Column("seen_date", TypeName = "timestamp without time zone")]
+    public DateTime? SeenDate { get; set; }
 
     [ForeignKey("ConversationId")]
     [InverseProperty("Messages")]
