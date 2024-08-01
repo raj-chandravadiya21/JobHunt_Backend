@@ -22,6 +22,6 @@ namespace JobHunt.Domain.DataModels.Response.Company
 
         public DateOnly CloseDate { get; set; }
 
-        public int TotalPage { get; set;}
+        public int TotalCount { get; set;}
     }
 }

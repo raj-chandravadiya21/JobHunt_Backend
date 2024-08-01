@@ -247,7 +247,7 @@ namespace JobHunt.Application.Services.CompanyService
 
             List<ExpiredJobListResponse> data = _mapper.Map<List<ExpiredJobListResponse>>(job);
 
-            data.First().TotalPage = (int)Math.Ceiling((double)totalCount / model.PageSize);
+            data.First().TotalCount = totalCount;
 
             return data;
         }
@@ -261,7 +261,7 @@ namespace JobHunt.Application.Services.CompanyService
             {
                 throw new CustomException("User is not valid");
             }
-
+                
             var aspnetId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
 
             Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
@@ -272,7 +272,7 @@ namespace JobHunt.Application.Services.CompanyService
 
             List<ExpiredJobListResponse> data = _mapper.Map<List<ExpiredJobListResponse>>(job);
 
-            data.First().TotalPage = (int)Math.Ceiling((double)totalCount / model.PageSize);
+            data.First().TotalCount = totalCount;
 
             return data;
         }

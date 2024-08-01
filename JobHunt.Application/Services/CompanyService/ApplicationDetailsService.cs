@@ -54,19 +54,7 @@ namespace JobHunt.Application.Services.CompanyService
 
         public async Task<JobSeekerCountWithStatus> GetJobSeekerCount(int jobId)
         {
-            var token = GetTokenFromHeader.GetToken((HttpContextAccessor)http);
-
-            var isValidToken = Jwt.ValidateToken(token, out JwtSecurityToken? jwtToken);
-            if (!isValidToken)
-            {
-                throw new CustomException("Session is Expired.");
-            }
-
-            var aspNetUserId = Jwt.GetClaimValue(ClaimTypes.Sid, jwtToken!);
-
-            Aspnetuser? aspnetuser = await _unitOfWork.AspNetUser.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspNetUserId);
-
-            Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspNetUserId);
+            Job? job = await _unitOfWork.Job.GetFirstOrDefaultAsync(x => x.Id == jobId);
 
             JobSeekerCountWithStatus model = new()
             {
@@ -76,6 +64,7 @@ namespace JobHunt.Application.Services.CompanyService
                 InterviewedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Interviewed && x.JobId == jobId),
                 SelectedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Selected && x.JobId == jobId),
                 RejectedCount = await _unitOfWork.JobApplication.ConditionalCount(x => x.StatusId == (int)ApplicationStatuses.Rejected && x.JobId == jobId),
+                JobName = job.JobName
             };
 
             return model;
