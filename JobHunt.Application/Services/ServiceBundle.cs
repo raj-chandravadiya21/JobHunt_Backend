@@ -39,7 +39,7 @@ namespace JobHunt.Application.Services
             ApplicationDetailsService = new ApplicationDetailsService(_contextAccessor, _unitOfWork, _mapper);
             UserDashboardService = new UserDashboardService(_unitOfWork, _contextAccessor);
             CommonService = new CommonService(_unitOfWork, _mapper);
-            ChatService = new ChatServices(_unitOfWork, _mapper, _cloudinary);
+            ChatService = new ChatServices(_unitOfWork, _cloudinary);
         }
         public IAuthService AuthService { get; private set; }
 

@@ -11,9 +11,9 @@ namespace JobHunt.Controllers.Chat
         private readonly IServiceBundle _serviceBundle = serviceBundle;
 
         [HttpGet("get-message")]
-        public async Task<IResult> GetMessage(int conversationId)
+        public async Task<IResult> GetMessage(int conversationId, int page, int pageSize = 10)
         {
-            var data = await _serviceBundle.ChatService.GetMessage(conversationId);
+            var data = await _serviceBundle.ChatService.GetMessage(conversationId, page, pageSize);
             return Results.Ok(ResponseHelper.SuccessResponse(data));
         }
 
