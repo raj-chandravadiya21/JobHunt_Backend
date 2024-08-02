@@ -1,4 +1,5 @@
-﻿using JobHunt.Domain.Entities;
+﻿using JobHunt.Domain.DataModels.Response.Chat;
+using JobHunt.Domain.Entities;
 using JobHunt.Domain.Helper;
 using JobHunt.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.SignalR;
@@ -54,10 +55,20 @@ namespace JobHunt.Application.ChatHub
                 Seen = false,
             };
 
+
             await _unitOfWork.Message.CreateAsync(message);
             await _unitOfWork.SaveAsync();
 
-            await Clients.Group(conversationId).SendAsync("ReceiveMessage", message);
+            ChatModel chatModel = new()
+            {
+                MessageId = message.MessageId,
+                SenderId = int.Parse(senderId),
+                Content = message.Content,
+                CreatedDate = message.CreatedDate,
+                Seen = message.Seen
+            };
+
+            await Clients.Group(conversationId).SendAsync("ReceiveMessage", chatModel);
         }
 
         public async Task MarkMessagesAsSeen(string conversationId, string userId)

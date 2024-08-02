@@ -241,7 +241,7 @@ namespace JobHunt.Application.Services.CompanyService
 
             Company? company = await _unitOfWork.Company.GetFirstOrDefaultAsync(x => x.AspnetuserId.ToString() == aspnetId);
 
-            int totalCount = await _unitOfWork.Job.ConditionalCount(x => x.CompanyId == company.CompanyId && x.IsDeleted == true);
+            int totalCount = await _unitOfWork.Job.ConditionalCount(x => x.CompanyId == company.CompanyId && x.LastDateToApply < DateOnly.FromDateTime(DateTime.Now));
 
             List<Job>? job = await _unitOfWork.Job.FilteredPaginatedList(x => x.CompanyId == company.CompanyId && x.LastDateToApply < DateOnly.FromDateTime(DateTime.Now), model);
 

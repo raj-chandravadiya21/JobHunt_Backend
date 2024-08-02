@@ -9,39 +9,14 @@ using Newtonsoft.Json;
 
 namespace JobHunt.Application.Services.ChatService
 {
-    public class ChatServices(IUnitOfWork unitOfWork, IMapper mapper, Cloudinary cloudinary) : IChatService
+    public class ChatServices(IUnitOfWork unitOfWork, Cloudinary cloudinary) : IChatService
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
-        private readonly IMapper _mapper = mapper;
         private readonly Cloudinary _cloudinary = cloudinary;
 
-        public async Task<List<ChatResponse>> GetMessage(int conversationId)
-        {
-            List<ChatModel> chatData = await _unitOfWork.Message.GetChat(conversationId);
-
-            List<ChatResponse> chatResponse = new();
-
-            foreach (var chat in chatData)
-            {
-                var response = _mapper.Map<ChatResponse>(chat);
-
-                if (!string.IsNullOrEmpty(chat.Content))
-                {
-                    try
-                    {
-                        response.Contents = JsonConvert.DeserializeObject<MessageModel>(chat.Content);
-                    }
-                    catch (Exception)
-                    {
-                        response.Contents = new();
-                    }
-                }
-
-                chatResponse.Add(response);
-            }
-
-            return chatResponse;
-        }
+        public async Task<List<ChatModel>> GetMessage(int conversationId, int pageNumber, int pageSize) =>
+            await _unitOfWork.Message.GetChat(conversationId, pageNumber, pageSize);
+        
 
         public async Task<ChatAttachmentResponse> Upload(IFormFile file, string thumbnail)
         {
