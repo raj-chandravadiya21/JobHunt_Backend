@@ -88,7 +88,14 @@ namespace JobHunt.Application.ChatHub
         }
         public async Task Typing(string conversationId, string senderId)
         {
-            await Clients.Group(conversationId).SendAsync("Typing", senderId);
+            var user = await _unitOfWork.AspNetUser.GetFirstOrDefault(u => u.AspnetuserId == int.Parse(senderId));
+            string? name = user.FirstName;
+            var data = new
+            {
+                senderId,
+                name,
+            };
+            await Clients.Group(conversationId).SendAsync("Typing", data);
         }
 
         public async Task StopTyping(string conversationId, string senderId)

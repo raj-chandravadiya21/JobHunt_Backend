@@ -29,7 +29,7 @@ namespace JobHunt.Application.Services.ChatService
             var uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
             string? thumbnailUrl = null;
-            if (!string.IsNullOrEmpty(thumbnail))
+            if (!string.IsNullOrEmpty(thumbnail) || thumbnail != "null")
             {
                 var byteArray = Convert.FromBase64String(thumbnail.Split(",")[1]);
                 using var stream = new MemoryStream(byteArray);
